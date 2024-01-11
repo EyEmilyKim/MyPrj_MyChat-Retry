@@ -1,0 +1,11 @@
+
+.login-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 10px;
+}
+.login-input,
+.login-button {
+  margin-bottom: 10px; /* 각 요소 사이에 간격을 주기 위해 마진을 추가할 수 있습니다. */
+}
