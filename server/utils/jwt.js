@@ -26,14 +26,20 @@ const generateToken = async (user, type) => {
 };
 
 function verifyToken(token, type) {
+  // console.log('verifyToken called', token);
   let secretKey = '';
   if (type === 'AT') secretKey = process.env.ACCESS_SECRET_KEY;
   else if (type === 'RT') secretKey = process.env.REFRESH_SECRET_KEY;
-  try {
-    return jwt.verify(token, secretKey);
-  } catch (error) {
-    throw new Error('토큰 인증 실패 : ' + error.message);
-  }
+
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        reject(new Error('토큰 인증 실패 : ' + err.message));
+      } else {
+        resolve(decoded);
+      }
+    });
+  });
 }
 
 module.exports = {

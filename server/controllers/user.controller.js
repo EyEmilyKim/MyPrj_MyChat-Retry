@@ -4,7 +4,7 @@ const userController = {};
 
 // 유저 등록
 userController.registerUser = async (req, res) => {
-  console.log('userController.registerUser called', req.body);
+  // console.log('userController.registerUser called', req.body);
   try {
     const { email, password, userName } = req.body;
     const user = await userService.registerUser(email, password, userName);
@@ -18,7 +18,7 @@ userController.registerUser = async (req, res) => {
 
 // 유저 로그인
 userController.loginUser = async (req, res) => {
-  console.log('userController.loginUser called', req.body);
+  // console.log('userController.loginUser called', req.body);
   try {
     const { email, password } = req.body;
     const { user, accessToken, refreshToken } = await userService.loginUser(
@@ -36,7 +36,7 @@ userController.loginUser = async (req, res) => {
       })
       .status(200)
       .json({ message: '로그인 성공', user });
-    console.log('userController.loginUser success');
+    // console.log('userController.loginUser success');
   } catch (error) {
     console.log('userController.loginUser failed', error);
     res.status(500).json({ error: error.message });

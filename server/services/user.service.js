@@ -6,7 +6,7 @@ const userService = {};
 
 // 유저 등록
 userService.registerUser = async (email, pw, un) => {
-  console.log('userService.registerUser called', email, pw, un);
+  // console.log('userService.registerUser called', email, pw, un);
   try {
     // 이미 있는 유저인지 확인
     let user = await User.findOne({ email: email });
@@ -29,12 +29,11 @@ userService.registerUser = async (email, pw, un) => {
   }
 };
 
-
 // 유저 로그인
 userService.loginUser = async (email, pw) => {
-  console.log('userService.loginUser called', email, pw);
+  // console.log('userService.loginUser called', email, pw);
   try {
-    let user = await User.findOne({ email : email }); // 이미 있는 유저인지 확인
+    let user = await User.findOne({ email: email }); // 이미 있는 유저인지 확인
     if (!user) {
       throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
     }
@@ -57,6 +56,5 @@ userService.loginUser = async (email, pw) => {
     throw new Error(error.message);
   }
 };
-
 
 module.exports = userService;

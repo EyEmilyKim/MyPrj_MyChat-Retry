@@ -9,7 +9,8 @@ export const SocketContext = createContext();
 
 // SocketProvider 컴포넌트 생성
 export const SocketProvider = ({ children }) => {
-  const ioUrl = 'http://localhost:5001';
+  const ioUrl = 'http://localhost:1234';
+  const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
   const { setIsLogin } = useContext(LoginContext);
   const { setUser } = useContext(UserContext);
@@ -20,7 +21,7 @@ export const SocketProvider = ({ children }) => {
 
     try {
       const res = await axios({
-        url: 'http://localhost:1234/user/login',
+        url: `${ioUrl}/user/login`,
         method: 'POST',
         withCredentials: true,
         headers: {
@@ -37,12 +38,16 @@ export const SocketProvider = ({ children }) => {
         console.log('로그인 성공 !', res.data.user);
         setIsLogin(true);
         setUser(res.data.user);
-        //토큰 받아오는 로직 필요
         //Socket.IO 연결 및 토큰 인증
         const newSocket = io(ioUrl, {
-          auth: {},
+          withCredentials: true,
+          origins: originUrl,
+        });
+        newSocket.on('connect_error', (error) => {
+          console.log('newSocket error', error);
         });
         setSocket(newSocket);
+        console.log('newSocket.connect() done');
       } else {
         alert('로그인 실패..', res.error);
         console.log('로그인 실패..', res.error);
