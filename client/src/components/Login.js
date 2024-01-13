@@ -1,12 +1,17 @@
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import './Login.css';
+import { LoginContext } from '../contexts/LoginContext';
+import { UserContext } from '../contexts/UserContext';
+import { SocketContext } from '../contexts/SocketContext';
 
 export default function Login() {
-  const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState(null);
+  const { isLogin } = useContext(LoginContext);
+  const { user } = useContext(UserContext);
   console.log('isLogin', isLogin);
   console.log('user', user);
+  const { socket, handleSocketLogin } = useContext(SocketContext);
+  console.log('socket', socket);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
@@ -16,42 +21,13 @@ export default function Login() {
     emailRef.current.focus();
   }, []);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    console.log('handleLogin called', email);
-
-    try {
-      const res = await axios({
-        url: 'http://localhost:1234/user/login',
-        method: 'POST',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          email: email,
-          password: password,
-        },
-      });
-
-      if (res.status === 200) {
-        alert('로그인 성공 !', res.data.user);
-        console.log('로그인 성공 !', res.data.user);
-        setIsLogin(true);
-        setUser(res.data.user);
-      } else {
-        alert('로그인 실패..', res.error);
-        console.log('로그인 실패..', res.error);
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
-    }
+  const handleLogin = async () => {
+    console.log('Login handleLogin called', email);
+    handleSocketLogin(email, password);
   };
 
-  const handleSignUp = async (event)=>{
-    event.preventDefault();
-    console.log("handleSignUp called", email);
+  const handleSignUp = async () => {
+    console.log('handleSignUp called', email);
 
     try {
       const res = await axios({
@@ -79,7 +55,7 @@ export default function Login() {
       console.error('SignUp failed:', error);
       alert('SignUp failed. Please try again.');
     }
-  }
+  };
 
   return (
     <div>
