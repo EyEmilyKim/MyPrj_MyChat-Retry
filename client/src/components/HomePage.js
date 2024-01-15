@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { UserContext } from '../contexts/UserContext';
+import { SocketContext } from '../contexts/SocketContext';
 import axios from 'axios';
 import './HomePage.css';
 import Login from './Login';
@@ -9,8 +10,10 @@ import Logout from './Logout';
 export default function HomePage() {
   const { isLogin, setIsLogin } = useContext(LoginContext);
   const { user, setUser } = useContext(UserContext);
+  const { socket } = useContext(SocketContext);
   console.log('isLogin', isLogin);
   console.log('user', user);
+  console.log('socket', socket);
 
   useEffect(() => {
     try {
@@ -22,7 +25,7 @@ export default function HomePage() {
         .then((result) => {
           if (result.data) {
             setIsLogin(true);
-            setUser(result.data);
+            setUser(result.data.user);
           }
         })
         .catch((error) => {

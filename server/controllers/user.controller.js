@@ -36,7 +36,7 @@ userController.loginUser = async (req, res) => {
         secure: false,
       })
       .status(200)
-      .json({ message: '로그인 성공', user });
+      .json({ message: '로그인 성공', user: user });
     // console.log('userController.loginUser success');
   } catch (error) {
     console.log('userController.loginUser failed', error);
@@ -52,10 +52,28 @@ userController.loginSuccess = async (req, res) => {
     const data = jwt.verifyToken(accessToken, 'AT');
     const user = await userService.checkUser(data.email);
 
-    res.status(200).json(user);
+    res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
     console.log('userController.loginSuccess failed');
     res.status(500).json({ error: error.message });
   }
 };
+
+// 유저 로그아웃
+userController.logoutUser = async (req, res) => {
+  // console.log('userController.logout called');
+  try {
+    const accessToken = req.cookies.accessToken;
+    const data = jwt.verifyToken(accessToken, 'AT');
+    const user = await userService.logoutUser(data.email);
+    if (!user.online) {
+      res.cookie('accessToken', '');
+      res.status(200).json({ message: '로그아웃 성공', user: user });
+    }
+  } catch (error) {
+    console.log('userController.logout failed', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = userController;

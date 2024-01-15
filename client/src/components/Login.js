@@ -4,8 +4,7 @@ import './Login.css';
 import { SocketContext } from '../contexts/SocketContext';
 
 export default function Login() {
-  const { socket, handleSocketLogin } = useContext(SocketContext);
-  console.log('socket', socket);
+  const { handleSocketLogin } = useContext(SocketContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
@@ -16,7 +15,7 @@ export default function Login() {
   }, []);
 
   const handleLogin = async () => {
-    console.log('Login handleLogin called', email);
+    // console.log('Login handleLogin called', email);
     handleSocketLogin(email, password);
   };
 

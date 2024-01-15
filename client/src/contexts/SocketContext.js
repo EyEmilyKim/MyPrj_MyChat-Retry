@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }) => {
 
   // 로그인 이벤트 처리하는 함수
   const handleSocketLogin = async (email, password) => {
-    console.log('Socket handleLogin called', email);
+    // console.log('handleSocketLogin called', email);
 
     try {
       const res = await axios({
@@ -58,6 +58,26 @@ export const SocketProvider = ({ children }) => {
     }
   };
 
+  // 로그아웃 이벤트 처리하는 함수
+  const handleSocketLogout = async () => {
+    console.log('handleSocketLogout called');
+
+    axios({
+      url: `${ioUrl}/user/logout`,
+      method: 'POST',
+      withCredentials: true,
+    }).then((res) => {
+      if (res.status === 200) {
+        alert('로그아웃 성공!');
+        setIsLogin(false);
+        setUser(null);
+      } else {
+        console.log(res.data.error);
+        alert(res.data.error);
+      }
+    });
+  };
+
   useEffect(() => {
     //컴포넌트 언마운트 시 Socket.IO 연결 해제
     return () => {
@@ -71,6 +91,7 @@ export const SocketProvider = ({ children }) => {
   const ContextValue = {
     socket,
     handleSocketLogin,
+    handleSocketLogout,
   };
 
   return (

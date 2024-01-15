@@ -57,6 +57,16 @@ userService.loginUser = async (email, pw) => {
   }
 };
 
+// 유저 로그아웃
+userService.logoutUser = async (email) => {
+  // console.log('userService.logoutUser called', email);
+  const user = await User.findOne({ email: email });
+  if (!user) throw new Error('user not found');
+  user.online = false;
+  await user.save();
+  return user;
+};
+
 // 유저 확인
 userService.checkUser = async (email) => {
   // console.log("userService.checkUser called", email);
