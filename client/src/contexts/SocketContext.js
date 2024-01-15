@@ -12,7 +12,8 @@ export const SocketProvider = ({ children }) => {
   const ioUrl = 'http://localhost:1234';
   const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
-  const { setIsLogin } = useContext(LoginContext);
+  const { isLogin, setIsLogin } = useContext(LoginContext);
+  console.log('isLogin', isLogin);
   const { setUser } = useContext(UserContext);
 
   // 로그인 이벤트 처리하는 함수
@@ -38,16 +39,8 @@ export const SocketProvider = ({ children }) => {
         // console.log('로그인 성공 !', res.data.user);
         setIsLogin(true);
         setUser(res.data.user);
-        //Socket.IO 연결 및 토큰 인증
-        const newSocket = io(ioUrl, {
-          withCredentials: true,
-          origins: originUrl,
-        });
-        newSocket.on('connect_error', (error) => {
-          console.log('newSocket error', error);
-        });
-        setSocket(newSocket);
-        console.log('newSocket.connect() done');
+        // 소켓 연결
+        createSocket();
       } else {
         alert('로그인 실패..', res.error);
         console.log('로그인 실패..', res.error);
@@ -80,14 +73,40 @@ export const SocketProvider = ({ children }) => {
     });
   };
 
+  // 소켓 생성하는 함수
+  const createSocket = () => {
+    // 이미 소켓 존재하면 그대로 반환
+    if (socket && socket.connected) {
+      return socket;
+    }
+    // 없으면 새로운 소켓 생성
+    const newSocket = io(ioUrl, {
+      withCredentials: true,
+      origins: originUrl,
+    });
+    newSocket.on('connect_error', (error) => {
+      console.log('newSocket error', error);
+    });
+    console.log('newSocket.connect() done');
+    return newSocket;
+  };
+
   useEffect(() => {
-    //컴포넌트 언마운트 시 Socket.IO 연결 해제
+    if (isLogin) {
+      // 로그인 후 소켓 연결 되어있지 않으면 새 소켓 연결
+      if (!socket || !socket.connected) {
+        const newSocket = createSocket();
+        setSocket(newSocket);
+      }
+    }
+
+    //컴포넌트 언마운트 시 기존 소켓 정리
     return () => {
       if (socket) {
         socket.disconnect();
       }
     };
-  }, [socket]);
+  }, [isLogin]);
 
   // Socket Context 값
   const ContextValue = {
