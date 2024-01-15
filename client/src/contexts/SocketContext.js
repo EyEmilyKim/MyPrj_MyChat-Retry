@@ -35,7 +35,7 @@ export const SocketProvider = ({ children }) => {
 
       if (res.status === 200) {
         alert('로그인 성공 !', res.data.user);
-        console.log('로그인 성공 !', res.data.user);
+        // console.log('로그인 성공 !', res.data.user);
         setIsLogin(true);
         setUser(res.data.user);
         //Socket.IO 연결 및 토큰 인증
@@ -61,7 +61,9 @@ export const SocketProvider = ({ children }) => {
   // 로그아웃 이벤트 처리하는 함수
   const handleSocketLogout = async () => {
     console.log('handleSocketLogout called');
-
+    if (socket) {
+      socket.emit('logout');
+    }
     axios({
       url: `${ioUrl}/user/logout`,
       method: 'POST',

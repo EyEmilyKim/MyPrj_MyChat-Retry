@@ -54,7 +54,7 @@ userController.loginSuccess = async (req, res) => {
 
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
-    console.log('userController.loginSuccess failed');
+    // console.log('userController.loginSuccess failed');
     res.status(500).json({ error: error.message });
   }
 };

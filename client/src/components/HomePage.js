@@ -11,8 +11,8 @@ export default function HomePage() {
   const { isLogin, setIsLogin } = useContext(LoginContext);
   const { user, setUser } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
-  console.log('isLogin', isLogin);
-  console.log('user', user);
+  // console.log('isLogin', isLogin);
+  // console.log('user', user);
   console.log('socket', socket);
 
   useEffect(() => {

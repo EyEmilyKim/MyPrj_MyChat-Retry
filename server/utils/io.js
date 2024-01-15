@@ -40,8 +40,13 @@ module.exports = function (io) {
   io.on('connection', (socket) => {
     console.log('Socket connected : ', socket.id);
 
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected : ', socket.id);
+    socket.on('logout', () => {
+      console.log('Logout requested, disconnecting socket');
+      socket.disconnect(true);
+    });
+
+    socket.on('disconnect', (reason) => {
+      console.log(`Socket disconnected by [${reason}] : ${socket.id}`);
     });
   });
 };
