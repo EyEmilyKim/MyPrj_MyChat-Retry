@@ -57,4 +57,12 @@ userService.loginUser = async (email, pw) => {
   }
 };
 
+// 유저 확인
+userService.checkUser = async (email) => {
+  // console.log("userService.checkUser called", email);
+  const user = await User.findOne({ email: email });
+  if (!user) throw new Error('user not found');
+  return user;
+};
+
 module.exports = userService;

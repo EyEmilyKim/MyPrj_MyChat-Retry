@@ -15,5 +15,7 @@ const ioServer = require('./utils/io')(
 );
 
 httpServer.listen(process.env.PORT, () => {
-  console.log('CORS-enabled web server listening on port ', process.env.PORT);
+  console.log(
+    `CORS-enabled web server listening on port ${process.env.PORT}...`
+  );
 });

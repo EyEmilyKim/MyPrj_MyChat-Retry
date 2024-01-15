@@ -37,10 +37,10 @@ module.exports = function (io) {
     authenticateSocket(socket, next);
   });
 
-  io.on('connection', async (socket) => {
+  io.on('connection', (socket) => {
     console.log('Socket connected : ', socket.id);
 
-    socket.on('disconnected', () => {
+    socket.on('disconnect', () => {
       console.log('Socket disconnected : ', socket.id);
     });
   });

@@ -1,4 +1,5 @@
 const userService = require('../services/user.Service');
+const jwt = require('../utils/jwt');
 
 const userController = {};
 
@@ -43,4 +44,18 @@ userController.loginUser = async (req, res) => {
   }
 };
 
+// 유저 로그인 유지
+userController.loginSuccess = async (req, res) => {
+  // console.log('userController.loginSuccess called');
+  try {
+    const accessToken = req.cookies.accessToken;
+    const data = jwt.verifyToken(accessToken, 'AT');
+    const user = await userService.checkUser(data.email);
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log('userController.loginSuccess failed');
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = userController;
