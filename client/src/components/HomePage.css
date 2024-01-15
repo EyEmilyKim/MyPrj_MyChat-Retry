@@ -1,0 +1,17 @@
+.home-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.home-title {
+  font-size: 23px;
+}
+.loggedIn-area,
+.nonLoggedIn-area {
+  /* border: solid 3px yellow; */
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

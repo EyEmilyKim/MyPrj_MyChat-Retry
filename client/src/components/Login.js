@@ -1,15 +1,9 @@
 import axios from 'axios';
 import { useEffect, useRef, useState, useContext } from 'react';
 import './Login.css';
-import { LoginContext } from '../contexts/LoginContext';
-import { UserContext } from '../contexts/UserContext';
 import { SocketContext } from '../contexts/SocketContext';
 
 export default function Login() {
-  const { isLogin } = useContext(LoginContext);
-  const { user } = useContext(UserContext);
-  console.log('isLogin', isLogin);
-  console.log('user', user);
   const { socket, handleSocketLogin } = useContext(SocketContext);
   console.log('socket', socket);
   const [email, setEmail] = useState('');

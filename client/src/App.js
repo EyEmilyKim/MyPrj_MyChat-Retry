@@ -1,11 +1,11 @@
-import Login from './components/Login';
+import HomePage from './components/HomePage';
 import { Providers } from './contexts/_Providers';
 
 function App() {
   return (
     <Providers>
       <div className="App">
-        <Login />
+        <HomePage />
       </div>
     </Providers>
   );
