@@ -17,7 +17,7 @@ async function authenticateSocket(socket, next) {
     socket.decoded = decoded;
     next();
   } catch (error) {
-    console.error('Token verification failed', err);
+    console.error('Token verification failed', error);
     return next(new Error('Socket Authentication error B'));
   }
 }
