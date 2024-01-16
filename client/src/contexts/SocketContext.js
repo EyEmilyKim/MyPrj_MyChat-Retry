@@ -12,8 +12,9 @@ export const SocketProvider = ({ children }) => {
   const ioUrl = 'http://localhost:1234';
   const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
+  // console.log('socket', socket);
   const { isLogin, setIsLogin } = useContext(LoginContext);
-  console.log('isLogin', isLogin);
+  // console.log('isLogin', isLogin);
   const { setUser } = useContext(UserContext);
 
   // 로그인 이벤트 처리하는 함수
@@ -85,7 +86,7 @@ export const SocketProvider = ({ children }) => {
       newSocket.on('connect_error', (error) => {
         console.log('newSocket error', error);
       });
-      console.log('newSocket.connect() done');
+      console.log('createSocket() done');
       return newSocket;
     }
   };

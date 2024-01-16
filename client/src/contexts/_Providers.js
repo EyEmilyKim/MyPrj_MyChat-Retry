@@ -4,10 +4,10 @@ import { SocketProvider } from './SocketContext';
 
 export const Providers = ({ children }) => {
   return (
-    <LoginProvider>
-      <UserProvider>
+    <UserProvider>
+      <LoginProvider>
         <SocketProvider>{children}</SocketProvider>
-      </UserProvider>
-    </LoginProvider>
+      </LoginProvider>
+    </UserProvider>
   );
 };

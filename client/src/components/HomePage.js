@@ -1,40 +1,18 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { UserContext } from '../contexts/UserContext';
 import { SocketContext } from '../contexts/SocketContext';
-import axios from 'axios';
 import './HomePage.css';
 import Login from './Login';
 import Logout from './Logout';
 
 export default function HomePage() {
-  const { isLogin, setIsLogin } = useContext(LoginContext);
-  const { user, setUser } = useContext(UserContext);
+  const { isLogin } = useContext(LoginContext);
+  const { user } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
   // console.log('isLogin', isLogin);
   // console.log('user', user);
   console.log('socket', socket);
-
-  useEffect(() => {
-    try {
-      axios({
-        url: 'http://localhost:1234/user/login/success',
-        method: 'GET',
-        withCredentials: true,
-      })
-        .then((result) => {
-          if (result.data) {
-            setIsLogin(true);
-            setUser(result.data.user);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }, [isLogin]);
 
   return (
     <div className="home-body">
