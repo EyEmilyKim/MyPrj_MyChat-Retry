@@ -1,4 +1,5 @@
 const jwt = require('./jwt');
+const userController = require('../controllers/user.controller');
 
 // JWT 인증 미들웨어
 async function authenticateSocket(socket, next) {
@@ -39,6 +40,17 @@ module.exports = function (io) {
 
   io.on('connection', (socket) => {
     console.log('Socket connected : ', socket.id);
+
+    socket.on('getUsers', () => {
+      userController
+        .getAllUsers()
+        .then((userList) => {
+          socket.emit('users', userList);
+        })
+        .catch((error) => {
+          console.error('Error fetching users : ', error);
+        });
+    });
 
     socket.on('logout', () => {
       console.log('Logout requested, disconnecting socket');

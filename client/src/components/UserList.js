@@ -12,6 +12,9 @@ export default function UserList() {
   useEffect(() => {
     if (isLogin && socket) {
       socket.emit('getUsers');
+      socket.on('users', (users) => {
+        setUserList(users);
+      });
     }
   }, [isLogin, socket]);
 
@@ -20,6 +23,15 @@ export default function UserList() {
       <div className="userList-body">
         <h1 className="userList-title">MyApp-test UserList</h1>
       </div>
+
+      {userList.length > 0
+        ? userList.map((user) => (
+            <div className="user-list" key={user.id}>
+              <div className="user-name">{user.name}</div>
+              {/* <div className="user-online">{user.online}</div> */}
+            </div>
+          ))
+        : null}
     </>
   );
 }

@@ -19,6 +19,9 @@ userService.registerUser = async (email, pw, un) => {
         email: email,
         password: hashedPW,
         name: un,
+        online: false,
+        // token: '',
+        // sid: '',
       });
       await user.save();
       return user;
@@ -73,6 +76,19 @@ userService.checkUser = async (email) => {
   const user = await User.findOne({ email: email });
   if (!user) throw new Error('user not found');
   return user;
+};
+
+// 모든 유저 확인
+userService.getAllUsers = async () => {
+  // console.log('userService.getAllUsers called');
+  try {
+    const userList = await User.find({});
+    console.log('userList', userList);
+    return userList;
+  } catch (error) {
+    console.log('userService.getAllUsers error', error);
+    throw new Error(error.message);
+  }
 };
 
 module.exports = userService;

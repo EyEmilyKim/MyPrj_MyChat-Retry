@@ -76,4 +76,16 @@ userController.logoutUser = async (req, res) => {
   }
 };
 
+// 전체 유저 찾기
+userController.getAllUsers = async () => {
+  console.log('userController.getAllUsers called');
+  try {
+    const userList = await userService.getAllUsers();
+    return userList;
+  } catch (error) {
+    console.log('userController.logout failed', error);
+    throw new Error(error);
+  }
+};
+
 module.exports = userController;
