@@ -1,0 +1,13 @@
+.nav-container {
+  background-color: yellow;
+}
+.nav-list {
+  display: flex;
+  justify-content: end;
+  margin: 0px;
+}
+.nav-items {
+  /* border: solid black 1px; */
+  list-style: none;
+  padding: 10px;
+}
