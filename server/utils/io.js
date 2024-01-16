@@ -14,8 +14,8 @@ async function authenticateSocket(socket, next) {
   const accessToken = cookies.accessToken;
   // 토큰 확인 로직
   try {
-    const decoded = await jwt.verifyToken(accessToken, 'AT');
-    socket.decoded = decoded;
+    const tokenDecoded = await jwt.verifyToken(accessToken, 'AT');
+    socket.decoded = tokenDecoded;
     next();
   } catch (error) {
     console.error('Token verification failed', error);
@@ -34,12 +34,14 @@ async function parseCookies(cookieHeader) {
 }
 
 module.exports = function (io) {
-  io.use((socket, next) => {
-    authenticateSocket(socket, next);
+  io.use(async (socket, next) => {
+    await authenticateSocket(socket, next);
   });
 
   io.on('connection', (socket) => {
-    console.log('Socket connected : ', socket.id);
+    console.log(
+      `Socket connected for ${socket.decoded.email}, socketId : ${socket.id}`
+    );
 
     socket.on('getUsers', () => {
       userController
