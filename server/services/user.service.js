@@ -5,11 +5,11 @@ const { generateToken, verifyToken } = require('../utils/jwt');
 const userService = {};
 
 // 유저 등록
-userService.registerUser = async (email, pw, un) => {
+userService.registerUser = async function (email, pw, un) {
   // console.log('userService.registerUser called', email, pw, un);
   try {
     // 이미 있는 유저인지 확인
-    let user = await User.findOne({ email: email });
+    let user = await this.checkUser(email, 'email');
     if (user) {
       throw new Error('이미 사용중인 이메일입니다.');
     } else {
@@ -33,10 +33,10 @@ userService.registerUser = async (email, pw, un) => {
 };
 
 // 유저 로그인
-userService.loginUser = async (email, pw) => {
+userService.loginUser = async function (email, pw) {
   // console.log('userService.loginUser called', email, pw);
   try {
-    let user = await User.findOne({ email: email }); // 이미 있는 유저인지 확인
+    let user = await this.checkUser(email, 'email'); // 이미 있는 유저인지 확인
     if (!user) {
       throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
     }
@@ -63,7 +63,7 @@ userService.loginUser = async (email, pw) => {
 userService.saveConnectedUser = async function (email, sid) {
   console.log('userService.saveConnectedUser called');
   try {
-    const user = await this.checkUser(email);
+    const user = await this.checkUser(email, 'email');
     user.online = true;
     user.sid = sid;
     await user.save();
@@ -74,25 +74,32 @@ userService.saveConnectedUser = async function (email, sid) {
 };
 
 // 유저 로그아웃
-userService.logoutUser = async (email) => {
+userService.logoutUser = async function (email) {
   // console.log('userService.logoutUser called', email);
-  const user = await User.findOne({ email: email });
-  if (!user) throw new Error('user not found');
-  user.online = false;
-  await user.save();
-  return user;
+  try {
+    const user = await this.checkUser(email, 'email');
+    user.online = false;
+    await user.save();
+    return user;
+  } catch (error) {
+    console.log('userService.logoutUser error', error);
+    throw new Error(error.message);
+  }
+};
 };
 
 // 유저 확인
-userService.checkUser = async function (email) {
+userService.checkUser = async function (value, key) {
   // console.log("userService.checkUser called", email);
-  const user = await User.findOne({ email: email });
+  const query = {};
+  query[key] = value;
+  const user = await User.findOne(query);
   if (!user) throw new Error('user not found');
   return user;
 };
 
 // 모든 유저 확인
-userService.getAllUsers = async () => {
+userService.getAllUsers = async function () {
   // console.log('userService.getAllUsers called');
   try {
     const userList = await User.find({});
