@@ -38,10 +38,12 @@ module.exports = function (io) {
     await authenticateSocket(socket, next);
   });
 
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
+    console.log('socket.decoded', socket.decoded);
     console.log(
       `Socket connected for ${socket.decoded.email}, socketId : ${socket.id}`
     );
+    await userController.saveConnectedUser(socket.decoded.email, socket.id);
 
     socket.on('getUsers', () => {
       userController

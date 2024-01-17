@@ -43,6 +43,16 @@ userController.loginUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// 유저 소켓 Connected -> sid 저장
+userController.saveConnectedUser = async (email, sid) => {
+  // console.log('userController.saveConnectedUser called');
+  try {
+    await userService.saveConnectedUser(email, sid);
+  } catch (error) {
+    // console.log('userController.saveConnectedUser failed', error);
+    throw new Error(error);
+  }
+};
 
 // 유저 로그인 유지
 userController.loginSuccess = async (req, res) => {

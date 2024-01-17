@@ -59,6 +59,19 @@ userService.loginUser = async (email, pw) => {
     throw new Error(error.message);
   }
 };
+// 유저 소켓 Connected -> sid 저장
+userService.saveConnectedUser = async function (email, sid) {
+  console.log('userService.saveConnectedUser called');
+  try {
+    const user = await this.checkUser(email);
+    user.online = true;
+    user.sid = sid;
+    await user.save();
+  } catch (error) {
+    console.log('userService.saveConnectedUser error', error);
+    throw new Error(error.message);
+  }
+};
 
 // 유저 로그아웃
 userService.logoutUser = async (email) => {
@@ -71,7 +84,7 @@ userService.logoutUser = async (email) => {
 };
 
 // 유저 확인
-userService.checkUser = async (email) => {
+userService.checkUser = async function (email) {
   // console.log("userService.checkUser called", email);
   const user = await User.findOne({ email: email });
   if (!user) throw new Error('user not found');
