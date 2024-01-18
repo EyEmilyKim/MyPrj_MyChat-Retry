@@ -60,15 +60,15 @@ userService.loginUser = async function (email, pw) {
   }
 };
 // 유저 소켓 Connected -> sid 저장
-userService.saveConnectedUser = async function (email, sid) {
-  console.log('userService.saveConnectedUser called');
+userService.updateConnectedUser = async function (email, sid) {
+  console.log('userService.updateConnectedUser called');
   try {
     const user = await this.checkUser(email, 'email');
     user.online = true;
     user.sid = sid;
     await user.save();
   } catch (error) {
-    console.log('userService.saveConnectedUser error', error);
+    console.log('userService.updateConnectedUser error', error);
     throw new Error(error.message);
   }
 };
@@ -86,11 +86,24 @@ userService.logoutUser = async function (email) {
     throw new Error(error.message);
   }
 };
+// 유저 소켓 disconnected -> online:false, sid:''
+userService.updateDisconnectedUser = async function (sid) {
+  console.log('userService.updateDisconnectedUser called', sid);
+  try {
+    const user = await this.checkUser(sid, 'sid');
+    user.online = false;
+    user.sid = '';
+    await user.save();
+    // console.log('disconnected user : ', user);
+  } catch (error) {
+    console.log('userService.updateDisconnectedUser error', error);
+    throw new Error(error.message);
+  }
 };
 
 // 유저 확인
 userService.checkUser = async function (value, key) {
-  // console.log("userService.checkUser called", email);
+  // console.log("userService.checkUser called", value, key);
   const query = {};
   query[key] = value;
   const user = await User.findOne(query);
@@ -103,7 +116,7 @@ userService.getAllUsers = async function () {
   // console.log('userService.getAllUsers called');
   try {
     const userList = await User.find({});
-    console.log('userList', userList);
+    // console.log('userList', userList);
     return userList;
   } catch (error) {
     console.log('userService.getAllUsers error', error);

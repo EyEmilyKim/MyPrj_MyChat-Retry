@@ -44,12 +44,12 @@ userController.loginUser = async (req, res) => {
   }
 };
 // 유저 소켓 Connected -> sid 저장
-userController.saveConnectedUser = async (email, sid) => {
-  // console.log('userController.saveConnectedUser called');
+userController.updateConnectedUser = async (email, sid) => {
+  // console.log('userController.updateConnectedUser called');
   try {
-    await userService.saveConnectedUser(email, sid);
+    await userService.updateConnectedUser(email, sid);
   } catch (error) {
-    // console.log('userController.saveConnectedUser failed', error);
+    // console.log('userController.updateConnectedUser failed', error);
     throw new Error(error);
   }
 };
@@ -83,6 +83,17 @@ userController.logoutUser = async (req, res) => {
   } catch (error) {
     console.log('userController.logout failed', error);
     res.status(500).json({ error: error.message });
+  }
+};
+
+// 유저 소켓 disconnected -> online:false, sid:''
+userController.updateDisconnectedUser = async (sid) => {
+  // console.log('userController.updateDisconnectedUser called');
+  try {
+    await userService.updateDisconnectedUser(sid);
+  } catch (error) {
+    // console.log('userController.updateDisconnectedUser failed', error);
+    throw new Error(error);
   }
 };
 

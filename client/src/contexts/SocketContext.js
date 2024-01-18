@@ -100,12 +100,12 @@ export const SocketProvider = ({ children }) => {
       }
     }
 
-    // //컴포넌트 언마운트 시 기존 소켓 정리
-    // return () => {
-    //   if (socket) {
-    //     socket.disconnect();
-    //   }
-    // };
+    //컴포넌트 언마운트 시 기존 소켓 정리
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
   }, [isLogin]);
 
   // Socket Context 값

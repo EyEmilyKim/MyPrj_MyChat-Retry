@@ -39,11 +39,12 @@ module.exports = function (io) {
   });
 
   io.on('connection', async (socket) => {
-    console.log('socket.decoded', socket.decoded);
+    // console.log('socket.decoded', socket.decoded);
     console.log(
       `Socket connected for ${socket.decoded.email}, socketId : ${socket.id}`
     );
-    await userController.saveConnectedUser(socket.decoded.email, socket.id);
+    await userController.updateConnectedUser(socket.decoded.email, socket.id);
+    socket.emit('users', await userController.getAllUsers());
 
     socket.on('getUsers', () => {
       userController
@@ -61,8 +62,10 @@ module.exports = function (io) {
       socket.disconnect(true);
     });
 
-    socket.on('disconnect', (reason) => {
+    socket.on('disconnect', async (reason) => {
       console.log(`Socket disconnected by [${reason}] : ${socket.id}`);
+      await userController.updateDisconnectedUser(socket.id);
+      socket.emit('users', await userController.getAllUsers());
     });
   });
 };
