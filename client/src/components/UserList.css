@@ -4,6 +4,20 @@
   align-items: center;
   justify-content: center;
 }
+.user-list {
+  display: flex;
+  align-items: center;
+}
 .userList-title {
   font-size: 23px;
+}
+.user-online {
+  font-size: 20px;
+  margin-left: 5px;
+}
+.online {
+  color: green;
+}
+.offline {
+  color: gray;
 }

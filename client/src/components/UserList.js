@@ -28,6 +28,11 @@ export default function UserList() {
         ? userList.map((user) => (
             <div className="user-list" key={user.id}>
               <div className="user-name">{user.name}</div>
+              <div
+                className={`user-online ${user.online ? 'online' : 'offline'}`}
+              >
+                {user.online ? '●' : '●'}
+              </div>
               {/* <div className="user-online">{user.online}</div> */}
             </div>
           ))

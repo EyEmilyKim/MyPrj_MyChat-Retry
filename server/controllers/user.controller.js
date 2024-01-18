@@ -98,13 +98,16 @@ userController.updateDisconnectedUser = async (sid) => {
 };
 
 // 전체 유저 찾기
-userController.getAllUsers = async () => {
-  console.log('userController.getAllUsers called');
+userController.listAllUsers = async () => {
+  // console.log('userController.listAllUsers called');
   try {
-    const userList = await userService.getAllUsers();
+    const userList = userService
+      .getAllUsers()
+      .then(userService.extractNameAndOnline)
+      .catch((error) => console.log(error));
     return userList;
   } catch (error) {
-    console.log('userController.logout failed', error);
+    console.log('userController.listAllUsers failed', error);
     throw new Error(error);
   }
 };

@@ -44,17 +44,15 @@ module.exports = function (io) {
       `Socket connected for ${socket.decoded.email}, socketId : ${socket.id}`
     );
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
-    socket.emit('users', await userController.getAllUsers());
+    socket.emit('users', await userController.listAllUsers());
 
-    socket.on('getUsers', () => {
-      userController
-        .getAllUsers()
-        .then((userList) => {
-          socket.emit('users', userList);
-        })
-        .catch((error) => {
-          console.error('Error fetching users : ', error);
-        });
+    socket.on('getUsers', async () => {
+      try {
+        const userList = await userController.listAllUsers();
+        socket.emit('users', userList);
+      } catch (error) {
+        console.error('Error fetching users : ', error);
+      }
     });
 
     socket.on('logout', () => {
@@ -63,9 +61,9 @@ module.exports = function (io) {
     });
 
     socket.on('disconnect', async (reason) => {
-      console.log(`Socket disconnected by [${reason}] : ${socket.id}`);
       await userController.updateDisconnectedUser(socket.id);
-      socket.emit('users', await userController.getAllUsers());
+      socket.emit('users', await userController.listAllUsers());
+      console.log(`Socket disconnected by [${reason}] : ${socket.id}`);
     });
   });
 };

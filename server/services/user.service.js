@@ -124,4 +124,17 @@ userService.getAllUsers = async function () {
   }
 };
 
+// 유저 배열에서 name, online 만 추출하기
+userService.extractNameAndOnline = async function (userList) {
+  const NameAndOnlineOfUser = (user) => {
+    return {
+      name: user.name,
+      online: user.online,
+    };
+  };
+  const extractData = await userList.map(NameAndOnlineOfUser);
+  // console.log('extractData', extractData);
+  return extractData;
+};
+
 module.exports = userService;
