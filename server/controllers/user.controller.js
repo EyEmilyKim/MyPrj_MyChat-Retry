@@ -60,11 +60,11 @@ userController.loginSuccess = async (req, res) => {
   try {
     const accessToken = req.cookies.accessToken;
     const data = jwt.verifyToken(accessToken, 'AT');
-    const user = await userService.checkUser(data.email);
+    const user = await userService.checkUser(data.email, 'email');
 
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
-    // console.log('userController.loginSuccess failed');
+    // console.log('userController.loginSuccess failed', error);
     res.status(500).json({ error: error.message });
   }
 };
