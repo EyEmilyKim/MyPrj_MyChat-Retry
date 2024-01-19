@@ -7,7 +7,7 @@ export const LoginProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   console.log('isLogin', isLogin);
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthing, setIsAuthing] = useState(true);
 
   // 로그인 이벤트 처리하는 함수
   const handleLogin = async (email, password) => {
@@ -90,13 +90,15 @@ export const LoginProvider = ({ children }) => {
 
   const contextValue = {
     isLogin,
-    user,
     setIsLogin,
+    isAuthing,
+    setIsAuthing,
+    user,
     handleLogin,
     handleLogout,
   };
 
-  return isLoading ? null : (
+  return (
     <LoginContext.Provider value={contextValue}>
       {children}
     </LoginContext.Provider>

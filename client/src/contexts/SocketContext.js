@@ -12,6 +12,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   console.log('socket', socket);
   const { isLogin } = useContext(LoginContext);
+  const [isConnecting, setIsConnecting] = useState(true);
 
   // 소켓 생성하는 함수
   const createSocket = () => {
@@ -26,11 +27,19 @@ export const SocketProvider = ({ children }) => {
       });
       newSocket.on('connect_error', (error) => {
         console.log('newSocket error', error);
+        setIsConnecting(false);
       });
-      console.log('createSocket() done');
+      newSocket.on('connect', () => {
+        console.log('Socket connected successfully !');
+        setIsConnecting(false);
+      });
       return newSocket;
     }
   };
+
+  useEffect(() => {
+    console.log('isConnecting', isConnecting);
+  }, [isConnecting]);
 
   useEffect(() => {
     if (isLogin) {
@@ -57,7 +66,14 @@ export const SocketProvider = ({ children }) => {
     };
   }, [isLogin]);
 
+  const contextValue = {
+    socket,
+    isConnecting,
+  };
+
   return (
-    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
+    <SocketContext.Provider value={contextValue}>
+      {children}
+    </SocketContext.Provider>
   );
 };
