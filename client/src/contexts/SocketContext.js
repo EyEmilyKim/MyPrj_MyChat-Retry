@@ -43,8 +43,8 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (isLogin) {
-      // 로그인 후 소켓 없으면 새 소켓 연결
-      console.log('로그인 후 소켓 없으면 새 소켓 연결');
+      // 로그인 후 소켓 연결
+      console.log('로그인 후 소켓 연결');
       if (!socket) {
         const newSocket = createSocket();
         setSocket(newSocket);
@@ -58,7 +58,7 @@ export const SocketProvider = ({ children }) => {
       }
     }
 
-    //컴포넌트 언마운트 시 기존 소켓 정리
+    //컴포넌트 언마운트 시 소켓 정리
     return () => {
       if (socket) {
         socket.disconnect();
