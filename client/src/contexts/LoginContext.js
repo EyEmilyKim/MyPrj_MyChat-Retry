@@ -1,13 +1,12 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { UserContext } from './UserContext';
 
 export const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   console.log('isLogin', isLogin);
-  const { setUser } = useContext(UserContext);
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // 로그인 이벤트 처리하는 함수
@@ -91,6 +90,7 @@ export const LoginProvider = ({ children }) => {
 
   const contextValue = {
     isLogin,
+    user,
     setIsLogin,
     handleLogin,
     handleLogout,

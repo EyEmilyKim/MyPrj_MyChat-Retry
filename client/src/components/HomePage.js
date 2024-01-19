@@ -1,18 +1,12 @@
 import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
-import { UserContext } from '../contexts/UserContext';
-import { SocketContext } from '../contexts/SocketContext';
 import './HomePage.css';
 import Login from './Login';
 import Logout from './Logout';
 
 export default function HomePage() {
   const { isLogin } = useContext(LoginContext);
-  const { user } = useContext(UserContext);
-  const { socket } = useContext(SocketContext);
-  // console.log('isLogin', isLogin);
-  // console.log('user', user);
-  console.log('socket', socket);
+  const { user } = useContext(LoginContext);
 
   return (
     <div className="home-body">
