@@ -3,6 +3,7 @@ import { Providers } from './contexts/_Providers';
 import HomePage from './components/HomePage';
 import UserList from './components/UserList';
 import NavBar from './components/NavBar';
+import PrivateRoutes from './utils/PrivateRoutes';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
         <NavBar />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
-          <Route exact path="/userList" element={<UserList />} />
+          <Route element={<PrivateRoutes />}>
+            <Route exact path="/userList" element={<UserList />} />
+          </Route>
         </Routes>
       </Providers>
     </BrowserRouter>

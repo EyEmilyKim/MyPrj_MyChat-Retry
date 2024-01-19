@@ -6,27 +6,30 @@ export const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      axios({
-        url: 'http://localhost:1234/user/login/success',
-        method: 'GET',
-        withCredentials: true,
-      })
-        .then((result) => {
-          if (result.data) {
-            setIsLogin(true);
-            setUser(result.data.user);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+    const fetchData = async () => {
+      try {
+        const result = await axios({
+          url: 'http://localhost:1234/user/auth',
+          method: 'GET',
+          withCredentials: true,
         });
-    } catch (error) {
-      console.log(error);
-    }
+
+        if (result.data) {
+          setIsLogin(true);
+          setUser(result.data.user);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const contextValue = {
@@ -34,7 +37,7 @@ export const LoginProvider = ({ children }) => {
     setIsLogin,
   };
 
-  return (
+  return isLoading ? null : (
     <LoginContext.Provider value={contextValue}>
       {children}
     </LoginContext.Provider>

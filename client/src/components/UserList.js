@@ -1,22 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
 import './UserList.css';
 import { SocketContext } from '../contexts/SocketContext';
-import { LoginContext } from '../contexts/LoginContext';
 
 export default function UserList() {
-  const { isLogin } = useContext(LoginContext);
   const { socket } = useContext(SocketContext);
   const [userList, setUserList] = useState([]);
   console.log('userList', userList);
 
   useEffect(() => {
-    if (isLogin && socket) {
       socket.emit('getUsers');
       socket.on('users', (users) => {
+    if (socket) {
         setUserList(users);
       });
     }
-  }, [isLogin, socket]);
+  }, [socket]);
 
   return (
     <>
