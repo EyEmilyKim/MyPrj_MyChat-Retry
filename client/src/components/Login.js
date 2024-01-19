@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useEffect, useRef, useState, useContext } from 'react';
 import './Login.css';
-import { SocketContext } from '../contexts/SocketContext';
+import { LoginContext } from '../contexts/LoginContext';
 
 export default function Login() {
-  const { handleSocketLogin } = useContext(SocketContext);
+  const { handleLogin } = useContext(LoginContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
@@ -14,9 +14,8 @@ export default function Login() {
     emailRef.current.focus();
   }, []);
 
-  const handleLogin = async () => {
-    // console.log('Login handleLogin called', email);
-    handleSocketLogin(email, password);
+  const doLogin = async () => {
+    handleLogin(email, password);
   };
 
   const handleSignUp = async () => {
@@ -84,7 +83,7 @@ export default function Login() {
         <button
           className="login-button"
           disabled={email === '' || password === ''}
-          onClick={handleLogin}
+          onClick={doLogin}
         >
           로그인
         </button>

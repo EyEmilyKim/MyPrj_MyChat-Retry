@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-import axios from 'axios';
 import { LoginContext } from './LoginContext';
-import { UserContext } from './UserContext';
 
 // SocketContext 생성
 export const SocketContext = createContext();
@@ -13,64 +11,7 @@ export const SocketProvider = ({ children }) => {
   const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
   console.log('socket', socket);
-  const { isLogin, setIsLogin } = useContext(LoginContext);
-  // console.log('isLogin', isLogin);
-  const { setUser } = useContext(UserContext);
-
-  // 로그인 이벤트 처리하는 함수
-  const handleSocketLogin = async (email, password) => {
-    // console.log('handleSocketLogin called', email);
-
-    try {
-      const res = await axios({
-        url: `${ioUrl}/user/login`,
-        method: 'POST',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          email: email,
-          password: password,
-        },
-      });
-
-      if (res.status === 200) {
-        alert('로그인 성공 !', res.data.user);
-        // console.log('로그인 성공 !', res.data.user);
-        setIsLogin(true);
-        setUser(res.data.user);
-      } else {
-        alert('로그인 실패..', res.error);
-        console.log('로그인 실패..', res.error);
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed. Please try again.');
-    }
-  };
-
-  // 로그아웃 이벤트 처리하는 함수
-  const handleSocketLogout = async () => {
-    console.log('handleSocketLogout called');
-    if (socket) {
-      socket.emit('logout');
-    }
-    axios({
-      url: `${ioUrl}/user/logout`,
-      method: 'POST',
-      withCredentials: true,
-    }).then((res) => {
-      if (res.status === 200) {
-        alert('로그아웃 성공!');
-        setIsLogin(false);
-        setUser(null);
-      } else {
-        console.log(res.data.error);
-        alert(res.data.error);
-      }
-    });
-  };
+  const { isLogin } = useContext(LoginContext);
 
   // 소켓 생성하는 함수
   const createSocket = () => {
@@ -94,9 +35,17 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (isLogin) {
       // 로그인 후 소켓 없으면 새 소켓 연결
+      console.log('로그인 후 소켓 없으면 새 소켓 연결');
       if (!socket) {
         const newSocket = createSocket();
         setSocket(newSocket);
+      }
+    } else if (isLogin == false) {
+      // 로그아웃 후 소켓 정리
+      if (socket) {
+        console.log('로그아웃 후 소켓 정리');
+        socket.emit('logout');
+        socket.disconnect();
       }
     }
 
@@ -108,16 +57,7 @@ export const SocketProvider = ({ children }) => {
     };
   }, [isLogin]);
 
-  // Socket Context 값
-  const ContextValue = {
-    socket,
-    handleSocketLogin,
-    handleSocketLogout,
-  };
-
   return (
-    <SocketContext.Provider value={ContextValue}>
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
 };

@@ -1,13 +1,8 @@
 import { useContext } from 'react';
-import { SocketContext } from '../contexts/SocketContext';
+import { LoginContext } from '../contexts/LoginContext';
 
 export default function Logout() {
-  const { handleSocketLogout } = useContext(SocketContext);
-
-  const handleLogout = () => {
-    // console.log('Logout handleLogout called');
-    handleSocketLogout();
-  };
+  const { handleLogout } = useContext(LoginContext);
 
   return (
     <div>
