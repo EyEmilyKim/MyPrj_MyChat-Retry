@@ -61,7 +61,7 @@ userService.loginUser = async function (email, pw) {
 };
 // 유저 소켓 Connected -> sid 저장
 userService.updateConnectedUser = async function (email, sid) {
-  console.log('userService.updateConnectedUser called');
+  // console.log('userService.updateConnectedUser called');
   try {
     const user = await this.checkUser(email, 'email');
     user.online = true;
@@ -88,12 +88,14 @@ userService.logoutUser = async function (email) {
 };
 // 유저 소켓 disconnected -> online:false, sid:''
 userService.updateDisconnectedUser = async function (sid) {
-  console.log('userService.updateDisconnectedUser called', sid);
+  // console.log('userService.updateDisconnectedUser called', sid);
   try {
     const user = await this.checkUser(sid, 'sid');
-    user.online = false;
-    user.sid = '';
-    await user.save();
+    if (user) {
+      user.online = false;
+      user.sid = '';
+      await user.save();
+    }
     // console.log('disconnected user : ', user);
   } catch (error) {
     console.log('userService.updateDisconnectedUser error', error);
@@ -104,11 +106,14 @@ userService.updateDisconnectedUser = async function (sid) {
 // 유저 확인
 userService.checkUser = async function (value, key) {
   // console.log("userService.checkUser called", value, key);
-  const query = {};
-  query[key] = value;
-  const user = await User.findOne(query);
-  if (!user) throw new Error('user not found');
-  return user;
+  try {
+    const query = {};
+    query[key] = value;
+    const user = await User.findOne(query);
+    return user;
+  } catch (error) {
+    throw new Error('user not found');
+  }
 };
 
 // 모든 유저 확인
