@@ -8,11 +8,20 @@ export default function UserList() {
   console.log('userList', userList);
 
   useEffect(() => {
-      socket.emit('getUsers');
-      socket.on('users', (users) => {
     if (socket) {
+      const handleUsers = (users) => {
+        console.log('handleUsers called');
         setUserList(users);
-      });
+      };
+
+      if (socket) {
+        socket.on('users', handleUsers);
+        socket.emit('getUsers');
+      }
+
+      return () => {
+        socket.off('users', handleUsers);
+      };
     }
   }, [socket]);
 
