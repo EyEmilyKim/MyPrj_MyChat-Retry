@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
   const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
   console.log('socket', socket);
-  const { isLogin } = useContext(LoginContext);
+  const { isLogin, isAuthing } = useContext(LoginContext);
   const [isConnecting, setIsConnecting] = useState(true);
 
   // 소켓 생성하는 함수
@@ -50,6 +50,7 @@ export const SocketProvider = ({ children }) => {
         setSocket(newSocket);
       }
     } else if (isLogin == false) {
+      setIsConnecting(false);
       // 로그아웃 후 소켓 정리
       if (socket) {
         console.log('로그아웃 후 소켓 정리');
@@ -64,7 +65,7 @@ export const SocketProvider = ({ children }) => {
         socket.disconnect();
       }
     };
-  }, [isLogin]);
+  }, [isAuthing]);
 
   const contextValue = {
     socket,

@@ -58,6 +58,10 @@ export const LoginProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('isAuthing', isAuthing);
+  }, [isAuthing]);
+
+  useEffect(() => {
     // 로그인 인증
     const Authenticate = async () => {
       try {
