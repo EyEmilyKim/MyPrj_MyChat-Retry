@@ -103,7 +103,7 @@ userController.listAllUsers = async () => {
   try {
     const userList = userService
       .getAllUsers()
-      .then(userService.extractNameAndOnline)
+      .then(userService.extractNameIdOnline)
       .catch((error) => console.log(error));
     return userList;
   } catch (error) {

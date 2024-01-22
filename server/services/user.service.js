@@ -129,15 +129,16 @@ userService.getAllUsers = async function () {
   }
 };
 
-// 유저 배열에서 name, online 만 추출하기
-userService.extractNameAndOnline = async function (userList) {
-  const NameAndOnlineOfUser = (user) => {
+// 유저 배열에서 name, id, online 만 추출하기
+userService.extractNameIdOnline = async function (userList) {
+  const NameIdOnlineOfUser = (user) => {
     return {
+      id: user.id,
       name: user.name,
       online: user.online,
     };
   };
-  const extractData = await userList.map(NameAndOnlineOfUser);
+  const extractData = await userList.map(NameIdOnlineOfUser);
   // console.log('extractData', extractData);
   return extractData;
 };
