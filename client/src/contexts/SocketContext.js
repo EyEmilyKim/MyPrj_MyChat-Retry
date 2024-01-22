@@ -68,10 +68,17 @@ export const SocketProvider = ({ children }) => {
       }
     };
   }, [isAuthing]);
+  // for UserList
+  const [userList, setUserList] = useState([]);
+  const handleUsers = (users) => {
+    console.log('handleUsers called');
+    setUserList(users);
+  };
+  if (socket) socket.on('users', (userList) => handleUsers(userList));
 
   const contextValue = {
-    socket,
     isConnecting,
+    userList, // for UserList
   };
 
   return (

@@ -3,27 +3,11 @@ import './UserList.css';
 import { SocketContext } from '../contexts/SocketContext';
 
 export default function UserList() {
-  const { socket } = useContext(SocketContext);
-  const [userList, setUserList] = useState([]);
-  console.log('userList', userList);
+  const { userList } = useContext(SocketContext);
 
   useEffect(() => {
-    if (socket) {
-      const handleUsers = (users) => {
-        console.log('handleUsers called');
-        setUserList(users);
-      };
-
-      if (socket) {
-        socket.on('users', handleUsers);
-        socket.emit('getUsers');
-      }
-
-      return () => {
-        socket.off('users', handleUsers);
-      };
-    }
-  }, [socket]);
+    console.log('userList', userList);
+  }, [userList]);
 
   return (
     <>
