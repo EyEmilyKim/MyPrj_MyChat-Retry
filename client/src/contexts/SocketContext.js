@@ -13,9 +13,12 @@ export const SocketProvider = ({ children }) => {
   console.log('socket', socket);
   const { isLogin, isAuthing } = useContext(LoginContext);
   const [isConnecting, setIsConnecting] = useState(true);
+  useEffect(() => {
+    // console.log('isConnecting', isConnecting);
+  }, [isConnecting]);
 
   // 소켓 생성하는 함수
-  const createSocket = () => {
+  const createSocket = (reason) => {
     // 이미 소켓 존재하면 그대로 반환
     if (socket) {
       return socket;
@@ -24,22 +27,21 @@ export const SocketProvider = ({ children }) => {
       const newSocket = io(ioUrl, {
         withCredentials: true,
         origins: originUrl,
+        query: {
+          reason: reason,
+        },
       });
       newSocket.on('connect_error', (error) => {
         console.log('newSocket error', error);
         setIsConnecting(false);
       });
       newSocket.on('connect', () => {
-        console.log('Socket connected successfully !');
+        console.log('소켓 연결 성공 !');
         setIsConnecting(false);
       });
       return newSocket;
     }
   };
-
-  useEffect(() => {
-    console.log('isConnecting', isConnecting);
-  }, [isConnecting]);
 
   useEffect(() => {
     if (isLogin) {

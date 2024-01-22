@@ -8,9 +8,9 @@ const PrivateRoutes = () => {
   const { isLogin, isAuthing } = useContext(LoginContext);
   const { isConnecting } = useContext(SocketContext);
   const [canNavigate, setCanNavigate] = useState(false);
-  console.log('isAuthing', isAuthing);
-  console.log('isConnecting', isConnecting);
-  console.log('canNavigate', canNavigate);
+  // console.log('isAuthing', isAuthing);
+  // console.log('isConnecting', isConnecting);
+  // console.log('canNavigate', canNavigate);
 
   useEffect(() => {
     const checkNavigation = async () => {
@@ -31,9 +31,7 @@ const PrivateRoutes = () => {
     ) : (
       <Navigate to="/" replace />
     )
-  ) : (
-    <h1>Loading...</h1>
-  );
+  ) : null;
 };
 
 export default PrivateRoutes;

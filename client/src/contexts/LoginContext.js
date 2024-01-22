@@ -27,7 +27,8 @@ export const LoginProvider = ({ children }) => {
         },
       });
       if (res.status === 200) {
-        alert('로그인 성공 !');
+        alert(`로그인 성공 !\n반갑습니다 ${res.data.user.name}님~~`);
+        console.log('로그인 성공 !');
         setIsLogin(true);
         setUser(res.data.user);
       }
@@ -47,7 +48,8 @@ export const LoginProvider = ({ children }) => {
         withCredentials: true,
       });
       if (res.status === 200) {
-        alert('로그아웃 성공!');
+        alert(`로그아웃 성공!\n또 만나요 ${res.data.user.name}님~~`);
+        console.log('로그아웃 성공!');
         setIsLogin(false);
         setUser(null);
       }

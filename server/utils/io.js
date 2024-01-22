@@ -40,8 +40,9 @@ module.exports = function (io) {
 
   io.on('connection', async (socket) => {
     // console.log('socket.decoded', socket.decoded);
+    // console.log(socket.handshake.query);
     console.log(
-      `Socket connected for ${socket.decoded.email}, socketId : ${socket.id}`
+      `Socket connected for ${socket.decoded.email}, by [${socket.handshake.query.reason}] : ${socket.id}`
     );
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
     socket.emit('users', await userController.listAllUsers());
@@ -63,7 +64,9 @@ module.exports = function (io) {
     socket.on('disconnect', async (reason) => {
       await userController.updateDisconnectedUser(socket.id);
       socket.emit('users', await userController.listAllUsers());
-      console.log(`Socket disconnected by [${reason}] : ${socket.id}`);
+      console.log(
+        `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`
+      );
     });
   });
 };
