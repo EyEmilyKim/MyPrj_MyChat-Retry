@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
   const ioUrl = 'http://localhost:1234';
   const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
-  console.log('socket', socket);
+  // console.log('socket', socket);
   const { isLogin, isAuthing } = useContext(LoginContext);
   const [isConnecting, setIsConnecting] = useState(true);
   useEffect(() => {
@@ -45,29 +45,45 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (isLogin) {
-      // 로그인 후 소켓 연결
-      console.log('로그인 후 소켓 연결');
-      if (!socket) {
-        const newSocket = createSocket();
+      // 인증성공 후 소켓 연결
+      console.log('인증성공 후 소켓 연결');
+      if (socket) {
+        return socket;
+      } else {
+        const newSocket = createSocket('auth');
         setSocket(newSocket);
       }
-    } else if (isLogin == false) {
-      setIsConnecting(false);
+    }
+    //컴포넌트 언마운트 시 소켓 정리
+    return () => {
+      if (socket) {
+        console.log('SocketContext 언마운트 소켓 정리 A');
+        socket.disconnect();
+        console.log(socket);
+      }
+    };
+  }, [isAuthing]);
+
+  useEffect(() => {
+    if (isLogin == false) {
       // 로그아웃 후 소켓 정리
       if (socket) {
         console.log('로그아웃 후 소켓 정리');
         socket.emit('logout');
         socket.disconnect();
+        console.log(socket);
       }
     }
-
     //컴포넌트 언마운트 시 소켓 정리
     return () => {
       if (socket) {
+        console.log('SocketContext 언마운트 소켓 정리 B');
         socket.disconnect();
+        console.log(socket);
       }
     };
-  }, [isAuthing]);
+  }, [isLogin]);
+
   // for UserList
   const [userList, setUserList] = useState([]);
   const handleUsers = (users) => {
@@ -77,7 +93,7 @@ export const SocketProvider = ({ children }) => {
   if (socket) socket.on('users', (userList) => handleUsers(userList));
 
   const contextValue = {
-    isConnecting,
+    isConnecting, // for PrivateRoutes
     userList, // for UserList
   };
 

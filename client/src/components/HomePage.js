@@ -5,14 +5,18 @@ import Login from './Login';
 import Logout from './Logout';
 
 export default function HomePage() {
-  const { isLogin } = useContext(LoginContext);
+  const { isLoggingIn, isLogin } = useContext(LoginContext);
   const { user } = useContext(LoginContext);
 
   return (
     <div className="home-body">
       <h1 className="home-title">MyApp-test HomePage</h1>
 
-      {!isLogin ? (
+      {isLoggingIn ? (
+        <div className="loader-area">
+          <span className="loader">Load&nbsp;ng</span>
+        </div>
+      ) : !isLogin ? (
         <div className="nonLoggedIn-area">
           <Login />
         </div>

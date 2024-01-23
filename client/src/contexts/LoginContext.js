@@ -6,13 +6,24 @@ export const LoginContext = createContext();
 export const LoginProvider = ({ children }) => {
   const path = 'http://localhost:1234/user';
   const [isLogin, setIsLogin] = useState(false);
-  console.log('isLogin', isLogin);
   const [user, setUser] = useState(null);
   const [isAuthing, setIsAuthing] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  useEffect(() => {
+    console.log('[isLogin] - isLogin', isLogin);
+  }, [isLogin]);
+  useEffect(() => {
+    console.log('[isAuthing] - isAuthing', isAuthing);
+  }, [isAuthing]);
+  useEffect(() => {
+    console.log('[isLoggingIn] - isLoggingIn', isLoggingIn);
+  }, [isLoggingIn]);
 
   // 로그인 이벤트 처리하는 함수
   const handleLogin = async (email, password) => {
     console.log('handleLogin called', email);
+    setIsLoggingIn(true);
     try {
       const res = await axios({
         url: `${path}/login`,
@@ -31,10 +42,13 @@ export const LoginProvider = ({ children }) => {
         console.log('로그인 성공 !');
         setIsLogin(true);
         setUser(res.data.user);
+        setIsLoggingIn(false);
+        window.location.reload(); // 소켓auth연결 위해 적정 페이지로 이동(or새로고침)필요
       }
     } catch (error) {
       const notify = true;
       handleError(error, notify);
+      setIsLoggingIn(false);
     }
   };
 
@@ -60,10 +74,7 @@ export const LoginProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log('isAuthing', isAuthing);
-  }, [isAuthing]);
-
-  useEffect(() => {
+    // console.log('[]useEffect - Auth called');
     // 로그인 인증
     const Authenticate = async () => {
       try {
@@ -105,13 +116,12 @@ export const LoginProvider = ({ children }) => {
   };
 
   const contextValue = {
-    isLogin,
-    setIsLogin,
-    isAuthing,
-    setIsAuthing,
-    user,
-    handleLogin,
-    handleLogout,
+    isLogin, // for PrivateRoutes
+    isAuthing, // for PrivateRoutes
+    isLoggingIn, // for HomePage
+    user, // for HomePage
+    handleLogin, // for Login(HomePage)
+    handleLogout, // for Logout(HomePage)
   };
 
   return (
