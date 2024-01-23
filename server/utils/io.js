@@ -1,4 +1,5 @@
 const jwt = require('./jwt');
+const { parseCookies } = require('./parseCookies');
 const userController = require('../controllers/user.controller');
 
 // JWT 인증 미들웨어
@@ -7,7 +8,11 @@ async function authenticateSocket(socket, next) {
 
   const cookieHeader = socket.handshake.headers.cookie;
   if (!cookieHeader) {
-    return next(new Error('Socket Authentication error A'));
+    return next(
+      new Error(
+        'Socket Authentication error A - There is no cookie-header provided'
+      )
+    );
   }
   // 쿠키 파싱
   const cookies = await parseCookies(cookieHeader);
@@ -19,18 +24,10 @@ async function authenticateSocket(socket, next) {
     next();
   } catch (error) {
     console.error('Token verification failed', error);
-    return next(new Error('Socket Authentication error B'));
+    return next(
+      new Error('Socket Authentication error B - Token Verification failed')
+    );
   }
-}
-
-// 쿠키 파싱 함수
-async function parseCookies(cookieHeader) {
-  const cookies = {};
-  cookieHeader.split(';').forEach((cookie) => {
-    const parts = cookie.split('=');
-    cookies[parts[0].trim()] = parts[1].trim();
-  });
-  return cookies;
 }
 
 module.exports = function (io) {
