@@ -1,14 +1,27 @@
 const {
   authenticateSocket,
-  connectedSockets,
-  printConnectedSockets,
+  addConnectedSocket,
+  deleteConnectedSocket,
 } = require('./io-middlewares');
 const userController = require('../controllers/user.controller');
+
+// 연결된 모든 소켓 출력하는 함수
+async function printAllSockets(io) {
+  const allSockets = io.sockets.sockets;
+  // console.log('allSockets', allSockets);
+  console.log('-------- All connected sockets --------');
+  for (const [socketId, socket] of allSockets) {
+    console.log(
+      `${socket.decoded.email} - ${socketId}, Connected: ${socket.connected}`
+    );
+  }
+  console.log('----------------------------------------');
+}
 
 module.exports = function (io) {
   io.use(async (socket, next) => {
     await authenticateSocket(socket, next);
-  });
+  }); // JWT 인증 미들웨어
 
   io.on('connection', async (socket) => {
     // console.log('socket.decoded', socket.decoded);
@@ -16,6 +29,8 @@ module.exports = function (io) {
     console.log(
       `Socket connected for ${socket.decoded.email}, by [${socket.handshake.query.reason}] : ${socket.id}`
     );
+    await addConnectedSocket(socket.decoded.email, socket.id); // 소켓정보 배열에 추가(+목록 출력)
+    await printAllSockets(io);
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
     socket.emit('users', await userController.listAllUsers());
 
@@ -39,14 +54,8 @@ module.exports = function (io) {
       console.log(
         `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`
       );
-      // 소켓정보를 배열에서 제거 후 목록 출력
-      const indexToRemove = connectedSockets.findIndex(
-        (item) => item.sid === socket.id
-      );
-      if (indexToRemove !== -1) {
-        connectedSockets.splice(indexToRemove, 1);
-      }
-      printConnectedSockets();
+      await deleteConnectedSocket(socket.id); // 소켓정보 배열에서 제거(+목록 출력)
+      await printAllSockets(io);
     });
   });
 };

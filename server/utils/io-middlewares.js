@@ -12,6 +12,19 @@ function printConnectedSockets() {
   console.log(`--------------------------------------`);
 }
 
+async function addConnectedSocket(email, sid) {
+  connectedSockets.push({ email: email, sid: sid });
+  // printConnectedSockets();
+}
+
+async function deleteConnectedSocket(sid) {
+  connectedSockets.splice(
+    connectedSockets.findIndex((item) => item.sid === sid),
+    1
+  );
+  // printConnectedSockets();
+}
+
 // JWT 인증 미들웨어
 async function authenticateSocket(socket, next) {
   // console.log('authenticateSocket called');
@@ -29,12 +42,8 @@ async function authenticateSocket(socket, next) {
   // 토큰 확인 로직
   try {
     const tokenDecoded = await jwt.verifyToken(accessToken, 'AT');
-    socket.decoded = tokenDecoded;
-    // 소켓정보를 배열에 추가 후 목록 출력
-    connectedSockets.push({ email: socket.decoded.email, sid: socket.id });
-    printConnectedSockets();
-    // 다음 미들웨어로 이동
-    next();
+    socket.decoded = tokenDecoded; // 소켓에 인증 정보 저장
+    next(); // 다음 미들웨어로 이동
   } catch (error) {
     console.error('Token verification failed', error);
     return next(
@@ -45,6 +54,6 @@ async function authenticateSocket(socket, next) {
 
 module.exports = {
   authenticateSocket,
-  connectedSockets,
-  printConnectedSockets,
+  addConnectedSocket,
+  deleteConnectedSocket,
 };
