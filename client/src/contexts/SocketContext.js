@@ -90,7 +90,18 @@ export const SocketProvider = ({ children }) => {
     console.log('handleUsers called');
     setUserList(users);
   };
-  if (socket) socket.on('users', (userList) => handleUsers(userList));
+
+  // 소켓 이벤트 처리
+  if (socket) {
+    // UserList 수신
+    socket.on('users', (userList) => handleUsers(userList));
+
+    // // 연결 해제 메시지 수신
+    // socket.on('disconnectMessage', (message) => {
+    //   alert(message);
+    //   console.log(message);
+    // });
+  }
 
   const contextValue = {
     isConnecting, // for PrivateRoutes

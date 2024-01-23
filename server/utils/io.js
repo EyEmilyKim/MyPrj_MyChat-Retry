@@ -1,5 +1,6 @@
 const {
   authenticateSocket,
+  // checkDuplicatedSocket,
   addConnectedSocket,
   deleteConnectedSocket,
 } = require('./io-middlewares');
@@ -22,6 +23,9 @@ module.exports = function (io) {
   io.use(async (socket, next) => {
     await authenticateSocket(socket, next);
   }); // JWT 인증 미들웨어
+  // io.use(async (socket, next) => {
+  //   await checkDuplicatedSocket(socket, next);
+  // }); // 1인1소켓 미들웨어
 
   io.on('connection', async (socket) => {
     // console.log('socket.decoded', socket.decoded);
