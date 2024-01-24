@@ -19,6 +19,10 @@ export default function ChatRoom() {
         console.log('failed to join', res);
       }
     });
+    socket.on('welcomeMessage', (welcomeMessage, cb) => {
+      console.log(`on('welcomeMessage') : ${welcomeMessage}`);
+      cb('welcomeMessage, got it');
+    });
   }, []);
 
   return (

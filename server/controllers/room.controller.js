@@ -14,15 +14,14 @@ roomController.getAllRooms = async () => {
   }
 };
 
-// rid 로 룸 조회
-roomController.checkRoom = async (rid) => {
-  // console.log('roomController.checkRoom called', rid);
+// 룸 입장
+roomController.joinRoom = async (rid, user) => {
+  // console.log('roomController.joinRoom called', rid, user);
   try {
-    const room = await roomService.checkRoom(rid, '_id');
-    // console.log('checkRoom', room);
+    const room = await roomService.joinRoom(rid, user);
     return room;
   } catch (error) {
-    console.log('roomController.checkRoom failed', error);
+    console.log('roomController.joinRoom failed', error);
     throw new Error(error);
   }
 };
