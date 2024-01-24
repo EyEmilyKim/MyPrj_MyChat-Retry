@@ -29,7 +29,22 @@ export default function RoomList() {
     axios
       .get('http://localhost:1234/room/createDummy')
       .then((res) => console.log(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        if (window.confirm('페이지를 새로고침 하시겠습니까?'))
+          window.location.reload();
+      });
+  };
+
+  const clearAllRooms = () => {
+    axios
+      .get('http://localhost:1234/room/clearRooms')
+      .then((res) => console.log(res.data))
+      .catch((err) => console.error(err))
+      .finally(() => {
+        if (window.confirm('페이지를 새로고침 하시겠습니까?'))
+          window.location.reload();
+      });
   };
 
   const navigate = useNavigate();
@@ -42,8 +57,12 @@ export default function RoomList() {
       <div className="roomList-header">
         <h1 className="roomList-title">MyApp-test RoomList</h1>
         <div className="button-area">
-          <button> X </button>
-          <button onClick={createDummyRooms}>dummy Rooms</button>
+          <button className="dummy-rooms" onClick={createDummyRooms}>
+            dummy Rooms
+          </button>
+          <button className="clear-rooms" onClick={clearAllRooms}>
+            clear Rooms
+          </button>
         </div>
       </div>
 
@@ -56,6 +75,7 @@ export default function RoomList() {
                 onClick={() => moveToRoom(room._id)}
               >
                 <div className="room-title">{room.title}</div>
+                <div className="num-of-member">({room.members.length}명)</div>
               </div>
             ))
           : null}

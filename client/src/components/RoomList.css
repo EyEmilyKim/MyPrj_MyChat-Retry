@@ -11,6 +11,12 @@
   display: flex;
   gap: 10px;
 }
+.dummy-rooms {
+  color: blue;
+}
+.clear-rooms {
+  color: red;
+}
 
 .roomList-body {
   /* border: solid palevioletred 2px; */
@@ -32,4 +38,8 @@
 .room-title {
   font-size: 15px;
   font-weight: bold;
+}
+.num-of-member {
+  color: gray;
+  margin-left: 5px;
 }
