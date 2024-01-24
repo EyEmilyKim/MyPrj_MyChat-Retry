@@ -5,11 +5,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function UserList() {
-  const { userList } = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
+  const [userList, setUserList] = useState([]);
+  useEffect(() => {
+    console.log('[userList]', userList);
+  }, [userList]);
 
   useEffect(() => {
-    console.log('userList', userList);
-  }, [userList]);
+    setTimeout(() => {
+      console.log(`socket : ${socket.id}`);
+    }, 50);
+    socket.emit('getUsers', (res) => {
+      // console.log('getUsers res', res);
+      setUserList(res.data);
+    });
+
+    socket.on('users', (reason, users, cb) => {
+      console.log(`on('users') ${reason}`, users);
+      setUserList(users);
+      cb('users, got it');
+    });
+  }, []);
 
   const refreshThis = () => {
     window.location.reload();

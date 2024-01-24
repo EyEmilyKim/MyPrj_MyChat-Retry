@@ -13,8 +13,8 @@ export default function RoomList() {
         console.log(`socket : ${socket.id}`);
       }, 60);
       socket.emit('getRooms', (res) => {
-        console.log('page getRooms res', res);
-        setRoomList(res.rooms);
+        // console.log('getRooms res', res);
+        setRoomList(res.data);
       });
     }
   }, []);

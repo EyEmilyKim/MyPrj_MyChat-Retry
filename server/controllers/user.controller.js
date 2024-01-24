@@ -98,13 +98,17 @@ userController.updateDisconnectedUser = async (sid) => {
 };
 
 // 모든 유저 조회
-userController.listAllUsers = async () => {
+userController.listAllUsers = async (reason) => {
   // console.log('userController.listAllUsers called');
   try {
     const userList = await userService
       .getAllUsers()
       .then(userService.extractNameIdOnline)
       .catch((error) => console.log(error));
+    console.log(
+      `listAllUsers [${reason}] `
+      // : ${JSON.stringify(userList)}`
+    );
     return userList;
   } catch (error) {
     console.log('userController.listAllUsers failed', error);

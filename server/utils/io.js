@@ -37,21 +37,27 @@ module.exports = function (io) {
     await addConnectedSocket(socket.decoded.email, socket.id); // 소켓정보 배열에 추가(+목록 출력)
     await printAllSockets(io);
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
-    socket.emit('users', await userController.listAllUsers());
+    socket.emit(
+      'users',
+      'Someone connected',
+      await userController.listAllUsers('Someone connected'),
+      (res) => console.log(res)
+    );
 
-    socket.on('getUsers', async () => {
+    socket.on('getUsers', async (cb) => {
       try {
-        const userList = await userController.listAllUsers();
-        socket.emit('users', userList);
+        const userList = await userController.listAllUsers('UserList loaded');
+        cb({ status: 'ok', data: userList });
       } catch (error) {
         console.error('Error fetching users : ', error);
+        cb({ status: 'not ok', error: error });
       }
     });
 
     socket.on('getRooms', async (cb) => {
       try {
         const roomList = await roomController.getAllRooms();
-        cb({ status: 'ok', rooms: roomList });
+        cb({ status: 'ok', data: roomList });
       } catch (error) {
         console.log('getRooms Error', error);
         cb({ status: 'not ok', error: error });
@@ -65,7 +71,12 @@ module.exports = function (io) {
 
     socket.on('disconnect', async (reason) => {
       await userController.updateDisconnectedUser(socket.id);
-      socket.emit('users', await userController.listAllUsers());
+      socket.emit(
+        'users',
+        'Someone disconnected',
+        await userController.listAllUsers('Someone disconnected'),
+        (res) => console.log(res)
+      );
       console.log(
         `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`
       );

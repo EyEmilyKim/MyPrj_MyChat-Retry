@@ -87,18 +87,8 @@ export const SocketProvider = ({ children }) => {
     };
   }, [isLogin]);
 
-  // for UserList
-  const [userList, setUserList] = useState([]);
-  const handleUsers = (users) => {
-    console.log('handleUsers called');
-    setUserList(users);
-  };
-
   // 소켓 이벤트 처리
   if (socket) {
-    // UserList 수신
-    socket.on('users', (userList) => handleUsers(userList));
-
     // // 연결 해제 메시지 수신
     // socket.on('disconnectMessage', (message) => {
     //   alert(message);
@@ -109,7 +99,6 @@ export const SocketProvider = ({ children }) => {
   const contextValue = {
     socket,
     isConnecting, // for PrivateRoutes
-    userList, // for UserList
   };
 
   return (
