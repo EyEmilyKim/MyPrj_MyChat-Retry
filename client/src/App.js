@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Providers } from './contexts/_Providers';
+import PrivateRoutes from './utils/PrivateRoutes';
+import NavBar from './components/NavBar';
 import HomePage from './components/HomePage';
 import UserList from './components/UserList';
-import NavBar from './components/NavBar';
-import PrivateRoutes from './utils/PrivateRoutes';
+import RoomList from './components/RoomList';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route exact path="/" element={<HomePage />} />
           <Route element={<PrivateRoutes />}>
             <Route exact path="/userList" element={<UserList />} />
+            <Route exact path="/roomList" element={<RoomList />} />
           </Route>
         </Routes>
       </Providers>

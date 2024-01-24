@@ -107,6 +107,7 @@ export const SocketProvider = ({ children }) => {
   }
 
   const contextValue = {
+    socket,
     isConnecting, // for PrivateRoutes
     userList, // for UserList
   };

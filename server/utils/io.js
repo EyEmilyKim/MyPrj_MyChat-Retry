@@ -47,6 +47,14 @@ module.exports = function (io) {
       }
     });
 
+    socket.on('getRooms', (cb) => {
+      try {
+        cb({ status: 'ok' });
+      } catch (error) {
+        console.log('getRooms Error', error);
+      }
+    });
+
     socket.on('logout', () => {
       console.log('Logout requested, disconnecting socket');
       socket.disconnect(true);
