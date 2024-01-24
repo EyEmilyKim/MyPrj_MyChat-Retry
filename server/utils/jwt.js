@@ -5,10 +5,10 @@ const generateToken = async (user, type) => {
   let expiresIn = '';
   if (type === 'AT') {
     secretKey = process.env.ACCESS_SECRET_KEY;
-    expiresIn = '1h';
+    expiresIn = process.env.ACCESS_EXPIRES_IN;
   } else if (type === 'RT') {
     secretKey = process.env.REFRESH_SECRET_KEY;
-    expiresIn = '24h';
+    expiresIn = process.env.REFRESH_EXPIRES_IN;
   }
 
   const token = jwt.sign(
@@ -19,7 +19,7 @@ const generateToken = async (user, type) => {
     secretKey,
     {
       expiresIn: expiresIn,
-      issuer: 'MyApp-Test',
+      issuer: process.env.TOKEN_ISSUER,
     }
   );
   return token;
