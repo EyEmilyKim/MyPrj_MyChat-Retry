@@ -10,7 +10,9 @@ const PrivateRoutes = () => {
   const [canNavigate, setCanNavigate] = useState(false);
   // console.log('isAuthing', isAuthing);
   // console.log('isConnecting', isConnecting);
-  // console.log('canNavigate', canNavigate);
+  useEffect(() => {
+    console.log('canNavigate', canNavigate);
+  }, [canNavigate]);
 
   useEffect(() => {
     const checkNavigation = async () => {
@@ -19,7 +21,7 @@ const PrivateRoutes = () => {
       }
     };
     checkNavigation();
-  }, [isAuthing, isConnecting]);
+  }, [isAuthing]);
 
   return isAuthing ? (
     <div className="loader-area">

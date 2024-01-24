@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   // console.log('socket', socket);
   const { isLogin, isAuthing } = useContext(LoginContext);
-  const [isConnecting, setIsConnecting] = useState(true);
+  const [isConnecting, setIsConnecting] = useState(false);
   useEffect(() => {
     // console.log('isConnecting', isConnecting);
   }, [isConnecting]);
@@ -23,6 +23,7 @@ export const SocketProvider = ({ children }) => {
     if (socket) {
       return socket;
     } else {
+      setIsConnecting(true);
       // 없으면 새로운 소켓 생성
       const newSocket = io(ioUrl, {
         withCredentials: true,
