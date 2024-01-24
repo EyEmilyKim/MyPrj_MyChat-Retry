@@ -64,6 +64,17 @@ module.exports = function (io) {
       }
     });
 
+    socket.on('joinRoom', async (rid, cb) => {
+      try {
+        const room = await roomController.checkRoom(rid); //룸정보 찾기
+
+        cb({ status: 'ok', data: { room: room } });
+      } catch (error) {
+        console.log('joinRoom Error', error);
+        cb({ status: 'not ok', error: error });
+      }
+    });
+
     socket.on('logout', () => {
       console.log('Logout requested, disconnecting socket');
       socket.disconnect(true);

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '../contexts/SocketContext';
 import axios from 'axios';
 import './RoomList.css';
@@ -26,6 +27,11 @@ export default function RoomList() {
       .catch((err) => console.error(err));
   };
 
+  const navigate = useNavigate();
+  const moveToRoom = (rid) => {
+    navigate(`/room/${rid}`);
+  };
+
   return (
     <>
       <div className="roomList-header">
@@ -39,7 +45,11 @@ export default function RoomList() {
       <div className="roomList-body">
         {roomList.length > 0
           ? roomList.map((room) => (
-              <div className="each-room" key={room._id}>
+              <div
+                className="each-room"
+                key={room._id}
+                onClick={() => moveToRoom(room._id)}
+              >
                 <div className="room-title">{room.title}</div>
               </div>
             ))

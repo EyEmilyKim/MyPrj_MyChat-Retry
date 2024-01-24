@@ -25,6 +25,10 @@
   padding: 5px;
   margin: 10px;
 }
+.each-room:hover {
+  cursor: pointer;
+  background-color: hsla(349, 75%, 78%, 0.782);
+}
 .room-title {
   font-size: 15px;
   font-weight: bold;

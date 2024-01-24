@@ -15,4 +15,16 @@ roomService.getAllRooms = async function () {
   }
 };
 
+// rid 로 룸 조회
+roomService.checkRoom = async (rid) => {
+  // console.log('roomService.checkRoom called');
+  try {
+    const room = await Room.findById(rid);
+    return room;
+  } catch (error) {
+    console.log('roomService.checkRoom error', error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = roomService;

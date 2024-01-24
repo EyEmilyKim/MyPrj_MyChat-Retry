@@ -119,7 +119,7 @@ export const LoginProvider = ({ children }) => {
     isLogin, // for PrivateRoutes
     isAuthing, // for PrivateRoutes
     isLoggingIn, // for HomePage
-    user, // for HomePage
+    user, // for HomePage, ChatRoom
     handleLogin, // for Login(HomePage)
     handleLogout, // for Logout(HomePage)
   };

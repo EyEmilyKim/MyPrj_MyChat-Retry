@@ -5,6 +5,7 @@ import NavBar from './components/NavBar';
 import HomePage from './components/HomePage';
 import UserList from './components/UserList';
 import RoomList from './components/RoomList';
+import ChatRoom from './components/ChatRoom';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route exact path="/userList" element={<UserList />} />
             <Route exact path="/roomList" element={<RoomList />} />
+            <Route exact path="/room/:id" element={<ChatRoom />} />
           </Route>
         </Routes>
       </Providers>
