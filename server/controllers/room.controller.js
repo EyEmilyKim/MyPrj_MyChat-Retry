@@ -16,9 +16,9 @@ roomController.getAllRooms = async () => {
 
 // rid 로 룸 조회
 roomController.checkRoom = async (rid) => {
-  // console.log('roomController.checkRoom called');
+  // console.log('roomController.checkRoom called', rid);
   try {
-    const room = await roomService.checkRoom(rid);
+    const room = await roomService.checkRoom(rid, '_id');
     // console.log('checkRoom', room);
     return room;
   } catch (error) {

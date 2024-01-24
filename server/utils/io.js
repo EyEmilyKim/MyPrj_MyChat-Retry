@@ -50,7 +50,7 @@ module.exports = function (io) {
         cb({ status: 'ok', data: userList });
       } catch (error) {
         console.error('Error fetching users : ', error);
-        cb({ status: 'not ok', error: error });
+        cb({ status: 'Server side Error' });
       }
     });
 
@@ -60,18 +60,17 @@ module.exports = function (io) {
         cb({ status: 'ok', data: roomList });
       } catch (error) {
         console.log('getRooms Error', error);
-        cb({ status: 'not ok', error: error });
+        cb({ status: 'Server side Error' });
       }
     });
 
     socket.on('joinRoom', async (rid, cb) => {
       try {
-        const room = await roomController.checkRoom(rid); //룸정보 찾기
-
-        cb({ status: 'ok', data: { room: room } });
+        const _room = await roomController.checkRoom(rid); //룸정보 찾기
+        cb({ status: 'ok', data: { room: _room } });
       } catch (error) {
         console.log('joinRoom Error', error);
-        cb({ status: 'not ok', error: error });
+        cb({ status: 'Server side Error' });
       }
     });
 

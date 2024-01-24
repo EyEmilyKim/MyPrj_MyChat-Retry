@@ -15,11 +15,13 @@ roomService.getAllRooms = async function () {
   }
 };
 
-// rid 로 룸 조회
-roomService.checkRoom = async (rid) => {
-  // console.log('roomService.checkRoom called');
+// 특정 키,값으로 룸 조회
+roomService.checkRoom = async function (value, key) {
+  // console.log('roomService.checkRoom called', value, key);
   try {
-    const room = await Room.findById(rid);
+    const query = {};
+    query[key] = value;
+    const room = await Room.findOne(query);
     return room;
   } catch (error) {
     console.log('roomService.checkRoom error', error);
