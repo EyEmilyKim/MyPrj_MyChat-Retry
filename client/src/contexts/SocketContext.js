@@ -10,12 +10,14 @@ export const SocketProvider = ({ children }) => {
   const ioUrl = 'http://localhost:1234';
   const originUrl = 'http://localhost:3000';
   const [socket, setSocket] = useState(null);
-  // console.log('socket', socket);
   const { isLogin, isAuthing } = useContext(LoginContext);
   const [isConnecting, setIsConnecting] = useState(false);
-  useEffect(() => {
-    // console.log('isConnecting', isConnecting);
-  }, [isConnecting]);
+  // useEffect(() => {
+  //   console.log('[socket]', socket);
+  // }, [socket]);
+  // useEffect(() => {
+  //   console.log('isConnecting', isConnecting);
+  // }, [isConnecting]);
 
   // 소켓 생성하는 함수
   const createSocket = (reason) => {

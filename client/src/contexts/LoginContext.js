@@ -10,15 +10,15 @@ export const LoginProvider = ({ children }) => {
   const [isAuthing, setIsAuthing] = useState(true);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  useEffect(() => {
-    console.log('[isLogin] - isLogin', isLogin);
-  }, [isLogin]);
-  useEffect(() => {
-    console.log('[isAuthing] - isAuthing', isAuthing);
-  }, [isAuthing]);
-  useEffect(() => {
-    console.log('[isLoggingIn] - isLoggingIn', isLoggingIn);
-  }, [isLoggingIn]);
+  // useEffect(() => {
+  //   console.log('[isLogin] - isLogin', isLogin);
+  // }, [isLogin]);
+  // useEffect(() => {
+  //   console.log('[isAuthing] - isAuthing', isAuthing);
+  // }, [isAuthing]);
+  // useEffect(() => {
+  //   console.log('[isLoggingIn] - isLoggingIn', isLoggingIn);
+  // }, [isLoggingIn]);
 
   // 로그인 이벤트 처리하는 함수
   const handleLogin = async (email, password) => {
