@@ -97,11 +97,11 @@ userController.updateDisconnectedUser = async (sid) => {
   }
 };
 
-// 전체 유저 찾기
+// 모든 유저 조회
 userController.listAllUsers = async () => {
   // console.log('userController.listAllUsers called');
   try {
-    const userList = userService
+    const userList = await userService
       .getAllUsers()
       .then(userService.extractNameIdOnline)
       .catch((error) => console.log(error));

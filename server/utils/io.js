@@ -5,6 +5,7 @@ const {
   deleteConnectedSocket,
 } = require('./io-middlewares');
 const userController = require('../controllers/user.controller');
+const roomController = require('../controllers/room.controller');
 
 // 연결된 모든 소켓 출력하는 함수
 async function printAllSockets(io) {
@@ -47,11 +48,13 @@ module.exports = function (io) {
       }
     });
 
-    socket.on('getRooms', (cb) => {
+    socket.on('getRooms', async (cb) => {
       try {
-        cb({ status: 'ok' });
+        const roomList = await roomController.getAllRooms();
+        cb({ status: 'ok', rooms: roomList });
       } catch (error) {
         console.log('getRooms Error', error);
+        cb({ status: 'not ok', error: error });
       }
     });
 

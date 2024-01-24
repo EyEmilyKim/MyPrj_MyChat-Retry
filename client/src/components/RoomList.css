@@ -1,0 +1,31 @@
+.roomList-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.roomList-title {
+  font-size: 23px;
+}
+.button-area {
+  display: flex;
+  gap: 10px;
+}
+
+.roomList-body {
+  /* border: solid palevioletred 2px; */
+  margin: 0 5px;
+}
+.each-room {
+  display: flex;
+  align-items: center;
+  /* border: solid pink 1px; */
+  background-color: hsla(350, 100%, 88%, 0.663);
+  border-radius: 3px;
+  padding: 5px;
+  margin: 10px;
+}
+.room-title {
+  font-size: 15px;
+  font-weight: bold;
+}

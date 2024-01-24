@@ -116,7 +116,7 @@ userService.checkUser = async function (value, key) {
   }
 };
 
-// 모든 유저 확인
+// 모든 유저 조회
 userService.getAllUsers = async function () {
   // console.log('userService.getAllUsers called');
   try {
