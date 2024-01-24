@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { SocketContext } from '../contexts/SocketContext';
+import axios from 'axios';
 
 export default function RoomList() {
   const { socket } = useContext(SocketContext);
@@ -20,6 +21,12 @@ export default function RoomList() {
       console.log('button getRooms res', res);
     });
   };
+  const createDummyRooms = () => {
+    axios
+      .get('http://localhost:1234/room/createDummy')
+      .then((res) => console.log(res.data))
+      .catch((err) => console.error(err));
+  };
 
   return (
     <>
@@ -27,6 +34,8 @@ export default function RoomList() {
         <h1 className="userList-title">MyApp-test RoomList</h1>
 
         <button onClick={getRooms}>get Rooms</button>
+        <br />
+        <button onClick={createDummyRooms}>dummy Rooms</button>
       </div>
     </>
   );
