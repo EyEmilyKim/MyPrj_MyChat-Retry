@@ -1,15 +1,30 @@
-.userList-body {
+.userList-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.user-list {
-  display: flex;
   align-items: center;
 }
 .userList-title {
   font-size: 23px;
+}
+.refresh-button {
+  padding: 5px;
+  border-radius: 15px;
+}
+.refresh-button:hover {
+  cursor: pointer;
+  background-color: #7fffd478;
+}
+.userList-body {
+  /* border: solid palevioletred 2px; */
+  margin: 0 20px;
+}
+.each-user {
+  /* border: solid pink 1px; */
+  display: flex;
+  align-items: center;
+}
+.user-name {
+  font-weight: normal;
 }
 .user-online {
   font-size: 20px;
