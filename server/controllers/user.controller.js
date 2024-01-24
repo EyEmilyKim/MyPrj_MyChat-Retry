@@ -54,9 +54,9 @@ userController.updateConnectedUser = async (email, sid) => {
   }
 };
 
-// 유저 로그인 유지
-userController.loginSuccess = async (req, res) => {
-  // console.log('userController.loginSuccess called');
+// 유저 인증
+userController.authenticateUser = async (req, res) => {
+  // console.log('userController.authenticateUser called');
   try {
     const accessToken = req.cookies.accessToken;
     const data = jwt.verifyToken(accessToken, 'AT');
@@ -64,7 +64,7 @@ userController.loginSuccess = async (req, res) => {
 
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
-    // console.log('userController.loginSuccess failed', error);
+    // console.log('userController.authenticateUser failed', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -97,6 +97,19 @@ userController.updateDisconnectedUser = async (sid) => {
   }
 };
 
+// 특정 유저 조회
+userController.checkUser = async (value, key) => {
+  try {
+    const user = await userService
+      .checkUser(value, key)
+      .then(userService.extractNameIdOnline)
+      .catch((error) => console.log(error));
+    return user;
+  } catch (error) {
+    console.log('userController.checkUser failed', error);
+  }
+};
+
 // 모든 유저 조회
 userController.listAllUsers = async (reason) => {
   // console.log('userController.listAllUsers called');
@@ -105,10 +118,10 @@ userController.listAllUsers = async (reason) => {
       .getAllUsers()
       .then(userService.extractNameIdOnline)
       .catch((error) => console.log(error));
-    console.log(
-      `listAllUsers [${reason}] `
-      // : ${JSON.stringify(userList)}`
-    );
+    // console.log(
+    //   `listAllUsers [${reason}] `
+    //   // : ${JSON.stringify(userList)}`
+    // );
     return userList;
   } catch (error) {
     console.log('userController.listAllUsers failed', error);

@@ -103,7 +103,7 @@ userService.updateDisconnectedUser = async function (sid) {
   }
 };
 
-// 유저 확인
+// 특정 키,값으로 유저 조회
 userService.checkUser = async function (value, key) {
   // console.log("userService.checkUser called", value, key);
   try {
@@ -129,16 +129,30 @@ userService.getAllUsers = async function () {
   }
 };
 
-// 유저 배열에서 name, id, online 만 추출하기
-userService.extractNameIdOnline = async function (userList) {
-  const NameIdOnlineOfUser = (user) => {
-    return {
-      id: user.id,
-      name: user.name,
-      online: user.online,
-    };
+// 유저 객체or배열에서 name, id, online 만 추출하기
+userService.extractNameIdOnline = async function (users) {
+  const NameIdOnlineOfUser = async (user) => {
+    if (Array.isArray(user)) {
+      // 배열인 경우
+      return user.map((u) => ({
+        id: u.id,
+        name: u.name,
+        online: u.online,
+      }));
+    } else if (typeof user === 'object') {
+      // 단일 객체인 경우
+      return {
+        id: user.id,
+        name: user.name,
+        online: user.online,
+      };
+    } else {
+      throw new Error(
+        'userService.extractNameIdOnline Error - Invalid parameter type'
+      );
+    }
   };
-  const extractData = await userList.map(NameIdOnlineOfUser);
+  const extractData = await NameIdOnlineOfUser(users);
   // console.log('extractData', extractData);
   return extractData;
 };
