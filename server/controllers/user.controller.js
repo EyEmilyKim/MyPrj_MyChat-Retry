@@ -9,7 +9,7 @@ userController.registerUser = async (req, res) => {
   try {
     const { email, password, userName } = req.body;
     const user = await userService.registerUser(email, password, userName);
-    console.log('user', user);
+    console.log('userController.registerUser user', user);
     res.status(200).json({ message: '등록 성공', user: user });
   } catch (error) {
     console.log('userController.registerUser failed', error);

@@ -7,15 +7,17 @@ const roomSchema = new mongoose.Schema(
       required: [true, 'Room title is required.'],
       unique: true,
     },
+    created: {
+      type: Date,
+      default: Date.now,
+    },
     owner: {
       type: mongoose.Schema.ObjectId,
-      unique: true,
       ref: 'User',
     },
     members: [
       {
         type: mongoose.Schema.ObjectId,
-        unique: true,
         ref: 'User',
       },
     ],
