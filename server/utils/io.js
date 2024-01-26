@@ -5,6 +5,7 @@ const {
   deleteConnectedSocket,
 } = require('./io-middlewares');
 const userController = require('../controllers/user.controller');
+const userService = require('../services/user.Service');
 const roomController = require('../controllers/room.controller');
 
 // 연결된 모든 소켓 출력하는 함수
@@ -65,22 +66,34 @@ module.exports = function (io) {
     });
 
     socket.on('joinRoom', async (rid, cb) => {
+      console.log(`socket.on('joinRoom') called`);
       try {
-        const user = await userController.checkUser(socket.id, 'sid'); // 유저정보 찾기
+        const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
         const room = await roomController.joinRoom(rid, user); // 룸 입장
         const ridToString = rid.toString();
         socket.join(ridToString); //해당 룸채널 조인
+
+        //해당 룸채널에 입장 메세지 발신
         const welcomeMessage = `${user.name} joined this room`;
         console.log('welcomeMessage', welcomeMessage);
-        io.to(ridToString).emit('welcomeMessage', welcomeMessage, (res) =>
-          console.log(res)
-        ); //해당 룸채널에 입장 메세지 발신
+        io.to(ridToString).emit(
+          'welcomeMessage',
+          welcomeMessage,
+          (res) => console.log(`'welcomeMessage' res : ${res}`)
+          // Error: operation has timed out
+        );
+        //실시간 룸정보 전체 발신
+        const roomList = await roomController.getAllRooms(
+          'Someone joined somewhere'
+        );
         io.emit(
           'rooms',
           'Someone joined somewhere',
-          await roomController.getAllRooms('Someone joined somewhere'),
-          (res) => console.log(res)
-        ); //실시간 룸정보 전체 발신
+          roomList,
+          (res) => console.log(`'rooms' res : ${res}`)
+          // Error: operation has timed out
+        );
+
         cb({ status: 'ok', data: { room: room } });
       } catch (error) {
         console.log('io > joinRoom Error', error);
