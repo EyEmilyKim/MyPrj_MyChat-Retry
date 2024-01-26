@@ -1,4 +1,5 @@
 const Room = require('../models/room');
+const db = require('../utils/db');
 
 const roomService = {};
 
@@ -22,6 +23,7 @@ roomService.checkRoom = async function (value, key) {
     const query = {};
     query[key] = value;
     const room = await Room.findOne(query);
+    await db.isInstance(room, 'roomServ.checkRoom room'); // true
     return room;
   } catch (error) {
     console.log('roomService.checkRoom error', error);

@@ -7,11 +7,7 @@ const userRoutes = require('./routes/user.routes');
 const roomRoutes = require('./routes/room.routes');
 
 // DB 연결
-const mongoose = require('mongoose');
-mongoose
-  .connect(process.env.DB)
-  .then(() => console.log('몽고DB에 연결되었습니다!'))
-  .catch((err) => console.log('몽고DB 연결 실패 : ', err));
+require('./utils/db').connect();
 
 // CORS 미들웨어
 const corsOptions = {

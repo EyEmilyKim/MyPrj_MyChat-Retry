@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const db = require('../utils/db');
 const { hashPassword, comparePassword } = require('../utils/hash');
 const { generateToken, verifyToken } = require('../utils/jwt');
 
@@ -105,11 +106,12 @@ userService.updateDisconnectedUser = async function (sid) {
 
 // 특정 키,값으로 유저 조회
 userService.checkUser = async function (value, key) {
-  // console.log("userService.checkUser called", value, key);
+  // console.log('userService.checkUser called', value, key);
   try {
     const query = {};
     query[key] = value;
     const user = await User.findOne(query);
+    await db.isInstance(user, 'userServ.checkUser user'); // true
     return user;
   } catch (error) {
     throw new Error('user not found');
