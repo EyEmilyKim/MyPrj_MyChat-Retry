@@ -1,8 +1,8 @@
 const {
   authenticateSocket,
   // checkDuplicatedSocket,
-  addConnectedSocket,
-  deleteConnectedSocket,
+  // addConnectedSocket,
+  // deleteConnectedSocket,
 } = require('./io-middlewares');
 const userController = require('../controllers/user.controller');
 const userService = require('../services/user.Service');
@@ -35,7 +35,7 @@ module.exports = function (io) {
     console.log(
       `Socket connected for ${socket.decoded.email}, by [${socket.handshake.query.reason}] : ${socket.id}`
     );
-    await addConnectedSocket(socket.decoded.email, socket.id); // 소켓정보 배열에 추가(+목록 출력)
+    // await addConnectedSocket(socket.decoded.email, socket.id); // 소켓정보 배열에 추가(+목록 출력)
     await printAllSockets(io);
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
     socket.emit(
@@ -117,7 +117,7 @@ module.exports = function (io) {
       console.log(
         `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`
       );
-      await deleteConnectedSocket(socket.id); // 소켓정보 배열에서 제거(+목록 출력)
+      // await deleteConnectedSocket(socket.id); // 소켓정보 배열에서 제거(+목록 출력)
       await printAllSockets(io);
     });
   });

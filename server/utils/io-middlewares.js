@@ -4,26 +4,26 @@ const { parseCookies } = require('./parseCookies');
 // 연결된 웹소켓 출력 관련...
 const connectedSockets = [];
 
-function printConnectedSockets() {
-  console.log(`---------Connected WebSockets---------`);
-  connectedSockets.forEach(({ email, sid }) => {
-    console.log(`${email} - (sid) ${sid}`);
-  });
-  console.log(`--------------------------------------`);
-}
+// function printConnectedSockets() {
+//   console.log(`---------Connected WebSockets---------`);
+//   connectedSockets.forEach(({ email, sid }) => {
+//     console.log(`${email} - (sid) ${sid}`);
+//   });
+//   console.log(`--------------------------------------`);
+// }
 
-async function addConnectedSocket(email, sid) {
-  connectedSockets.push({ email: email, sid: sid });
-  // printConnectedSockets();
-}
+// async function addConnectedSocket(email, sid) {
+//   connectedSockets.push({ email: email, sid: sid });
+//   // printConnectedSockets();
+// }
 
-async function deleteConnectedSocket(sid) {
-  connectedSockets.splice(
-    connectedSockets.findIndex((item) => item.sid === sid),
-    1
-  );
-  // printConnectedSockets();
-}
+// async function deleteConnectedSocket(sid) {
+//   connectedSockets.splice(
+//     connectedSockets.findIndex((item) => item.sid === sid),
+//     1
+//   );
+//   // printConnectedSockets();
+// }
 
 // JWT 인증 미들웨어
 async function authenticateSocket(socket, next) {
@@ -84,6 +84,6 @@ async function authenticateSocket(socket, next) {
 module.exports = {
   authenticateSocket,
   // checkDuplicatedSocket,
-  addConnectedSocket,
-  deleteConnectedSocket,
+  // addConnectedSocket,
+  // deleteConnectedSocket,
 };
