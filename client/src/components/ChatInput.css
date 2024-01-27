@@ -1,0 +1,25 @@
+.input-container {
+  min-height: 40px;
+  display: flex;
+  justify-content: space-between;
+  bottom: 0;
+  width: 100%;
+}
+
+.input-field {
+  border: none;
+  flex: 1;
+  padding: 5px 0 5px 5px;
+  box-sizing: border-box; /* padding 포함한 크기 계산*/
+}
+.input-field:focus {
+  outline: none;
+}
+
+.send-button {
+  background-color: aquamarine;
+  border: none;
+}
+.send-button:hover {
+  cursor: pointer;
+}

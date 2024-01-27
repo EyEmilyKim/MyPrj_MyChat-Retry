@@ -1,21 +1,33 @@
+.room-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .room-header {
   background-color: aquamarine;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.room-header * {
-  border: 1px solid plum;
-}
 .room-title {
-  padding: 10px;
+  margin: 0 10px;
+  font-size: 16px;
 }
 .user {
-  /* border: 1px solid plum; */
-  padding: 10px;
+  margin: 0 10px;
   font-weight: bold;
 }
+
 .chat-container {
   background-color: antiquewhite;
-  padding: 10px 10px 15px;
+  flex: 1;
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
+  /* scroll-behavior: smooth; */
+  /* scroll-margin-bottom: 0; */
+}
+
+.input-container {
+  background-color: pink;
 }

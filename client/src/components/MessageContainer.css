@@ -1,6 +1,6 @@
-.message-container-whole {
+.each-message {
   /* border: 1px solid plum; */
-  margin: 12px 0px;
+  margin: 15px;
 }
 .system-message-container {
   display: flex;

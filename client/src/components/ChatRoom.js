@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { SocketContext } from '../contexts/SocketContext';
 import MessageContainer from './MessageContainer';
+import ChatInput from './ChatInput';
 
 export default function ChatRoom() {
   const { id } = useParams();
@@ -44,9 +45,9 @@ export default function ChatRoom() {
   }, []);
 
   return (
-    <>
+    <div className="room-container">
       <div className="room-header">
-        <h1 className="room-title">{roomTitle}</h1>
+        <div className="room-title">{roomTitle}</div>
         <p className="user">{user.name}</p>
       </div>
 
@@ -55,6 +56,10 @@ export default function ChatRoom() {
           <MessageContainer messageList={messageList} user={user} />
         ) : null}
       </div>
-    </>
+
+      <div className="input-container">
+        <ChatInput></ChatInput>
+      </div>
+    </div>
   );
 }
