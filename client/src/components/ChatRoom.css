@@ -1,3 +1,21 @@
 .room-header {
   background-color: aquamarine;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.room-header * {
+  border: 1px solid plum;
+}
+.room-title {
+  padding: 10px;
+}
+.user {
+  /* border: 1px solid plum; */
+  padding: 10px;
+  font-weight: bold;
+}
+.chat-container {
+  background-color: antiquewhite;
+  padding: 10px 10px 15px;
 }
