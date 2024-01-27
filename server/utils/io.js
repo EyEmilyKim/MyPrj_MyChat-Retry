@@ -30,21 +30,21 @@ module.exports = function (io) {
   // }); // 1인1소켓 미들웨어
 
   io.on('connection', async (socket) => {
-    // console.log('socket.decoded', socket.decoded);
-    // console.log(socket.handshake.query);
+    // 소켓 연결 시
+    // 서버 로그
     console.log(
       `Socket connected for ${socket.decoded.email}, by [${socket.handshake.query.reason}] : ${socket.id}`
     );
     // await addConnectedSocket(socket.decoded.email, socket.id); // 소켓정보 배열에 추가(+목록 출력)
     await printAllSockets(io);
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
-    socket.emit(
-      'users',
-      'Someone connected',
-      await userController.listAllUsers('Someone connected'),
-      (res) => console.log(res)
+    // 유저 on/offline 정보 발신
+    const userList = await userController.listAllUsers('Someone connected');
+    socket.emit('users', 'Someone connected', userList, (res) =>
+      console.log(`'users' res: ${res}`)
     );
 
+    // 유저 목록 요청
     socket.on('getUsers', async (cb) => {
       try {
         const userList = await userController.listAllUsers('UserList loaded');
@@ -55,6 +55,7 @@ module.exports = function (io) {
       }
     });
 
+    // 룸 목록 요청
     socket.on('getRooms', async (cb) => {
       try {
         const roomList = await roomController.getAllRooms();
@@ -65,6 +66,7 @@ module.exports = function (io) {
       }
     });
 
+    // 룸 입장 시
     socket.on('joinRoom', async (rid, cb) => {
       console.log(`socket.on('joinRoom') called`);
       try {
@@ -72,7 +74,6 @@ module.exports = function (io) {
         const room = await roomController.joinRoom(rid, user); // 룸 입장
         const ridToString = rid.toString();
         socket.join(ridToString); //해당 룸채널 조인
-
         //해당 룸채널에 입장 메세지 발신
         const welcomeMessage = `${user.name} joined this room`;
         console.log('welcomeMessage', welcomeMessage);
@@ -101,19 +102,23 @@ module.exports = function (io) {
       }
     });
 
+    // 로그아웃 요청
     socket.on('logout', () => {
       console.log('Logout requested, disconnecting socket');
       socket.disconnect(true);
     });
 
+    // 소켓 연결 해제 시
     socket.on('disconnect', async (reason) => {
       await userController.updateDisconnectedUser(socket.id);
-      socket.emit(
-        'users',
-        'Someone disconnected',
-        await userController.listAllUsers('Someone disconnected'),
-        (res) => console.log(res)
+      // 유저 on/offline 정보 발신
+      const userList = await userController.listAllUsers(
+        'Someone disconnected'
       );
+      socket.emit('users', 'Someone disconnected', userList, (res) =>
+        console.log(`logout 'users' res : ${res}`)
+      );
+      // 서버 로그
       console.log(
         `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`
       );

@@ -111,7 +111,7 @@ userService.checkUser = async function (value, key) {
     const query = {};
     query[key] = value;
     const user = await User.findOne(query);
-    await db.isInstance(user, 'userServ.checkUser user'); // true
+    // await db.isInstance(user, 'userServ.checkUser user'); // true
     return user;
   } catch (error) {
     throw new Error('user not found');

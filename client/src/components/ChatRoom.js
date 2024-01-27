@@ -39,7 +39,7 @@ export default function ChatRoom() {
       }
     });
     socket.on('welcomeMessage', (welcomeMessage, cb) => {
-      console.log(`on('welcomeMessage') : ${welcomeMessage}`);
+      console.log(`on('welcomeMessage') : ${JSON.stringify(welcomeMessage)}`);
       cb('welcomeMessage, got it');
     });
   }, []);

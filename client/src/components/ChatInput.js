@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 export default function ChatInput() {
   const [message, setMessage] = useState('');
   useEffect(() => {
-    console.log('message', message);
+    console.log('sending message', message);
   }, [message]);
 
   const checkContent = () => {
