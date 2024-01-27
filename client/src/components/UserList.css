@@ -16,19 +16,20 @@
 }
 
 .userList-body {
-  /* border: solid palevioletred 2px; */
+  /* border: solid pink 2px; */
   margin: 0 20px;
 }
 .each-user {
-  /* border: solid pink 1px; */
+  /* border: solid palevioletred 1px; */
   display: flex;
   align-items: center;
+  margin-bottom: 5px;
 }
 .user-name {
   font-weight: normal;
 }
 .user-online {
-  font-size: 20px;
+  font-size: 15px;
   margin-left: 5px;
 }
 .online {

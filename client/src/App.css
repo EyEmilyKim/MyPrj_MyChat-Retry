@@ -1,0 +1,12 @@
+/* App.css */
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main {
+  border: 2px solid black;
+  flex: 1; /* 나머지 공간 모두 차지 */
+  overflow: auto;
+}

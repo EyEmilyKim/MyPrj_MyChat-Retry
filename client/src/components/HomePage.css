@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 .home-title {
   font-size: 23px;
@@ -13,5 +12,5 @@
   gap: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }

@@ -12,15 +12,19 @@ function App() {
   return (
     <BrowserRouter>
       <Providers>
-        <NavBar />
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route element={<PrivateRoutes />}>
-            <Route exact path="/userList" element={<UserList />} />
-            <Route exact path="/roomList" element={<RoomList />} />
-            <Route exact path="/room/:id" element={<ChatRoom />} />
-          </Route>
-        </Routes>
+        <div className="App">
+          <NavBar />
+          <div className="main">
+            <Routes>
+              <Route exact path="/" element={<HomePage />} />
+              <Route element={<PrivateRoutes />}>
+                <Route exact path="/userList" element={<UserList />} />
+                <Route exact path="/roomList" element={<RoomList />} />
+                <Route exact path="/room/:id" element={<ChatRoom />} />
+              </Route>
+            </Routes>
+          </div>
+        </div>
       </Providers>
     </BrowserRouter>
   );
