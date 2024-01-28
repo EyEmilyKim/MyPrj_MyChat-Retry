@@ -14,20 +14,23 @@ export default function ChatRoom() {
   const [messageList, setMessageList] = useState([
     {
       _id: 'dummy1',
-      user: { name: 'system' },
+      sender: { name: 'system' },
       content: `dummy System message`,
     },
     {
       _id: 'dummy2',
-      user: { name: 'Alfa' },
+      sender: { name: 'Alfa' },
       content: `Hi there, I'm Alfa. this is dummy`,
     },
     {
       _id: 'dummy3',
-      user: { name: 'Chalie' },
+      sender: { name: 'Chalie' },
       content: `Hi Alfa, I'm Chalie. this is dummy too`,
     },
   ]);
+  useEffect(() => {
+    console.log('[messageList]', messageList);
+  }, [messageList]);
 
   useEffect(() => {
     socket.emit('joinRoom', rid, (res) => {
@@ -43,11 +46,11 @@ export default function ChatRoom() {
   socket.on('welcomeMessage', (welcomeMessage) => {
     console.log(`on('welcomeMessage') : ${JSON.stringify(welcomeMessage)}`);
   });
-  // socket.on('message', (res, cb) => {
-  //   console.log('received message', res);
-  //   setMessageList((prevState) => prevState.concat(res));
-  //   cb('message, got it');
-  // });
+
+  socket.on('message', (message) => {
+    console.log(`on('message') : ${JSON.stringify(message)}`);
+    setMessageList((prevState) => prevState.concat(message));
+  });
 
   return (
     <div className="room-container">
