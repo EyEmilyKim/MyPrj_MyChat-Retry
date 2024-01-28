@@ -115,7 +115,7 @@ userController.checkUser = async (value, key) => {
 };
 
 // 모든 유저 조회
-userController.listAllUsers = async (reason) => {
+userController.listAllUsers = async (reason = 'reason not provided') => {
   // console.log('userController.listAllUsers called');
   try {
     const userList = await userService
