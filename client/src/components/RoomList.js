@@ -17,13 +17,13 @@ export default function RoomList() {
         // console.log('getRooms res', res);
         setRoomList(res.data);
       });
-      socket.on('rooms', (reason, rooms, cb) => {
-        console.log(`on('rooms') ${reason}`, rooms);
-        setRoomList(rooms);
-        cb('rooms, got it');
-      });
     }
   }, []);
+
+  socket.on('rooms', (reason, rooms) => {
+    console.log(`on('rooms') ${reason}`, rooms);
+    setRoomList(rooms);
+  });
 
   const createDummyRooms = () => {
     axios

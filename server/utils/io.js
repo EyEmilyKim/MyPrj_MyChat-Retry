@@ -40,9 +40,7 @@ module.exports = function (io) {
     await userController.updateConnectedUser(socket.decoded.email, socket.id);
     // 유저 on/offline 정보 발신
     const userList = await userController.listAllUsers('Someone connected');
-    socket.emit('users', 'Someone connected', userList, (res) =>
-      console.log(`'users' res: ${res}`)
-    );
+    io.emit('users', 'Someone connected', userList);
 
     // 유저 목록 요청
     socket.on('getUsers', async (cb) => {
@@ -75,25 +73,16 @@ module.exports = function (io) {
         const ridToString = rid.toString();
         socket.join(ridToString); //해당 룸채널 조인
         //해당 룸채널에 입장 메세지 발신
-        const welcomeMessage = `${user.name} joined this room`;
-        console.log('welcomeMessage', welcomeMessage);
-        io.to(ridToString).emit(
-          'welcomeMessage',
-          welcomeMessage,
-          (res) => console.log(`'welcomeMessage' res : ${res}`)
-          // Error: operation has timed out
-        );
+        const welcomeMessage = {
+          content: `${user.name} joined this room`,
+          user: { _id: null, name: 'system' },
+        };
+        io.to(ridToString).emit('welcomeMessage', welcomeMessage);
         //실시간 룸정보 전체 발신
         const roomList = await roomController.getAllRooms(
           'Someone joined somewhere'
         );
-        io.emit(
-          'rooms',
-          'Someone joined somewhere',
-          roomList,
-          (res) => console.log(`'rooms' res : ${res}`)
-          // Error: operation has timed out
-        );
+        io.emit('rooms', 'Someone joined somewhere', roomList);
 
         cb({ status: 'ok', data: { room: room } });
       } catch (error) {
@@ -115,9 +104,7 @@ module.exports = function (io) {
       const userList = await userController.listAllUsers(
         'Someone disconnected'
       );
-      socket.emit('users', 'Someone disconnected', userList, (res) =>
-        console.log(`logout 'users' res : ${res}`)
-      );
+      io.emit('users', 'Someone disconnected', userList);
       // 서버 로그
       console.log(
         `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`

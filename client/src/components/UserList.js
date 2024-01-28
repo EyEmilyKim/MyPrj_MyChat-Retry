@@ -19,13 +19,12 @@ export default function UserList() {
       // console.log('getUsers res', res);
       setUserList(res.data);
     });
-
-    socket.on('users', (reason, users, cb) => {
-      console.log(`on('users') ${reason}`, users);
-      setUserList(users);
-      cb('users, got it');
-    });
   }, []);
+
+  socket.on('users', (reason, users) => {
+    console.log(`on('users') ${reason}`, users);
+    setUserList(users);
+  });
 
   const refreshThis = () => {
     window.location.reload();
