@@ -104,10 +104,10 @@ userController.checkUser = async (value, key) => {
       .checkUser(value, key)
       .then(userService.extractNameIdOnline)
       .catch((error) => console.log(error));
-    require('../utils/db').isInstance(
-      user,
-      'userCont.checkUser user_extracted'
-    );
+    // await require('../utils/db').isInstance(
+    //   user,
+    //   'userCont.checkUser user_extracted'
+    // ); // false
     return user;
   } catch (error) {
     console.log('userController.checkUser failed', error);

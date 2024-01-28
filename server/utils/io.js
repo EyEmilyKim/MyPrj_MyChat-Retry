@@ -5,6 +5,8 @@ const {
 const userController = require('../controllers/user.controller');
 const userService = require('../services/user.Service');
 const roomController = require('../controllers/room.controller');
+const roomService = require('../services/room.service');
+const messageService = require('../services/message.service');
 
 // 연결된 모든 소켓 출력하는 함수
 async function printAllSockets(io) {
@@ -28,7 +30,7 @@ module.exports = function (io) {
   // }); // 1인1소켓 미들웨어
 
   io.on('connection', async (socket) => {
-    // 소켓 연결 시
+    // ** 소켓 연결 시
     console.log(
       `Socket connected for ${socket.decoded.email}, by [${socket.handshake.query.reason}] : ${socket.id}`
     );
@@ -44,7 +46,7 @@ module.exports = function (io) {
       console.error('io > connection Error', error);
     }
 
-    // 유저 목록 요청
+    // ** 유저 목록 요청
     socket.on('getUsers', async (cb) => {
       console.log(`'getUsers' called by : `, socket.decoded.email);
       try {
@@ -56,7 +58,7 @@ module.exports = function (io) {
       }
     });
 
-    // 룸 목록 요청
+    // ** 룸 목록 요청
     socket.on('getRooms', async (cb) => {
       console.log(`'getRooms' called by : `, socket.decoded.email);
       try {
@@ -68,7 +70,7 @@ module.exports = function (io) {
       }
     });
 
-    // 룸 입장 시
+    // ** 룸 입장 시
     socket.on('joinRoom', async (rid, cb) => {
       console.log(`'joinRoom' called by :`, socket.decoded.email);
       try {
@@ -96,7 +98,41 @@ module.exports = function (io) {
       }
     });
 
-    // 로그아웃 요청
+    // ** 메세지 수신 시
+    socket.on('sendMessage', async (receivedMsg, rid, cb) => {
+      console.log(
+        `'sendMessage' called by : ${socket.decoded.email}, ${receivedMsg}, ${rid}`
+      );
+      try {
+        // 유저, 룸 정보 찾기
+        const user = await userService.checkUser(socket.id, 'sid');
+        const room = await roomService.checkRoom(rid, '_id');
+        if (user && room) {
+          // 메세지 저장
+          const newMsg = await messageService.saveMessage(
+            receivedMsg,
+            user,
+            room
+          );
+          // 해당 룸에 메세지(sender 정보 채워서) 보냄
+          const populatedMsg = await newMsg.populate('sender', [
+            'email',
+            'name',
+          ]);
+          // console.log('populatedMsg', populatedMsg);
+          io.to(rid).emit('message', populatedMsg);
+
+          cb({ status: 'ok' });
+        } else {
+          throw new Error('room 또는 user 정보를 찾을 수 없습니다');
+        }
+      } catch (error) {
+        console.log('io > sendMessage Error', error);
+        cb({ status: 'Server side Error' });
+      }
+    });
+
+    // ** 로그아웃 요청
     socket.on('logout', (cb) => {
       console.log('Logout requested, disconnecting socket');
       try {
@@ -108,7 +144,7 @@ module.exports = function (io) {
       }
     });
 
-    // 소켓 연결 해제 시
+    // ** 소켓 연결 해제 시
     socket.on('disconnect', async (reason) => {
       console.log(
         `Socket disconnected for ${socket.decoded.email}, by [${reason}] : ${socket.id}`
