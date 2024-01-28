@@ -63,7 +63,7 @@ export default function ChatRoom() {
       </div>
 
       <div className="input-container">
-        <ChatInput></ChatInput>
+        <ChatInput rid={rid} />
       </div>
     </div>
   );
