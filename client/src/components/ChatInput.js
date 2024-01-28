@@ -1,7 +1,7 @@
 import './ChatInput.css';
 import { useEffect, useState } from 'react';
 
-export default function ChatInput() {
+export default function ChatInput(props) {
   const [message, setMessage] = useState('');
   useEffect(() => {
     console.log('sending message', message);

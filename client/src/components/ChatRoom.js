@@ -7,7 +7,7 @@ import MessageContainer from './MessageContainer';
 import ChatInput from './ChatInput';
 
 export default function ChatRoom() {
-  const { id } = useParams();
+  const { rid } = useParams();
   const { user } = useContext(LoginContext);
   const { socket } = useContext(SocketContext);
   const [roomTitle, setRoomTitle] = useState('fetching room title...');
@@ -30,7 +30,7 @@ export default function ChatRoom() {
   ]);
 
   useEffect(() => {
-    socket.emit('joinRoom', id, (res) => {
+    socket.emit('joinRoom', rid, (res) => {
       if (res && res.status === 'ok') {
         console.log('successfully joined', res);
         setRoomTitle(res.data.room.title);

@@ -20,7 +20,7 @@ function App() {
               <Route element={<PrivateRoutes />}>
                 <Route exact path="/userList" element={<UserList />} />
                 <Route exact path="/roomList" element={<RoomList />} />
-                <Route exact path="/room/:id" element={<ChatRoom />} />
+                <Route exact path="/room/:rid" element={<ChatRoom />} />
               </Route>
             </Routes>
           </div>
