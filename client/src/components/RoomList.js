@@ -12,11 +12,11 @@ export default function RoomList() {
     if (socket) {
       setTimeout(() => {
         console.log(`socket : ${socket.id}`);
+        socket.emit('getRooms', (res) => {
+          // console.log('getRooms res', res);
+          setRoomList(res.data);
+        });
       }, 60);
-      socket.emit('getRooms', (res) => {
-        // console.log('getRooms res', res);
-        setRoomList(res.data);
-      });
     }
   }, []);
 

@@ -14,11 +14,11 @@ export default function UserList() {
   useEffect(() => {
     setTimeout(() => {
       console.log(`socket : ${socket.id}`);
+      socket.emit('getUsers', (res) => {
+        // console.log('getUsers res', res);
+        setUserList(res.data);
+      });
     }, 50);
-    socket.emit('getUsers', (res) => {
-      // console.log('getUsers res', res);
-      setUserList(res.data);
-    });
   }, []);
 
   socket.on('users', (reason, users) => {
