@@ -18,12 +18,12 @@ export default function RoomList() {
         });
       }, 60);
     }
-  }, []);
 
-  socket.on('rooms', (reason, rooms) => {
-    console.log(`on('rooms') ${reason}`, rooms);
-    setRoomList(rooms);
-  });
+    socket.on('rooms', (reason, rooms) => {
+      console.log(`on('rooms') ${reason}`, rooms);
+      setRoomList(rooms);
+    });
+  }, []);
 
   const createDummyRooms = () => {
     axios

@@ -41,16 +41,15 @@ export default function ChatRoom() {
         console.log('failed to join', res);
       }
     });
+
+    socket.on('message', (message) => {
+      console.log(`on('message') : ${JSON.stringify(message)}`);
+      setMessageList((prevState) => [...prevState, message]);
+    });
+    socket.on('welcomeMessage', (welcomeMessage) => {
+      console.log(`on('welcomeMessage') : \n${JSON.stringify(welcomeMessage)}`);
+    });
   }, []);
-
-  socket.on('welcomeMessage', (welcomeMessage) => {
-    console.log(`on('welcomeMessage') : ${JSON.stringify(welcomeMessage)}`);
-  });
-
-  socket.on('message', (message) => {
-    console.log(`on('message') : ${JSON.stringify(message)}`);
-    setMessageList((prevState) => prevState.concat(message));
-  });
 
   return (
     <div className="room-container">
