@@ -18,28 +18,48 @@
   color: red;
 }
 
-.roomList-body {
+.roomList-container {
   /* border: solid palevioletred 2px; */
-  margin: 0 5px;
+}
+
+.nonClassified-format,
+.format-title {
+  display: none;
+  border: 1px solid purple;
+  background-color: pink;
+}
+
+.list-header {
+  background-color: aquamarine;
+  display: flex;
+  align-items: baseline;
+}
+.list-title {
+  padding: 5px 10px;
+  font-weight: 600;
+}
+.list-count {
+  color: palevioletred;
+  font-size: medium;
+  padding-bottom: 2px;
 }
 .each-room {
   display: flex;
   align-items: center;
   /* border: solid pink 1px; */
-  background-color: hsla(350, 100%, 88%, 0.663);
+  background-color: antiquewhite;
   border-radius: 3px;
   padding: 5px;
   margin: 10px;
 }
 .each-room:hover {
   cursor: pointer;
-  background-color: hsla(349, 75%, 78%, 0.782);
+  background-color: #e9d4b9;
 }
 .room-title {
   font-size: 15px;
   font-weight: bold;
 }
-.num-of-member {
+.member-count {
   color: gray;
-  margin-left: 5px;
 }
