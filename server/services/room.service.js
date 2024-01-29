@@ -31,7 +31,7 @@ roomService.checkRoom = async function (value, key) {
   }
 };
 
-// 룸 입장
+// 룸 입장 -> members[]: user 추가
 roomService.joinRoom = async function (rid, user) {
   // console.log('roomService.joinRoom called', rid, user);
   const room = await this.checkRoom(rid, '_id');

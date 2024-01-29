@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema({
   online: {
     type: Boolean,
   },
+  joinedRoom: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Room',
+    },
+  ],
 });
 
 module.exports = mongoose.model('User', userSchema);

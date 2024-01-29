@@ -76,7 +76,8 @@ module.exports = function (io) {
       console.log(`'joinRoom' called by :`, socket.decoded.email);
       try {
         const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
-        const room = await roomController.joinRoom(rid, user); // 룸 입장
+        const room = await roomController.joinRoom(rid, user); // update Room
+        const updatedUser = await userController.joinRoom(user, room); // update User
         // 해당 룸채널 조인
         const ridToString = rid.toString();
         socket.join(ridToString);
@@ -94,7 +95,7 @@ module.exports = function (io) {
         );
         io.emit('rooms', 'Someone joined somewhere', roomList);
 
-        cb({ status: 'ok', data: { room: room } });
+        cb({ status: 'ok', data: { room: room, user: updatedUser } });
       } catch (error) {
         console.log('io > joinRoom Error', error);
         cb({ status: 'Server side Error' });

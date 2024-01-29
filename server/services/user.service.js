@@ -74,6 +74,21 @@ userService.updateConnectedUser = async function (email, sid) {
   }
 };
 
+// 룸 입장 -> joinedRoom[]: room 추가
+userService.joinRoom = async function (user, room) {
+  // console.log('userService.joinRoom called', user, room);
+  try {
+    if (!user.joinedRoom.includes(room._id)) {
+      user.joinedRoom.push(room._id);
+      await user.save();
+    }
+    return user;
+  } catch (error) {
+    console.log('userService.joinRoom error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 유저 로그아웃
 userService.logoutUser = async function (email) {
   // console.log('userService.logoutUser called', email);

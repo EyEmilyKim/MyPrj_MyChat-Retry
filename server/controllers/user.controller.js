@@ -3,7 +3,7 @@ const jwt = require('../utils/jwt');
 
 const userController = {};
 
-// 유저 등록
+// 유저 등록 HTTP
 userController.registerUser = async (req, res) => {
   // console.log('userController.registerUser called', req.body);
   try {
@@ -17,7 +17,7 @@ userController.registerUser = async (req, res) => {
   }
 };
 
-// 유저 로그인
+// 유저 로그인 HTTP
 userController.loginUser = async (req, res) => {
   // console.log('userController.loginUser called', req.body);
   try {
@@ -43,6 +43,7 @@ userController.loginUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // 유저 소켓 Connected -> sid 저장
 userController.updateConnectedUser = async (email, sid) => {
   // console.log('userController.updateConnectedUser called');
@@ -54,7 +55,7 @@ userController.updateConnectedUser = async (email, sid) => {
   }
 };
 
-// 유저 인증
+// 유저 인증 HTTP
 userController.authenticateUser = async (req, res) => {
   // console.log('userController.authenticateUser called');
   try {
@@ -69,7 +70,19 @@ userController.authenticateUser = async (req, res) => {
   }
 };
 
-// 유저 로그아웃
+// 유저 룸 입장
+userController.joinRoom = async (user, room) => {
+  // console.log('userController.joinRoom called');
+  try {
+    const updateUser = await userService.joinRoom(user, room);
+    return updateUser;
+  } catch (error) {
+    console.log('userController.joinRoom failed', error);
+    throw new Error(error);
+  }
+};
+
+// 유저 로그아웃 HTTP
 userController.logoutUser = async (req, res) => {
   // console.log('userController.logout called');
   try {
