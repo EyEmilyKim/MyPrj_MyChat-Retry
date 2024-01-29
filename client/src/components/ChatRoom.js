@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import './ChatRoom.css';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { SocketContext } from '../contexts/SocketContext';
 import MessageContainer from './MessageContainer';
@@ -31,8 +31,11 @@ export default function ChatRoom() {
       timestamp: new Date(),
     },
   ]);
+  const messageContainerRef = useRef();
   useEffect(() => {
     console.log('[messageList]', messageList);
+    messageContainerRef.current.scrollTop =
+      messageContainerRef.current.scrollHeight;
   }, [messageList]);
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function ChatRoom() {
         <p className="user">{user.name}</p>
       </div>
 
-      <div className="chat-container">
+      <div className="chat-container" ref={messageContainerRef}>
         {messageList.length > 0 ? (
           <MessageContainer messageList={messageList} user={user} />
         ) : null}
