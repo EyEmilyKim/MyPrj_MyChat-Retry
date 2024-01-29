@@ -82,18 +82,17 @@ module.exports = function (io) {
         const ridToString = rid.toString();
         socket.join(ridToString);
         // 룸채널에 입장 메세지 발신
-        const welcomeMessage = {
+        const systemMessage = {
           _id: uuidv4(),
           room: rid,
           sender: { _id: uuidv4(), name: 'system' },
           content: `${user.name} joined this room`,
         };
-        io.to(ridToString).emit('message', welcomeMessage);
+        io.to(ridToString).emit('message', systemMessage);
         // 실시간 룸정보 전체 발신
-        const roomList = await roomController.getAllRooms(
-          'Someone joined somewhere'
-        );
-        io.emit('rooms', 'Someone joined somewhere', roomList);
+        const reason = 'Someone joined somewhere';
+        const roomList = await roomController.getAllRooms(reason);
+        io.emit('rooms', reason, roomList);
 
         cb({ status: 'ok', data: { room: room, user: updatedUser } });
       } catch (error) {

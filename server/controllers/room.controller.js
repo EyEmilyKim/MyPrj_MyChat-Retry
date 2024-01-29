@@ -18,7 +18,9 @@ roomController.getAllRooms = async () => {
 roomController.joinRoom = async (rid, user) => {
   // console.log('roomController.joinRoom called', rid, user);
   try {
-    const room = await roomService.joinRoom(rid, user);
+    const room = await roomService
+      .checkRoom(rid, '_id')
+      .then((r) => roomService.joinRoom(r, user));
     return room;
   } catch (error) {
     console.log('roomController.joinRoom failed', error);

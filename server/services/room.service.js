@@ -32,11 +32,10 @@ roomService.checkRoom = async function (value, key) {
 };
 
 // 룸 입장 -> members[]: user 추가
-roomService.joinRoom = async function (rid, user) {
-  // console.log('roomService.joinRoom called', rid, user);
-  const room = await this.checkRoom(rid, '_id');
+roomService.joinRoom = async function (room, user) {
+  // console.log('roomService.joinRoom called', room, user);
   if (!room) {
-    throw new Error('해당 방이 없습니다.');
+    throw new Error('해당 방이 존재하지 않습니다.');
   }
   if (!room.members.includes(user._id)) {
     room.members.push(user._id);
