@@ -7,6 +7,7 @@ const userService = require('../services/user.Service');
 const roomController = require('../controllers/room.controller');
 const roomService = require('../services/room.service');
 const messageService = require('../services/message.service');
+const { v4: uuidv4 } = require('uuid');
 
 // 연결된 모든 소켓 출력하는 함수
 async function printAllSockets(io) {
@@ -81,10 +82,12 @@ module.exports = function (io) {
         socket.join(ridToString);
         // 룸채널에 입장 메세지 발신
         const welcomeMessage = {
+          _id: uuidv4(),
+          room: rid,
+          sender: { _id: uuidv4(), name: 'system' },
           content: `${user.name} joined this room`,
-          user: { _id: null, name: 'system' },
         };
-        io.to(ridToString).emit('welcomeMessage', welcomeMessage);
+        io.to(ridToString).emit('message', welcomeMessage);
         // 실시간 룸정보 전체 발신
         const roomList = await roomController.getAllRooms(
           'Someone joined somewhere'

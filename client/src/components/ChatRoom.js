@@ -16,16 +16,19 @@ export default function ChatRoom() {
       _id: 'dummy1',
       sender: { name: 'system' },
       content: `dummy System message`,
+      timestamp: new Date(),
     },
     {
       _id: 'dummy2',
-      sender: { name: 'Alfa' },
+      sender: { name: 'Alfa', email: 'alfa@a.com' },
       content: `Hi there, I'm Alfa. this is dummy`,
+      timestamp: new Date(),
     },
     {
       _id: 'dummy3',
-      sender: { name: 'Chalie' },
+      sender: { name: 'Chalie', email: 'chalie@c.com' },
       content: `Hi Alfa, I'm Chalie. this is dummy too`,
+      timestamp: new Date(),
     },
   ]);
   useEffect(() => {
@@ -43,11 +46,8 @@ export default function ChatRoom() {
     });
 
     socket.on('message', (message) => {
-      console.log(`on('message') : ${JSON.stringify(message)}`);
+      // console.log(`on('message') : ${JSON.stringify(message)}`);
       setMessageList((prevState) => [...prevState, message]);
-    });
-    socket.on('welcomeMessage', (welcomeMessage) => {
-      console.log(`on('welcomeMessage') : \n${JSON.stringify(welcomeMessage)}`);
     });
   }, []);
 

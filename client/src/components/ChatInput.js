@@ -7,7 +7,7 @@ export default function ChatInput(props) {
   const { socket } = useContext(SocketContext);
   const [message, setMessage] = useState('');
   useEffect(() => {
-    console.log(`sending message : ${message}, rid: ${rid}`);
+    // console.log(`sending message : ${message}, rid: ${rid}`);
   }, [message]);
 
   const handleSendMessage = () => {
@@ -17,15 +17,17 @@ export default function ChatInput(props) {
     // console.log('validation', validation);
     if (!validation.result) {
       console.log(`Invalid message :\n${validation.invalidReason.join('\n')}`);
+      alert(`Invalid message :\n${validation.invalidReason.join('\n')}`);
       return;
     }
     // HTML escape 처리
     const escapedMessage = escapeHTML(message);
-    console.log(`modified message : ${escapedMessage}`);
+    // console.log(`modified message : ${escapedMessage}`);
     // 소켓 발신
     socket.emit('sendMessage', escapedMessage, rid, (res) => {
       console.log(`'sendMessage' res : ${JSON.stringify(res)}`);
     });
+    setMessage('');
   };
 
   const validateMessage = (msg) => {

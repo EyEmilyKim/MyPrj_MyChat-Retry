@@ -1,34 +1,60 @@
+/* 기본 사항 */
 .each-message {
-  /* border: 1px solid plum; */
-  margin: 15px;
+  /* border: 2px solid plum; */
+  display: flex;
+  flex-direction: column;
 }
+
+/* 시스템 메세지 */
 .system-message-container {
   display: flex;
   justify-content: center;
+  margin: 12px 0;
 }
 .system-message {
   border-radius: 20px;
-  padding: 1px 7px 3px;
+  padding: 2px 7px 4px;
   background-color: #d1cbcb;
   color: white;
   font-size: 13px;
   font-weight: 400;
 }
-.my-message-container {
+
+/* 채팅 메세지 - 공통사항 */
+.message-container {
+  /* border: 1px solid maroon; */
   display: flex;
-  justify-content: flex-end;
 }
-.others-message-container {
-  display: flex;
-  justify-content: flex-start;
+.name {
+  margin: 0 0 2px 10px;
+  font-size: 15px;
 }
 .message {
+  /* border: 1px solid red; */
+  max-width: 85%;
   border-radius: 20px;
   padding: 6px 15px 8px;
 }
-.mine {
+.timestamp {
+  display: flex;
+  font-size: 13px;
+  color: #959595;
+  margin: 1px 10px 3px;
+}
+
+/* mine */
+.message-container.mine,
+.timestamp.mine {
+  justify-content: flex-end;
+}
+.message.mine {
   background-color: white;
 }
-.others {
+/* others */
+.message-container.others,
+.timestamp.others {
+  justify-content: flex-start;
+}
+.message.others {
   background-color: #e9e9ab;
 }
