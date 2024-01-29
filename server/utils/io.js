@@ -137,10 +137,8 @@ module.exports = function (io) {
       console.log('Logout requested, disconnecting socket');
       try {
         socket.disconnect(true);
-        cb({ status: 'ok' });
       } catch (error) {
         console.log('io > logout Error', error);
-        cb({ status: 'Server side Error' });
       }
     });
 
