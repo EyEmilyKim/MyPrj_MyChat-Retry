@@ -91,6 +91,23 @@ userService.joinRoom = async function (user, room) {
   }
 };
 
+// 룸 퇴장 -> joinedRooms[]: room 제거
+userService.leaveRoom = async function (user, room) {
+  // console.log('userService.leaveRoom called', user, room);
+  try {
+    if (user.joinedRooms.includes(room._id)) {
+      // console.log('user.joinRoom, does include yet', user.joinedRooms);
+      user.joinedRooms.pull(room._id);
+      await user.save();
+      // console.log('user.joinRoom, now pulled', user.joinedRooms);
+    }
+    return user;
+  } catch (error) {
+    console.log('userService.leaveRoom error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 유저 로그아웃
 userService.logoutUser = async function (email) {
   // console.log('userService.logoutUser called', email);

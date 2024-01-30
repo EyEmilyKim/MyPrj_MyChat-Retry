@@ -51,4 +51,24 @@ roomService.joinRoom = async function (room, user) {
   }
 };
 
+// 룸 퇴장 -> members[]: user 제거
+roomService.leaveRoom = async function (room, user) {
+  // console.log('roomService.leaveRoom called', room, user);
+  try {
+    if (!room) {
+      throw new Error('해당 방이 존재하지 않습니다.');
+    }
+    if (room.members.includes(user._id)) {
+      // console.log('room.leaveRoom, does include yet', room.members);
+      room.members.pull(user._id);
+      await room.save();
+      // console.log('room.leaveRoom, now pulled', room.members);
+    }
+    return room;
+  } catch (error) {
+    console.log('roomService.leaveRoom error', error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = roomService;

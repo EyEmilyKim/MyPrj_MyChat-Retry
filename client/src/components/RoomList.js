@@ -42,8 +42,8 @@ export default function RoomList() {
         notMyRooms.push(room);
       }
     });
-    console.log(`classifyRooms joinedRooms : `, joinedRooms);
-    console.log(`classifyRooms notMyRooms : `, notMyRooms);
+    // console.log(`classifyRooms joinedRooms : `, joinedRooms);
+    // console.log(`classifyRooms notMyRooms : `, notMyRooms);
     setJoinedRooms(joinedRooms);
     setNotMyRooms(notMyRooms);
   };

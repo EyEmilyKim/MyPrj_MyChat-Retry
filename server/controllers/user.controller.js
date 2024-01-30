@@ -82,6 +82,18 @@ userController.joinRoom = async (user, room) => {
   }
 };
 
+// 유저 룸 퇴장
+userController.leaveRoom = async (user, room) => {
+  // console.log('userController.leaveRoom called');
+  try {
+    const updateUser = await userService.leaveRoom(user, room);
+    return updateUser;
+  } catch (error) {
+    console.log('userController.leaveRoom failed', error);
+    throw new Error(error);
+  }
+};
+
 // 유저 로그아웃 HTTP
 userController.logoutUser = async (req, res) => {
   // console.log('userController.logout called');

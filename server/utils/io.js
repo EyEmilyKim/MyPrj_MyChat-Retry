@@ -101,6 +101,36 @@ module.exports = function (io) {
       }
     });
 
+    // ** 룸 퇴장 시
+    socket.on('leaveRoom', async (rid, cb) => {
+      console.log(`'leaveRoom' called by :`, socket.decoded.email);
+      try {
+        const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
+        const room = await roomController.leaveRoom(rid, user); // update Room
+        const updatedUser = await userController.leaveRoom(user, room); // update User
+        // 해당 룸채널 탈퇴
+        const ridToString = rid.toString();
+        socket.leave(ridToString);
+        // 룸채널에 퇴장 메세지 발신
+        const systemMessage = {
+          _id: uuidv4(),
+          room: rid,
+          sender: { _id: uuidv4(), name: 'system' },
+          content: `${user.name} left this room`,
+        };
+        io.to(ridToString).emit('message', systemMessage);
+        // 실시간 룸정보 전체 발신
+        const reason = 'Someone left somewhere';
+        const roomList = await roomController.getAllRooms(reason);
+        io.emit('rooms', reason, roomList);
+
+        cb({ status: 'ok', data: { room: room, user: updatedUser } });
+      } catch (error) {
+        console.log('io > leaveRoom Error', error);
+        cb({ status: 'Server side Error' });
+      }
+    });
+
     // ** 메세지 수신 시
     socket.on('sendMessage', async (receivedMsg, rid, cb) => {
       console.log(

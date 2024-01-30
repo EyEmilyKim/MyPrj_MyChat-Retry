@@ -28,4 +28,18 @@ roomController.joinRoom = async (rid, user) => {
   }
 };
 
+// 룸 퇴장
+roomController.leaveRoom = async (rid, user) => {
+  // console.log('roomController.leaveRoom called', rid, user);
+  try {
+    const room = await roomService
+      .checkRoom(rid, '_id')
+      .then((r) => roomService.leaveRoom(r, user));
+    return room;
+  } catch (error) {
+    console.log('roomController.leaveRoom failed', error);
+    throw new Error(error);
+  }
+};
+
 module.exports = roomController;
