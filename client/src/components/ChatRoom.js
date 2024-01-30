@@ -7,6 +7,7 @@ import MessageContainer from './MessageContainer';
 import ChatInput from './ChatInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function ChatRoom() {
   const { rid } = useParams();
@@ -71,14 +72,25 @@ export default function ChatRoom() {
     });
   };
 
+  const handleBack = () => {
+    console.log(`handleBack called`);
+    navigate(`/roomList`);
+    console.log(`successfully back from ${roomTitle}`);
+  };
+
   return (
     <div className="room-container">
       <div className="room-header">
         <div className="room-section">
+          <FontAwesomeIcon
+            icon={faAngleLeft}
+            className="header-button back"
+            onClick={handleBack}
+          />
           <div className="room-title">{roomTitle}</div>
           <FontAwesomeIcon
             icon={faArrowRightFromBracket}
-            className="leave-button"
+            className="header-button leave"
             onClick={handleLeaveRoom}
           />
         </div>

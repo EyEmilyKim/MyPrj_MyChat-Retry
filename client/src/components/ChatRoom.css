@@ -16,18 +16,23 @@
   align-items: center;
 }
 .room-title {
-  margin-left: 10px;
   font-size: 16px;
 }
-.leave-button {
-  margin-left: 3px;
+.header-button {
+  margin: 0 5px;
   color: gray;
-  padding: 5px;
   border-radius: 15px;
+  padding: 5px;
 }
-.leave-button:hover {
-  color: red;
+.header-button.back {
+  padding: 5px 8px;
+}
+.header-button:hover {
   background-color: white;
+  color: red;
+}
+.header-button.back:hover {
+  color: green;
 }
 .user {
   margin: 0 10px;
