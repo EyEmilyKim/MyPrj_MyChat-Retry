@@ -79,8 +79,10 @@ userService.joinRoom = async function (user, room) {
   // console.log('userService.joinRoom called', user, room);
   try {
     if (!user.joinedRooms.includes(room._id)) {
+      // console.log('user.joinRoom, not include yet', user.joinedRooms);
       user.joinedRooms.push(room._id);
       await user.save();
+      // console.log('user.joinRoom, now pushed', user.joinedRooms);
     }
     return user;
   } catch (error) {
