@@ -25,6 +25,12 @@ export default function NewRoom() {
     // 소켓 발신
     socket.emit('createRoom', escapedTitle, (res) => {
       console.log(`'createRoom' res : `, res);
+      if (res && res.status === 'ok') {
+        console.log('successfully create', res.data);
+        navigate(`/room/${res.data.room._id}`);
+      } else {
+        alert(res.data);
+      }
     });
     setNewTitle('');
   };

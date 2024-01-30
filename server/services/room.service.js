@@ -11,7 +11,7 @@ roomService.getAllRooms = async function () {
     // console.log('roomList', roomList);
     return roomList;
   } catch (error) {
-    console.log('roomService.getAllRooms error', error);
+    // console.log('roomService.getAllRooms error', error);
     throw new Error(error.message);
   }
 };
@@ -26,14 +26,37 @@ roomService.checkRoom = async function (value, key) {
     // await db.isInstance(room, 'roomServ.checkRoom room'); // true
     return room;
   } catch (error) {
-    console.log('roomService.checkRoom error', error);
+    // console.log('roomService.checkRoom error', error);
+    throw new Error(error.message);
+  }
+};
+
+// 룸 생성
+roomService.createRoom = async function (title, user) {
+  // console.log('roomService.createRoom called', title, user);
+  try {
+    // 이미 있는 방 제목인지 확인
+    let isExistingTitle = await this.checkRoom(title, 'title');
+    if (isExistingTitle) {
+      throw new Error('이미 존재하는 방제목입니다.');
+    } else {
+      // -> 없으면 새로 저장
+      const room = new Room({
+        title: title,
+        owner: user._id,
+      });
+      await room.save();
+      return room;
+    }
+  } catch (error) {
+    // console.log('roomService.createRoom error', error);
     throw new Error(error.message);
   }
 };
 
 // 룸 입장 -> members[]: user 추가
 roomService.joinRoom = async function (room, user) {
-  // console.log('roomService.joinRoom called', room, user);
+  // console.log('roomService.joinRoom called', room);
   try {
     if (!room) {
       throw new Error('해당 방이 존재하지 않습니다.');
@@ -46,7 +69,7 @@ roomService.joinRoom = async function (room, user) {
     }
     return room;
   } catch (error) {
-    console.log('roomService.joinRoom error', error);
+    // console.log('roomService.joinRoom error', error);
     throw new Error(error.message);
   }
 };
@@ -66,7 +89,7 @@ roomService.leaveRoom = async function (room, user) {
     }
     return room;
   } catch (error) {
-    console.log('roomService.leaveRoom error', error);
+    // console.log('roomService.leaveRoom error', error);
     throw new Error(error.message);
   }
 };

@@ -71,9 +71,27 @@ module.exports = function (io) {
       }
     });
 
+    // ** 룸 생성
+    socket.on('createRoom', async (title, cb) => {
+      console.log(`'createRoom' called by : ${socket.decoded.email}, ${title}`);
+      try {
+        const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
+        const room = await roomService.createRoom(title, user); // 룸 만들기
+        // 실시간 룸정보 전체 발신
+        const reason = 'Someone created a room';
+        const roomList = await roomController.getAllRooms(reason);
+        io.emit('rooms', reason, roomList);
+
+        cb({ status: 'ok', data: { room: room, user: user } });
+      } catch (error) {
+        console.log('io > createRoom Error', error);
+        cb({ status: 'not ok', data: error.message });
+      }
+    });
+
     // ** 룸 입장 시
     socket.on('joinRoom', async (rid, cb) => {
-      console.log(`'joinRoom' called by :`, socket.decoded.email);
+      console.log(`'joinRoom' called by :`, socket.decoded.email, rid);
       try {
         const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
         const room = await roomController.joinRoom(rid, user); // update Room
