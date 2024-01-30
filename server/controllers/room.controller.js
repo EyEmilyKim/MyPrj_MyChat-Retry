@@ -21,7 +21,11 @@ roomController.joinRoom = async (rid, user) => {
     const room = await roomService
       .checkRoom(rid, '_id')
       .then((r) => roomService.joinRoom(r, user));
-    return room;
+    // 해당 룸에 owner, members 정보 채우기
+    const populatedRoom = await room
+      .populate('owner', ['email', 'name'])
+      .then((r) => r.populate('members', ['email', 'name']));
+    return populatedRoom;
   } catch (error) {
     console.log('roomController.joinRoom failed', error);
     throw new Error(error);

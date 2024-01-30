@@ -4,6 +4,7 @@
   flex-direction: column;
 }
 
+/* ChatRoom 헤더 섹션 */
 .room-header {
   background-color: aquamarine;
   height: 35px;
@@ -11,15 +12,16 @@
   align-items: center;
   justify-content: space-between;
 }
-.room-section {
+.section {
   display: flex;
   align-items: center;
 }
+/* 헤더 Left - 룸 타이틀 */
 .room-title {
   font-size: 16px;
 }
 .header-button {
-  margin: 0 5px;
+  margin: 0 2px;
   color: gray;
   border-radius: 15px;
   padding: 5px;
@@ -27,18 +29,27 @@
 .header-button.back {
   padding: 5px 8px;
 }
+.header-button.menu {
+  padding: 5px 10px;
+}
 .header-button:hover {
   background-color: white;
-  color: red;
-}
-.header-button.back:hover {
   color: green;
 }
-.user {
-  margin: 0 10px;
+.header-button.leave:hover {
+  color: red;
+}
+/* 헤더 Right - 룸 메뉴 */
+.crown {
+  color: orange;
+}
+.owner {
+  margin: 0 0 0 3px;
+  font-size: 14px;
   font-weight: bold;
 }
 
+/* ChatRoom 메인 섹션 */
 .chat-container {
   background-color: antiquewhite;
   padding: 15px;
@@ -48,6 +59,7 @@
   /* scroll-margin-bottom: 0; */
 }
 
+/* 메세지 입력 섹션 */
 .input-container {
   background-color: pink;
 }

@@ -8,12 +8,22 @@ import ChatInput from './ChatInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faCrown } from '@fortawesome/free-solid-svg-icons';
+import Loader from '../util-components/Loader';
 
 export default function ChatRoom() {
   const { rid } = useParams();
   const { user } = useContext(LoginContext);
   const { socket } = useContext(SocketContext);
-  const [roomTitle, setRoomTitle] = useState('fetching room title...');
+  const [room, setRoom] = useState('fetching room data...');
+  const [isFetching, setIsFetching] = useState(true);
+  useEffect(() => {
+    console.log('[room]', room);
+  }, [room]);
+  // useEffect(() => {
+  //   console.log('[fetchCompleted]', fetchCompleted);
+  // }, [fetchCompleted]);
   const [messageList, setMessageList] = useState([
     {
       _id: 'dummy1',
@@ -37,15 +47,17 @@ export default function ChatRoom() {
   const messageContainerRef = useRef();
   useEffect(() => {
     console.log('[messageList]', messageList);
-    messageContainerRef.current.scrollTop =
-      messageContainerRef.current.scrollHeight;
+    if (!isFetching)
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
   }, [messageList]);
 
   useEffect(() => {
     socket.emit('joinRoom', rid, (res) => {
       if (res && res.status === 'ok') {
         console.log('successfully joined', res);
-        setRoomTitle(res.data.room.title);
+        setRoom(res.data.room);
+        setIsFetching(false);
       } else {
         console.log('failed to join', res);
       }
@@ -75,26 +87,36 @@ export default function ChatRoom() {
   const handleBack = () => {
     console.log(`handleBack called`);
     navigate(`/roomList`);
-    console.log(`successfully back from ${roomTitle}`);
+    console.log(`successfully back from ${room}`);
   };
 
-  return (
+  return isFetching ? (
+    <Loader />
+  ) : (
     <div className="room-container">
       <div className="room-header">
-        <div className="room-section">
+        <div className="section">
           <FontAwesomeIcon
             icon={faAngleLeft}
             className="header-button back"
             onClick={handleBack}
           />
-          <div className="room-title">{roomTitle}</div>
+          <div className="room-title">{room.title}</div>
           <FontAwesomeIcon
             icon={faArrowRightFromBracket}
             className="header-button leave"
             onClick={handleLeaveRoom}
           />
         </div>
-        <p className="user">{user.name}</p>
+        <div className="section">
+          <FontAwesomeIcon icon={faCrown} className="crown" />
+          <p className="owner">{room.owner ? room.owner.name : 'system'}</p>
+          <FontAwesomeIcon
+            icon={faEllipsisVertical}
+            className="header-button menu"
+            // onClick={handleRoomMenu}
+          />
+        </div>
       </div>
 
       <div className="chat-container" ref={messageContainerRef}>
