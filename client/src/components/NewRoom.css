@@ -1,4 +1,4 @@
-.chatInput-body {
+.newRoom-body {
   min-height: 40px;
   display: flex;
   justify-content: space-between;
@@ -6,20 +6,20 @@
   width: 100%;
 }
 
-.input-field {
-  border: none;
+.newRoom-input {
   flex: 1;
   padding: 5px 0 5px 5px;
-  box-sizing: border-box; /* padding 포함한 크기 계산*/
+  box-sizing: border-box;
+  border: none;
 }
-.input-field:focus {
+.newRoom-input:focus {
   outline: none;
 }
 
-.send-button {
+.create-button {
   background-color: aquamarine;
   border: none;
 }
-.send-button:hover {
+.create-button:hover {
   cursor: pointer;
 }

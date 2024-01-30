@@ -5,6 +5,7 @@ import axios from 'axios';
 import './RoomList.css';
 import { LoginContext } from '../contexts/LoginContext';
 import ClassifiedRooms from './ClassifiedRooms';
+import NewRoom from './NewRoom';
 
 export default function RoomList() {
   const { user } = useContext(LoginContext);
@@ -76,7 +77,7 @@ export default function RoomList() {
   };
 
   return (
-    <>
+    <div className="roomList-body">
       <div className="roomList-header">
         <h1 className="roomList-title">MyApp-test RoomList</h1>
         <div className="button-area">
@@ -113,6 +114,10 @@ export default function RoomList() {
           moveToRoom={moveToRoom}
         />
       </div>
-    </>
+
+      <div className="newRoom-container">
+        <NewRoom />
+      </div>
+    </div>
   );
 }

@@ -1,3 +1,10 @@
+.roomList-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* RoomList 헤더 섹션 */
 .roomList-header {
   display: flex;
   flex-direction: column;
@@ -18,8 +25,10 @@
   color: red;
 }
 
+/* RoomList 메인 섹션 */
 .roomList-container {
   /* border: solid palevioletred 2px; */
+  flex: 1;
 }
 
 .nonClassified-format,
@@ -62,4 +71,10 @@
 }
 .member-count {
   color: gray;
+}
+
+/* 방 만들기 섹션 */
+.newRoom-container {
+  background-color: aquamarine;
+  border: solid 1px green;
 }

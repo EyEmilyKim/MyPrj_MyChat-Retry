@@ -1,6 +1,7 @@
 import './ChatInput.css';
 import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '../contexts/SocketContext';
+const { validateText, escapeHTML } = require('../utils/beforeWriting');
 
 export default function ChatInput(props) {
   const rid = props.rid;
@@ -13,7 +14,7 @@ export default function ChatInput(props) {
   const handleSendMessage = () => {
     console.log(`handleSendMessage called : ${message}, ${rid}`);
     // 메세지 유효성 검사
-    const validation = validateMessage(message);
+    const validation = validateText(message);
     // console.log('validation', validation);
     if (!validation.result) {
       console.log(`Invalid message :\n${validation.invalidReason.join('\n')}`);
@@ -25,41 +26,13 @@ export default function ChatInput(props) {
     // console.log(`modified message : ${escapedMessage}`);
     // 소켓 발신
     socket.emit('sendMessage', escapedMessage, rid, (res) => {
-      console.log(`'sendMessage' res : ${JSON.stringify(res)}`);
+      console.log(`'sendMessage' res : `, res);
     });
     setMessage('');
   };
 
-  const validateMessage = (msg) => {
-    let isValid = false; // 최종 유효성 변수
-    const invalidReason = []; // 미통과 사유 배열
-    // 빈 메세지 여부 검사
-    let hasContent = false;
-    if (msg.trim() === '') {
-      invalidReason.push('메세지 내용이 없습니다');
-    } else {
-      hasContent = true;
-    }
-    // 기타 유효성 검사..
-    // 최종 결과 반환
-    if (hasContent && 1 == 1) isValid = true;
-    return { result: isValid, invalidReason: invalidReason };
-  };
-
-  const escapeHTML = (msg) => {
-    return msg.replace(/[&<>"']/g, function (match) {
-      return {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-      }[match];
-    });
-  };
-
   return (
-    <div className="input-container">
+    <div className="chatInput-body">
       <input
         className="input-field"
         type="text"
