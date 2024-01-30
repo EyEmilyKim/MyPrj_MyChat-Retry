@@ -74,12 +74,12 @@ userService.updateConnectedUser = async function (email, sid) {
   }
 };
 
-// 룸 입장 -> joinedRoom[]: room 추가
+// 룸 입장 -> joinedRooms[]: room 추가
 userService.joinRoom = async function (user, room) {
   // console.log('userService.joinRoom called', user, room);
   try {
-    if (!user.joinedRoom.includes(room._id)) {
-      user.joinedRoom.push(room._id);
+    if (!user.joinedRooms.includes(room._id)) {
+      user.joinedRooms.push(room._id);
       await user.save();
     }
     return user;

@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   online: {
     type: Boolean,
   },
-  joinedRoom: [
+  joinedRooms: [
     {
       type: mongoose.Schema.ObjectId,
       ref: 'Room',

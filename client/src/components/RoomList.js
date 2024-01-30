@@ -28,6 +28,7 @@ export default function RoomList() {
     socket.on('rooms', (reason, rooms) => {
       console.log(`on('rooms') ${reason}`, rooms);
       setRoomList(rooms);
+      classifyRooms(rooms);
     });
   }, []);
 
@@ -41,8 +42,8 @@ export default function RoomList() {
         notMyRooms.push(room);
       }
     });
-    console.log(`classifyRooms joinedRoom : `, joinedRooms);
-    console.log(`classifyRooms notMyRoom : `, notMyRooms);
+    console.log(`classifyRooms joinedRooms : `, joinedRooms);
+    console.log(`classifyRooms notMyRooms : `, notMyRooms);
     setJoinedRooms(joinedRooms);
     setNotMyRooms(notMyRooms);
   };
