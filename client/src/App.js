@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Providers } from './contexts/_Providers';
-import PrivateRoutes from './utils/PrivateRoutes';
+import PrivateRoutes from './util-components/PrivateRoutes';
 import NavBar from './components/NavBar';
 import HomePage from './components/HomePage';
 import UserList from './components/UserList';

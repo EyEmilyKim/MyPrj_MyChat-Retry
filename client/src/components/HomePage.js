@@ -3,6 +3,7 @@ import { LoginContext } from '../contexts/LoginContext';
 import './HomePage.css';
 import Login from './Login';
 import Logout from './Logout';
+import Loader from '../util-components/Loader';
 
 export default function HomePage() {
   const { isLoggingIn, isLogin } = useContext(LoginContext);
@@ -13,9 +14,7 @@ export default function HomePage() {
       <h1 className="home-title">MyApp-test HomePage</h1>
 
       {isLoggingIn ? (
-        <div className="loader-area">
-          <span className="loader">Load&nbsp;ng</span>
-        </div>
+        <Loader />
       ) : !isLogin ? (
         <div className="nonLoggedIn-area">
           <Login />
