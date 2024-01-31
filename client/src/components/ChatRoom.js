@@ -65,6 +65,11 @@ export default function ChatRoom() {
       // console.log(`on('message') : ${JSON.stringify(message)}`);
       setMessageList((prevState) => [...prevState, message]);
     });
+
+    socket.on('updatedRoom', (room) => {
+      console.log(`on('updatedRoom'): `, room);
+      setRoom(room);
+    });
   }, []);
 
   const navigate = useNavigate();
@@ -84,7 +89,7 @@ export default function ChatRoom() {
   const handleBack = () => {
     console.log(`handleBack called`);
     navigate(`/roomList`);
-    console.log(`successfully back from ${room}`);
+    console.log(`successfully back from "${room.title}"`);
   };
 
   const [isMenuOpen, setMenuOpen] = useState(true);

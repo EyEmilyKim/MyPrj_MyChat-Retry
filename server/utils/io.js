@@ -99,7 +99,7 @@ module.exports = function (io) {
         // 해당 룸채널 조인
         const ridToString = rid.toString();
         socket.join(ridToString);
-        // 룸채널에 입장 메세지 발신
+        // 룸채널에 입장 메세지, 룸 정보 발신
         const systemMessage = {
           _id: uuidv4(),
           room: rid,
@@ -107,6 +107,7 @@ module.exports = function (io) {
           content: `${user.name} joined this room`,
         };
         io.to(ridToString).emit('message', systemMessage);
+        io.to(ridToString).emit('updatedRoom', room);
         // 실시간 룸정보 전체 발신
         const reason = 'Someone joined somewhere';
         const roomList = await roomController.getAllRooms(reason);
@@ -129,7 +130,7 @@ module.exports = function (io) {
         // 해당 룸채널 탈퇴
         const ridToString = rid.toString();
         socket.leave(ridToString);
-        // 룸채널에 퇴장 메세지 발신
+        // 룸채널에 퇴장 메세지, 룸 정보 발신
         const systemMessage = {
           _id: uuidv4(),
           room: rid,
@@ -137,6 +138,7 @@ module.exports = function (io) {
           content: `${user.name} left this room`,
         };
         io.to(ridToString).emit('message', systemMessage);
+        io.to(ridToString).emit('updatedRoom', room);
         // 실시간 룸정보 전체 발신
         const reason = 'Someone left somewhere';
         const roomList = await roomController.getAllRooms(reason);
