@@ -12,18 +12,22 @@ export default function UserList() {
   }, [userList]);
 
   useEffect(() => {
-    setTimeout(() => {
-      console.log(`socket : ${socket.id}`);
-      socket.emit('getUsers', (res) => {
-        // console.log('getUsers res', res);
-        setUserList(res.data);
-      });
-    }, 50);
+    console.log(`socket : ${socket.id}`);
+
+    socket.emit('getUsers', (res) => {
+      // console.log('getUsers res', res);
+      setUserList(res.data);
+    });
 
     socket.on('users', (reason, users) => {
       console.log(`on('users') ${reason}`, users);
       setUserList(users);
     });
+
+    // 컴포넌트 언마운트 시 이벤트 해제
+    return () => {
+      socket.off('users');
+    };
   }, []);
 
   const refreshThis = () => {

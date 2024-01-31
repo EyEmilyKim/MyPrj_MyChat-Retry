@@ -15,22 +15,24 @@ export default function RoomList() {
   const [notMyRooms, setNotMyRooms] = useState([]);
 
   useEffect(() => {
-    if (socket) {
-      setTimeout(() => {
-        console.log(`socket : ${socket.id}`);
-        socket.emit('getRooms', (res) => {
-          console.log('getRooms res', res);
-          setRoomList(res.data);
-          classifyRooms(res.data);
-        });
-      }, 60);
-    }
+    console.log(`socket : ${socket.id}`);
+
+    socket.emit('getRooms', (res) => {
+      console.log('getRooms res', res);
+      setRoomList(res.data);
+      classifyRooms(res.data);
+    });
 
     socket.on('rooms', (reason, rooms) => {
       console.log(`on('rooms') ${reason}`, rooms);
       setRoomList(rooms);
       classifyRooms(rooms);
     });
+
+    // 컴포넌트 언마운트 시 이벤트 해제
+    return () => {
+      socket.off('rooms');
+    };
   }, []);
 
   const classifyRooms = async (roomList) => {

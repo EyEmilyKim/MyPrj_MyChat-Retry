@@ -51,6 +51,8 @@ export default function ChatRoom() {
   }, [messageList]);
 
   useEffect(() => {
+    console.log(`socket : ${socket.id}`);
+
     socket.emit('joinRoom', rid, (res) => {
       if (res && res.status === 'ok') {
         console.log('successfully joined', res);
@@ -70,6 +72,14 @@ export default function ChatRoom() {
       console.log(`on('updatedRoom'): `, room);
       setRoom(room);
     });
+
+    // 컴포넌트 언마운트 시 이벤트 해제
+    return () => {
+      const eventsToOff = ['message', 'updatedRoom'];
+      eventsToOff.map((item) => {
+        socket.off(item);
+      });
+    };
   }, []);
 
   const navigate = useNavigate();
