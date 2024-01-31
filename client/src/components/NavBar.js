@@ -3,21 +3,22 @@ import './NavBar.css';
 import { LoginContext } from '../contexts/LoginContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   const { isLogin, user } = useContext(LoginContext);
 
   const navItems = [
     {
-      href: '/',
+      to: '/',
       text: 'Home',
     },
     {
-      href: '/userList',
+      to: '/userList',
       text: 'Users',
     },
     {
-      href: '/roomList',
+      to: '/roomList',
       text: 'Rooms',
     },
   ];
@@ -43,7 +44,7 @@ export default function NavBar() {
         {navItems.map((item) => {
           return (
             <li className="nav-items" key={item.text}>
-              <a href={item.href}>{item.text}</a>
+              <Link to={item.to}>{item.text}</Link>
             </li>
           );
         })}
