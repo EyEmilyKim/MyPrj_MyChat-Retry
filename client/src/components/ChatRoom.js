@@ -11,6 +11,7 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../util-components/Loader';
+import RoomMenu from './RoomMenu';
 
 export default function ChatRoom() {
   const { rid } = useParams();
@@ -124,6 +125,7 @@ export default function ChatRoom() {
       <div className="room-main" ref={scrollRef}>
         {isMenuOpen && (
           <div className="roomMenu-container">
+            <RoomMenu room={room} isMenuOpen={isMenuOpen} />
           </div>
         )}
         <div className="chat-container">
