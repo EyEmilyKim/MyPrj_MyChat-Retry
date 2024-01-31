@@ -21,9 +21,6 @@ export default function ChatRoom() {
   useEffect(() => {
     console.log('[room]', room);
   }, [room]);
-  // useEffect(() => {
-  //   console.log('[fetchCompleted]', fetchCompleted);
-  // }, [fetchCompleted]);
   const [messageList, setMessageList] = useState([
     {
       _id: 'dummy1',
@@ -44,12 +41,12 @@ export default function ChatRoom() {
       timestamp: new Date(),
     },
   ]);
-  const messageContainerRef = useRef();
+
+  const scrollRef = useRef();
   useEffect(() => {
     console.log('[messageList]', messageList);
     if (!isFetching)
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messageList]);
 
   useEffect(() => {
@@ -70,7 +67,6 @@ export default function ChatRoom() {
   }, []);
 
   const navigate = useNavigate();
-
   const handleLeaveRoom = () => {
     console.log(`leaveRoom called`);
     if (!window.confirm(`이 방을 완전히 떠나시겠습니까?`)) return;
@@ -88,6 +84,11 @@ export default function ChatRoom() {
     console.log(`handleBack called`);
     navigate(`/roomList`);
     console.log(`successfully back from ${room}`);
+  };
+
+  const [isMenuOpen, setMenuOpen] = useState(true);
+  const toggleRoomMenu = () => {
+    setMenuOpen(!isMenuOpen);
   };
 
   return isFetching ? (
@@ -108,21 +109,28 @@ export default function ChatRoom() {
             onClick={handleLeaveRoom}
           />
         </div>
+
         <div className="section">
           <FontAwesomeIcon icon={faCrown} className="crown" />
-          <p className="owner">{room.owner ? room.owner.name : 'system'}</p>
+          <p className="owner">{room.owner ? room.owner.name : 'SYSTEM'}</p>
           <FontAwesomeIcon
             icon={faEllipsisVertical}
             className="header-button menu"
-            // onClick={handleRoomMenu}
+            onClick={toggleRoomMenu}
           />
         </div>
       </div>
 
-      <div className="chat-container" ref={messageContainerRef}>
-        {messageList.length > 0 ? (
-          <MessageContainer messageList={messageList} user={user} />
-        ) : null}
+      <div className="room-main" ref={scrollRef}>
+        {isMenuOpen && (
+          <div className="roomMenu-container">
+          </div>
+        )}
+        <div className="chat-container">
+          {messageList.length > 0 ? (
+            <MessageContainer messageList={messageList} user={user} />
+          ) : null}
+        </div>
       </div>
 
       <div className="input-container">
