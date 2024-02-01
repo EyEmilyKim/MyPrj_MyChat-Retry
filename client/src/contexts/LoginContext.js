@@ -25,7 +25,7 @@ export const LoginProvider = ({ children }) => {
 
   // 로그인 이벤트 처리하는 함수
   const handleLogin = async (email, password) => {
-    console.log('handleLogin called', email);
+    // console.log('handleLogin called', email);
     setIsLoggingIn(true);
     try {
       const res = await axios({
@@ -57,7 +57,7 @@ export const LoginProvider = ({ children }) => {
 
   // 로그아웃 이벤트 처리하는 함수
   const handleLogout = async () => {
-    console.log('handleLogout called');
+    // console.log('handleLogout called');
     try {
       const res = await axios({
         url: `${path}/logout`,

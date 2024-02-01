@@ -87,15 +87,6 @@ export const SocketProvider = ({ children }) => {
     };
   }, [isLogin]);
 
-  // 소켓 이벤트 처리
-  if (socket) {
-    // // 연결 해제 메시지 수신
-    // socket.on('disconnectMessage', (message) => {
-    //   alert(message);
-    //   console.log(message);
-    // });
-  }
-
   const contextValue = {
     socket,
     isConnecting, // for PrivateRoutes
