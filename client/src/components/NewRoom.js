@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewRoom.css';
 import { SocketContext } from '../contexts/SocketContext';
-const { validateText, escapeHTML } = require('../utils/beforeWriting');
+const { validation } = require('../utils/beforeWriting');
 
 export default function NewRoom() {
   const { socket } = useContext(SocketContext);
@@ -11,27 +11,19 @@ export default function NewRoom() {
 
   const handleCreateRoom = () => {
     console.log(`handleCreateRoom called ${newTitle}`);
-    // 타이틀 유효성 검사
-    const validation = validateText(newTitle);
-    // console.log('validation', validation);
-    if (!validation.result) {
-      console.log(`Invalid title :\n${validation.invalidReason.join('\n')}`);
-      alert(`Invalid title :\n${validation.invalidReason.join('\n')}`);
-      return;
+    // 유효성 검사 후
+    if (validation(newTitle, 'newTitle')) {
+      // 소켓 발신
+      socket.emit('createRoom', newTitle, (res) => {
+        console.log(`'createRoom' res : `, res);
+        if (res && res.status === 'ok') {
+          console.log('successfully create', res.data);
+          navigate(`/room/${res.data.room._id}`);
+        } else {
+          alert(res.data);
+        }
+      });
     }
-    // HTML escape 처리
-    const escapedTitle = escapeHTML(newTitle);
-    // console.log(`modified title : ${escapedTitle}`);
-    // 소켓 발신
-    socket.emit('createRoom', escapedTitle, (res) => {
-      console.log(`'createRoom' res : `, res);
-      if (res && res.status === 'ok') {
-        console.log('successfully create', res.data);
-        navigate(`/room/${res.data.room._id}`);
-      } else {
-        alert(res.data);
-      }
-    });
     setNewTitle('');
   };
 

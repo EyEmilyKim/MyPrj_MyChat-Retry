@@ -1,7 +1,7 @@
 import './ChatInput.css';
 import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '../contexts/SocketContext';
-const { validateText, escapeHTML } = require('../utils/beforeWriting');
+const { validation } = require('../utils/beforeWriting');
 
 export default function ChatInput(props) {
   const rid = props.rid;
@@ -13,21 +13,13 @@ export default function ChatInput(props) {
 
   const handleSendMessage = () => {
     console.log(`handleSendMessage called : ${message}, ${rid}`);
-    // 메세지 유효성 검사
-    const validation = validateText(message);
-    // console.log('validation', validation);
-    if (!validation.result) {
-      console.log(`Invalid message :\n${validation.invalidReason.join('\n')}`);
-      alert(`Invalid message :\n${validation.invalidReason.join('\n')}`);
-      return;
+    // 유효성 검사 후
+    if (validation(message, 'message')) {
+      // 소켓 발신
+      socket.emit('sendMessage', message, rid, (res) => {
+        console.log(`'sendMessage' res : `, res);
+      });
     }
-    // HTML escape 처리
-    const escapedMessage = escapeHTML(message);
-    // console.log(`modified message : ${escapedMessage}`);
-    // 소켓 발신
-    socket.emit('sendMessage', escapedMessage, rid, (res) => {
-      console.log(`'sendMessage' res : `, res);
-    });
     setMessage('');
   };
 
