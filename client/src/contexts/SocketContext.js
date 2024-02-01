@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { LoginContext } from './LoginContext';
+import useStateLogger from '../hooks/useStateLogger';
 
 // SocketContext 생성
 export const SocketContext = createContext();
@@ -12,12 +13,8 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { isLogin, isAuthing } = useContext(LoginContext);
   const [isConnecting, setIsConnecting] = useState(false);
-  // useEffect(() => {
-  //   console.log('[socket]', socket);
-  // }, [socket]);
-  // useEffect(() => {
-  //   console.log('isConnecting', isConnecting);
-  // }, [isConnecting]);
+  // useStateLogger(socket, 'socket');
+  // useStateLogger(isConnecting, 'isConnecting');
 
   // 소켓 생성하는 함수
   const createSocket = (reason) => {

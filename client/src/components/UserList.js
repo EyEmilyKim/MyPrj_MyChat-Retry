@@ -3,13 +3,12 @@ import './UserList.css';
 import { SocketContext } from '../contexts/SocketContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
+import useStateLogger from '../hooks/useStateLogger';
 
 export default function UserList() {
   const { socket } = useContext(SocketContext);
   const [userList, setUserList] = useState([]);
-  useEffect(() => {
-    console.log('[userList]', userList);
-  }, [userList]);
+  useStateLogger(userList, 'useList');
 
   useEffect(() => {
     console.log(`socket : ${socket.id}`);

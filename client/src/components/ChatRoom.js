@@ -12,6 +12,7 @@ import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../util-components/Loader';
 import RoomMenu from './RoomMenu';
+import useStateLogger from '../hooks/useStateLogger';
 
 export default function ChatRoom() {
   const { rid } = useParams();
@@ -19,9 +20,8 @@ export default function ChatRoom() {
   const { socket } = useContext(SocketContext);
   const [room, setRoom] = useState('fetching room data...');
   const [isFetching, setIsFetching] = useState(true);
-  useEffect(() => {
-    console.log('[room]', room);
-  }, [room]);
+  useStateLogger(room, 'room');
+  // useStateLogger(isFetching, 'isFetching');
   const [messageList, setMessageList] = useState([
     {
       _id: 'dummy1',

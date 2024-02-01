@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './RoomMenu.css';
+import useStateLogger from '../hooks/useStateLogger';
 
 export default function RoomMenu(props) {
   const room = props.room;
   const isMenuOpen = props.isMenuOpen;
-  // useEffect(() => {
-  //   console.log('[room]', room);
-  // }, [room]);
+  // useStateLogger(room, 'room');
 
   const members = room.members;
   const info = [

@@ -1,27 +1,20 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import useStateLogger from '../hooks/useStateLogger';
 
 export const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
   const path = 'http://localhost:1234/user';
-  const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
   const [isAuthing, setIsAuthing] = useState(true);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  useEffect(() => {
-    console.log('[user]', user);
-  }, [user]);
-  // useEffect(() => {
-  //   console.log('[isLogin]', isLogin);
-  // }, [isLogin]);
-  // useEffect(() => {
-  //   console.log('[isAuthing]', isAuthing);
-  // }, [isAuthing]);
-  // useEffect(() => {
-  //   console.log('[isLoggingIn]', isLoggingIn);
-  // }, [isLoggingIn]);
+  useStateLogger(user, 'user');
+  // useStateLogger(isLogin, 'isLogin');
+  // useStateLogger(isAuthing, 'isAuthing');
+  // useStateLogger(isLoggingIn, 'isLoggingIn');
 
   // 로그인 이벤트 처리하는 함수
   const handleLogin = async (email, password) => {
