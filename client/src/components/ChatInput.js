@@ -1,7 +1,7 @@
 import './ChatInput.css';
 import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '../contexts/SocketContext';
-const { validation } = require('../utils/beforeWriting');
+import { validation } from '../utils/beforeWriting';
 
 export default function ChatInput(props) {
   const rid = props.rid;

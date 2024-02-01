@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewRoom.css';
 import { SocketContext } from '../contexts/SocketContext';
-const { validation } = require('../utils/beforeWriting');
+import { validation } from '../utils/beforeWriting';
 
 export default function NewRoom() {
   const { socket } = useContext(SocketContext);
