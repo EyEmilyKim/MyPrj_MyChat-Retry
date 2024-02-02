@@ -2,9 +2,12 @@ import axios from 'axios';
 import { useEffect, useRef, useState, useContext } from 'react';
 import './Login.css';
 import { LoginContext } from '../contexts/LoginContext';
+import { handleHttpError } from '../utils/handleHttpError';
 
 export default function Login() {
-  const { handleLogin } = useContext(LoginContext);
+  const { setUser, setIsLogin, setLoginOperating } = useContext(LoginContext);
+  const apiRoot = process.env.REACT_APP_API_ROOT;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
@@ -14,16 +17,44 @@ export default function Login() {
     emailRef.current.focus();
   }, []);
 
-  const doLogin = async () => {
-    handleLogin(email, password);
+  // 로그인 이벤트 처리하는 함수
+  const handleLogin = async () => {
+    // console.log('handleLogin called', email);
+    setLoginOperating(true);
+    try {
+      const res = await axios({
+        url: `${apiRoot}/user/login`,
+        method: 'POST',
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          email: email,
+          password: password,
+        },
+      });
+      if (res.status === 200) {
+        alert(`로그인 성공 !\n반갑습니다 ${res.data.user.name}님~~`);
+        console.log('로그인 성공 !');
+        setUser(res.data.user);
+        setIsLogin(true);
+      }
+    } catch (error) {
+      const notify = true;
+      handleHttpError(error, notify);
+    } finally {
+      setLoginOperating(false);
+    }
   };
 
+  // 유저 등록 이벤트 처리하는 함수
   const handleSignUp = async () => {
     console.log('handleSignUp called', email);
 
     try {
       const res = await axios({
-        url: 'http://localhost:1234/user/signup',
+        url: `${apiRoot}/user/signup`,
         method: 'POST',
         withCredentials: true,
         headers: {
@@ -83,7 +114,7 @@ export default function Login() {
         <button
           className="login-button"
           disabled={email === '' || password === ''}
-          onClick={doLogin}
+          onClick={handleLogin}
         >
           로그인
         </button>
