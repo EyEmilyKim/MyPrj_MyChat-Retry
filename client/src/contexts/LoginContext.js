@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import useStateLogger from '../hooks/useStateLogger';
+import { handleHttpError } from '../utils/handleHttpError';
 
 export const LoginContext = createContext();
 
@@ -43,29 +44,8 @@ export const LoginProvider = ({ children }) => {
       }
     } catch (error) {
       const notify = true;
-      handleError(error, notify);
+      handleHttpError(error, notify);
       setIsLoggingIn(false);
-    }
-  };
-
-  // 로그아웃 이벤트 처리하는 함수
-  const handleLogout = async () => {
-    // console.log('handleLogout called');
-    try {
-      const res = await axios({
-        url: `${path}/logout`,
-        method: 'POST',
-        withCredentials: true,
-      });
-      if (res.status === 200) {
-        alert(`로그아웃 성공!\n또 만나요 ${res.data.user.name}님~~`);
-        console.log('로그아웃 성공!');
-        setIsLogin(false);
-        setUser(null);
-      }
-    } catch (error) {
-      const notify = true;
-      handleError(error, notify);
     }
   };
 
@@ -85,7 +65,7 @@ export const LoginProvider = ({ children }) => {
         }
       } catch (error) {
         const notify = false;
-        handleError(error, notify);
+        handleHttpError(error, notify);
         setIsAuthing(false);
       } finally {
         setIsAuthing(false);
@@ -95,29 +75,14 @@ export const LoginProvider = ({ children }) => {
     Authenticate();
   }, []);
 
-  // 에러 메시지 처리하는 함수
-  const handleError = async (error, notify) => {
-    if (error.response) {
-      //응답코드 2xx 가 아닌 경우
-      console.log('Error response:', error.response.data);
-      if (notify) alert(error.response.data.error);
-    } else if (error.request) {
-      //요청이 전혀 이루어지지 않은 경우
-      console.log('Error request:', error.request);
-    } else {
-      //예상치 못한 에러
-      console.log('Error:', error);
-      alert(error);
-    }
-  };
-
   const contextValue = {
-    isLogin, // for PrivateRoutes
+    isLogin, // for PrivateRoutes, Login/Logout(HomePage)
     isAuthing, // for PrivateRoutes
-    isLoggingIn, // for HomePage
+    loginOperated, // for Login(HomePage)
     user, // for HomePage, ChatRoom
-    handleLogin, // for Login(HomePage)
-    handleLogout, // for Logout(HomePage)
+    setLoginOperated, // for Login(HomePage)
+    setIsLogin, // for Login/Logout(HomePage)
+    setUser, // for Login/Logout(HomePage)
   };
 
   return (
