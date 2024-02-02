@@ -13,6 +13,7 @@ export default function RoomList() {
   const [roomList, setRoomList] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
   const [notMyRooms, setNotMyRooms] = useState([]);
+  const apiRoot = process.env.REACT_APP_API_ROOT;
 
   useEffect(() => {
     console.log(`socket : ${socket.id}`);
@@ -53,7 +54,7 @@ export default function RoomList() {
 
   const createDummyRooms = () => {
     axios
-      .get('http://localhost:1234/room/createDummy')
+      .get(`${apiRoot}/room/createDummy`)
       .then((res) => console.log(res.data))
       .catch((err) => console.error(err))
       .finally(() => {
@@ -64,7 +65,7 @@ export default function RoomList() {
 
   const clearAllRooms = () => {
     axios
-      .get('http://localhost:1234/room/clearRooms')
+      .get(`${apiRoot}/room/clearRooms`)
       .then((res) => console.log(res.data))
       .catch((err) => console.error(err))
       .finally(() => {
