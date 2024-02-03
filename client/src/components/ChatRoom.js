@@ -1,19 +1,15 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import './ChatRoom.css';
+import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { SocketContext } from '../contexts/SocketContext';
-import MessageContainer from './MessageContainer';
-import ChatInput from './ChatInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
-import { faCrown } from '@fortawesome/free-solid-svg-icons';
-import Loader from '../util-components/Loader';
-import RoomMenu from './RoomMenu';
 import useStateLogger from '../hooks/useStateLogger';
 import useToggleMenu from '../hooks/useToggleMenu';
+import './ChatRoom.css';
+import Loader from '../util-components/Loader';
+import RoomHeader from './RoomHeader';
+import RoomMenu from './RoomMenu';
+import MessageContainer from './MessageContainer';
+import ChatInput from './ChatInput';
 
 export default function ChatRoom() {
   const { rid } = useParams();
@@ -21,9 +17,9 @@ export default function ChatRoom() {
   const { socket } = useContext(SocketContext);
   const [room, setRoom] = useState('fetching room data...');
   const [isFetching, setIsFetching] = useState(true);
+  const { isMenuOpen, toggleMenu } = useToggleMenu(true);
   useStateLogger(room, 'room');
   // useStateLogger(isFetching, 'isFetching');
-  const { isMenuOpen, toggleMenu } = useToggleMenu(true);
 
   const [messageList, setMessageList] = useState([
     {
@@ -85,55 +81,11 @@ export default function ChatRoom() {
     };
   }, []);
 
-  const navigate = useNavigate();
-  const handleLeaveRoom = () => {
-    console.log(`leaveRoom called`);
-    if (!window.confirm(`이 방을 완전히 떠나시겠습니까?`)) return;
-    socket.emit('leaveRoom', rid, (res) => {
-      if (res && res.status === 'ok') {
-        navigate(`/roomList`);
-        console.log('successfully left', res);
-      } else {
-        console.log('failed to leave', res);
-      }
-    });
-  };
-
-  const handleBack = () => {
-    console.log(`handleBack called`);
-    navigate(`/roomList`);
-    console.log(`successfully back from "${room.title}"`);
-  };
-
   return isFetching ? (
     <Loader />
   ) : (
     <div className="room-container">
-      <div className="room-header">
-        <div className="section">
-          <FontAwesomeIcon
-            icon={faAngleLeft}
-            className="header-button back"
-            onClick={handleBack}
-          />
-          <div className="room-title">{room.title}</div>
-          <FontAwesomeIcon
-            icon={faArrowRightFromBracket}
-            className="header-button leave"
-            onClick={handleLeaveRoom}
-          />
-        </div>
-
-        <div className="section">
-          <FontAwesomeIcon icon={faCrown} className="crown" />
-          <p className="owner">{room.owner ? room.owner.name : 'SYSTEM'}</p>
-          <FontAwesomeIcon
-            icon={faEllipsisVertical}
-            className="header-button menu"
-            onClick={toggleMenu}
-          />
-        </div>
-      </div>
+      <RoomHeader room={room} toggleMenu={toggleMenu} />
 
       <div className="room-main" ref={scrollRef}>
         {isMenuOpen && (

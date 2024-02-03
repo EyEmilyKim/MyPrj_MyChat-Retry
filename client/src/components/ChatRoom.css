@@ -5,57 +5,8 @@
   align-items: flex-end;
 }
 .room-container > * {
-  border: 1px solid plum;
+  /* border: 1px solid plum; */
   background-color: pink;
-}
-
-/* ------- ChatRoom 헤더 섹션 ------- */
-.room-header {
-  background-color: aquamarine;
-  width: 100%;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.section {
-  display: flex;
-  align-items: center;
-  padding: 5px 0;
-}
-
-/* 헤더 Left - 룸 타이틀 */
-.room-title {
-  font-size: 18px;
-}
-.header-button {
-  margin: 0 2px;
-  color: gray;
-  border-radius: 15px;
-  padding: 5px;
-}
-.header-button.back {
-  padding: 5px 8px;
-}
-.header-button.menu {
-  padding: 5px 10px;
-}
-.header-button:hover {
-  background-color: white;
-  color: green;
-}
-.header-button.leave:hover {
-  color: red;
-}
-
-/* 헤더 Right - 룸 메뉴 */
-.crown {
-  color: orange;
-}
-.owner {
-  margin: 0 0 0 3px;
-  font-size: 14px;
-  font-weight: bold;
 }
 
 /* ------- ChatRoom 메인 섹션 ------- */
