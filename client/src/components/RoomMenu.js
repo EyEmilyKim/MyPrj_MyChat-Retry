@@ -6,8 +6,7 @@ export default function RoomMenu(props) {
   const room = props.room;
   const isMenuOpen = props.isMenuOpen;
   // useStateLogger(room, 'room');
-
-  const members = room.members;
+  const members = room.members || [];
   const info = [
     { label: '오너', value: room.owner ? room.owner.name : 'SYSTEM' },
     { label: '개설일', value: room.created },
