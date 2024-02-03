@@ -84,8 +84,10 @@ export default function ChatRoom() {
   return isFetching ? (
     <Loader />
   ) : (
-    <div className="room-container">
-      <RoomHeader room={room} toggleMenu={toggleMenu} />
+    <div className="room-body">
+      <div className="roomHeader-container">
+        <RoomHeader room={room} toggleMenu={toggleMenu} />
+      </div>
 
       <div className="room-main" ref={scrollRef}>
         {isMenuOpen && (
