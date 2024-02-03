@@ -13,6 +13,7 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../util-components/Loader';
 import RoomMenu from './RoomMenu';
 import useStateLogger from '../hooks/useStateLogger';
+import useToggleMenu from '../hooks/useToggleMenu';
 
 export default function ChatRoom() {
   const { rid } = useParams();
@@ -22,6 +23,8 @@ export default function ChatRoom() {
   const [isFetching, setIsFetching] = useState(true);
   useStateLogger(room, 'room');
   // useStateLogger(isFetching, 'isFetching');
+  const { isMenuOpen, toggleMenu } = useToggleMenu(true);
+
   const [messageList, setMessageList] = useState([
     {
       _id: 'dummy1',
@@ -102,11 +105,6 @@ export default function ChatRoom() {
     console.log(`successfully back from "${room.title}"`);
   };
 
-  const [isMenuOpen, setMenuOpen] = useState(true);
-  const toggleRoomMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-
   return isFetching ? (
     <Loader />
   ) : (
@@ -132,7 +130,7 @@ export default function ChatRoom() {
           <FontAwesomeIcon
             icon={faEllipsisVertical}
             className="header-button menu"
-            onClick={toggleRoomMenu}
+            onClick={toggleMenu}
           />
         </div>
       </div>
