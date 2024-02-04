@@ -1,16 +1,22 @@
 .nav-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ----- NavBar 상단 ----- */
+.nav-upper {
   background-color: yellow;
   min-height: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.nav-container > * {
-  /* border: solid black 1px; */
+.nav-upper > * {
+  border: solid black 1px;
   padding: 10px;
 }
 
-/* ------ NavBar 메뉴 섹션 ------ */
 .nav-list {
   display: flex;
 }
@@ -18,4 +24,9 @@
   /* border: solid black 1px; */
   list-style: none;
   margin-left: 10px;
+}
+
+/* ----- NavBar 하단 ----- */
+.nav-lower {
+  background-color: aquamarine;
 }

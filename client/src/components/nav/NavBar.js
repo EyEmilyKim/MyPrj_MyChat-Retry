@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
+import useToggleMenu from '../../hooks/useToggleMenu';
 import './NavBar.css';
 import NavUser from './NavUser';
+import NavUserMenu from './NavUserMenu';
 
 export default function NavBar() {
+  const { isMenuOpen, toggleMenu } = useToggleMenu(true);
+
   const navItems = [
     {
       to: '/',
@@ -20,17 +24,23 @@ export default function NavBar() {
 
   return (
     <div className="nav-container">
-      <NavUser />
+      <div className="nav-upper">
+        <NavUser toggleMenu={toggleMenu} />
 
-      <ul className="nav-list">
-        {navItems.map((item) => {
-          return (
-            <li className="nav-items" key={item.text}>
-              <Link to={item.to}>{item.text}</Link>
-            </li>
-          );
-        })}
-      </ul>
+        <ul className="nav-list">
+          {navItems.map((item) => {
+            return (
+              <li className="nav-items" key={item.text}>
+                <Link to={item.to}>{item.text}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div className="nav-lower">
+        {isMenuOpen ? <NavUserMenu isMenuOpen={isMenuOpen} /> : null}
+      </div>
     </div>
   );
 }

@@ -4,11 +4,12 @@ import './NavUser.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 
-export default function NavUser() {
+export default function NavUser(props) {
+  const toggleMenu = props.toggleMenu;
   const { isLogin, user } = useContext(LoginContext);
 
   return (
-    <div className="nav-user">
+    <div className="nav-user" onClick={toggleMenu}>
       {isLogin ? (
         <>
           <img

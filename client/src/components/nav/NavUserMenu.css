@@ -1,0 +1,18 @@
+.navUserMenu {
+  /* border: solid red 1px; */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.navUserMenu-list {
+  padding-left: 8px;
+  list-style: none;
+}
+.navUserMenu-items {
+  margin: 6px;
+}
+.navUserMenu-items > *:hover {
+  font-weight: bolder;
+  color: green;
+  cursor: pointer;
+}
