@@ -43,7 +43,7 @@ export const LoginProvider = ({ children }) => {
 
   const contextValue = {
     isLogin, // for SocketContext, PrivateRoutes, NavBar, HomePage
-    isAuthing, // for SocketContext, PrivateRoutes, HomePage
+    isAuthing, // for SocketContext, HomePage
     loginOperating, // for SocketContext, HomePage
     user, // for ...
     setLoginOperating, // for SocketContext

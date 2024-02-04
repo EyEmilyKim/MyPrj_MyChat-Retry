@@ -6,29 +6,24 @@ import useStateLogger from '../hooks/useStateLogger';
 import Loader from './Loader';
 
 const PrivateRoutes = () => {
-  const { isLogin, isAuthing } = useContext(LoginContext);
+  const { isLogin } = useContext(LoginContext);
   const { isConnecting } = useContext(SocketContext);
   const [canNavigate, setCanNavigate] = useState(false);
   // useStateLogger(canNavigate, 'canNavigate');
 
   useEffect(() => {
-    const checkNavigation = async () => {
-      if (!isAuthing && !isConnecting) {
-        setCanNavigate(true);
-      }
-    };
-    checkNavigation();
-  }, [isAuthing]);
+    if (!isConnecting) {
+      setCanNavigate(true);
+    }
+  }, [isConnecting]);
 
-  return isAuthing ? (
+  return !canNavigate ? (
     <Loader />
-  ) : canNavigate ? (
-    isLogin ? (
-      <Outlet />
-    ) : (
-      <Navigate to="/" replace />
-    )
-  ) : null;
+  ) : isLogin ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/" replace />
+  );
 };
 
 export default PrivateRoutes;

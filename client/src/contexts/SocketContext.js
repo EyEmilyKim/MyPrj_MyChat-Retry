@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
   const ioUrl = process.env.REACT_APP_API_ROOT;
   const originUrl = process.env.REACT_APP_ORIGIN_ROOT;
   const [socket, setSocket] = useState(null);
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(true);
   useStateLogger(socket, 'socket');
   useStateLogger(isConnecting, 'isConnecting');
 
@@ -21,7 +21,6 @@ export const SocketProvider = ({ children }) => {
     console.log(`${reason} 후 소켓 연결`);
     if (!socket || socket.disconnected) {
       // 연결된 소켓 없으면 새로 생성
-      setIsConnecting(true);
       const newSocket = io(ioUrl, {
         withCredentials: true,
         origins: originUrl,
