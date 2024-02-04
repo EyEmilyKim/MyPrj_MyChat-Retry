@@ -21,26 +21,7 @@ export default function ChatRoom() {
   useStateLogger(room, 'room');
   // useStateLogger(isFetching, 'isFetching');
 
-  const [messageList, setMessageList] = useState([
-    {
-      _id: 'dummy1',
-      sender: { name: 'system' },
-      content: `dummy System message`,
-      timestamp: new Date(),
-    },
-    {
-      _id: 'dummy2',
-      sender: { name: 'Alfa', email: 'alfa@a.com' },
-      content: `Hi there, I'm Alfa. this is dummy`,
-      timestamp: new Date(),
-    },
-    {
-      _id: 'dummy3',
-      sender: { name: 'Chalie', email: 'chalie@c.com' },
-      content: `Hi Alfa, I'm Chalie. this is dummy too`,
-      timestamp: new Date(),
-    },
-  ]);
+  const [messageList, setMessageList] = useState([]);
 
   const scrollRef = useRef();
   useEffect(() => {
