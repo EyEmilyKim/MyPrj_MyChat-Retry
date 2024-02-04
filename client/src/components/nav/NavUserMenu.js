@@ -1,9 +1,18 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LoginContext } from '../../contexts/LoginContext';
+import useLogout from '../../hooks/useLogout';
 import './NavUserMenu.css';
 
 export default function NavUserMenu() {
   const { isLogin } = useContext(LoginContext);
+  const { handleLogout } = useLogout();
+
+  const navigate = useNavigate();
+  const moveToMyPage = () => {
+    // console.log('moveToMyPage called');
+    navigate('/myPage');
+  };
 
   return (
     <div className="navUserMenu">
@@ -11,10 +20,10 @@ export default function NavUserMenu() {
         {isLogin ? (
           <>
             <li className="navUserMenu-items" key={101}>
-              <p>마이페이지</p>
+              <label onClick={moveToMyPage}>마이페이지</label>
             </li>
             <li className="navUserMenu-items" key={102}>
-              <p>로그아웃</p>
+              <label onClick={handleLogout}>로그아웃</label>
             </li>
           </>
         ) : (

@@ -7,6 +7,7 @@ import HomePage from './components/home/HomePage';
 import UserList from './components/users/UserList';
 import RoomList from './components/rooms/RoomList';
 import ChatRoom from './components/rooms/ChatRoom';
+import MyPage from './components/myPage/MyPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route element={<PrivateRoutes />}>
+                <Route exact path="/myPage" element={<MyPage />} />
                 <Route exact path="/userList" element={<UserList />} />
                 <Route exact path="/roomList" element={<RoomList />} />
                 <Route exact path="/room/:rid" element={<ChatRoom />} />
