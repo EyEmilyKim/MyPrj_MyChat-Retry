@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
       ref: 'Room',
     },
   ],
+  description: {
+    type: String,
+    default: '',
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

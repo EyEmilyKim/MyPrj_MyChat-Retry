@@ -1,0 +1,55 @@
+.myPage-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+.myPage-title {
+  font-size: 23px;
+}
+
+.myPage-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+/* ----- MyPage 프로필 섹션 ----- */
+.myPage-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.myPage-profile > * {
+  border-bottom: solid 1.5px #a8a6a6;
+  padding-bottom: 3px;
+  font-weight: bold;
+}
+.myPage-userImage {
+  width: 170px;
+  height: 170px;
+}
+.myPage-userCreated {
+  font-weight: normal;
+}
+/* ----- MyPage 설정 섹션 ----- */
+.myPage-feats {
+  /* border: solid 1px pink; */
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+.myPage-feats > * {
+  border: solid 1px #a8a6a6;
+  padding: 5px 20px;
+  border-radius: 5px;
+}
+.myPage-feats > *:hover {
+  font-weight: bold;
+  background-color: aquamarine;
+}
