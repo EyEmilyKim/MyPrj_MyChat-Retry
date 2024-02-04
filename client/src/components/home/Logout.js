@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
+import { LoginContext } from '../../contexts/LoginContext';
 import axios from 'axios';
-import { handleHttpError } from '../utils/handleHttpError';
+import { handleHttpError } from '../../utils/handleHttpError';
 
 export default function Logout() {
   const { setIsLogin, setUser } = useContext(LoginContext);

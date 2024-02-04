@@ -1,3 +1,5 @@
+// CSS definition is in './RoomList.css';
+
 export default function ClassifiedRooms(props) {
   const joinedRooms = props.joinedRooms;
   const notMyRooms = props.notMyRooms;

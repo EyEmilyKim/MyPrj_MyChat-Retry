@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import useStateLogger from '../hooks/useStateLogger';
 import { handleHttpError } from '../utils/handleHttpError';
+import useStateLogger from '../hooks/useStateLogger';
 
 export const LoginContext = createContext();
 

@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
 import { Navigate, Outlet } from 'react-router-dom';
+import { LoginContext } from '../contexts/LoginContext';
 import { SocketContext } from '../contexts/SocketContext';
-import './PrivateRoutes.css';
-import Loader from './Loader';
 import useStateLogger from '../hooks/useStateLogger';
+import Loader from './Loader';
 
 const PrivateRoutes = () => {
   const { isLogin, isAuthing } = useContext(LoginContext);

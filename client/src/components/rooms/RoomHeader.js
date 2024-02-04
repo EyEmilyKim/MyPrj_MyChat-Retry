@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import './RoomHeader.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
-import './RoomHeader.css';
 import RoomHeaderIconBack from './RoomHeaderIconBack';
 import RoomHeaderIconLeave from './RoomHeaderIconLeave';
 import RoomHeaderIconMenu from './RoomHeaderIconMenu';

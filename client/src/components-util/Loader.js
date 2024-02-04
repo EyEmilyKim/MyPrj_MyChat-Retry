@@ -1,4 +1,4 @@
-// CSS definition is in 'PrivateRoutes.css'
+import './Loader.css';
 
 export default function Loader() {
   return (

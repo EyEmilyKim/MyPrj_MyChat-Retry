@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SocketContext } from '../../contexts/SocketContext';
+// CSS definition is in './RoomHeader.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { SocketContext } from '../contexts/SocketContext';
 
 export default function RoomHeaderIconLeave(props) {
   const rid = props.rid;

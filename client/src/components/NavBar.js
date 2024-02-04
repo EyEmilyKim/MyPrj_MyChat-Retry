@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import './NavBar.css';
+import { Link } from 'react-router-dom';
 import { LoginContext } from '../contexts/LoginContext';
+import './NavBar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   const { isLogin, user } = useContext(LoginContext);

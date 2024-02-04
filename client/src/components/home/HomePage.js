@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
+import { LoginContext } from '../../contexts/LoginContext';
 import './HomePage.css';
+import Loader from '../../components-util/Loader';
 import Login from './Login';
 import Logout from './Logout';
-import Loader from '../util-components/Loader';
 
 export default function HomePage() {
   const { loginOperating, isAuthing, isLogin, user } = useContext(LoginContext);

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useStateLogger from '../../hooks/useStateLogger';
 import './RoomMenu.css';
-import useStateLogger from '../hooks/useStateLogger';
 
 export default function RoomMenu(props) {
   const room = props.room;

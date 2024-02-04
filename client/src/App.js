@@ -1,12 +1,12 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Providers } from './contexts/_Providers';
-import PrivateRoutes from './util-components/PrivateRoutes';
+import PrivateRoutes from './components-util/PrivateRoutes';
 import NavBar from './components/NavBar';
-import HomePage from './components/HomePage';
-import UserList from './components/UserList';
-import RoomList from './components/RoomList';
-import ChatRoom from './components/ChatRoom';
+import HomePage from './components/home/HomePage';
+import UserList from './components/users/UserList';
+import RoomList from './components/rooms/RoomList';
+import ChatRoom from './components/rooms/ChatRoom';
 
 function App() {
   return (

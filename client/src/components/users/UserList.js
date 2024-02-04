@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
+import { SocketContext } from '../../contexts/SocketContext';
+import useStateLogger from '../../hooks/useStateLogger';
 import './UserList.css';
-import { SocketContext } from '../contexts/SocketContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
-import useStateLogger from '../hooks/useStateLogger';
 
 export default function UserList() {
   const { socket } = useContext(SocketContext);

@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SocketContext } from '../../contexts/SocketContext';
+import { validation } from '../../utils/beforeWriting';
 import './NewRoom.css';
-import { SocketContext } from '../contexts/SocketContext';
-import { validation } from '../utils/beforeWriting';
 
 export default function NewRoom() {
   const { socket } = useContext(SocketContext);
