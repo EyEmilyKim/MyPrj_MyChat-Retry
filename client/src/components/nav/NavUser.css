@@ -1,0 +1,15 @@
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.nav-user > * {
+  /* border: solid red 1px; */
+}
+.lock-image {
+  margin-left: 5px;
+}
+.user-name {
+  font-size: 17px;
+  font-weight: bolder;
+}
