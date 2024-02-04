@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { dateFormatKST } = require('../utils/dateFormatKST');
 const db = require('../utils/db');
 const { hashPassword, comparePassword } = require('../utils/hash');
 const { generateToken, verifyToken } = require('../utils/jwt');
@@ -16,11 +17,13 @@ userService.registerUser = async function (email, pw, un) {
     } else {
       // -> 없으면 새로 저장
       const hashedPW = await hashPassword(pw);
+      const now = await dateFormatKST();
       user = new User({
         email: email,
         password: hashedPW,
         name: un,
         online: false,
+        created: now,
         // token: '',
         // sid: '',
       });

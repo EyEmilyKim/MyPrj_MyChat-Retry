@@ -8,8 +8,7 @@ const roomSchema = new mongoose.Schema(
       unique: true,
     },
     created: {
-      type: Date,
-      default: Date.now,
+      type: String,
     },
     owner: {
       type: mongoose.Schema.ObjectId,

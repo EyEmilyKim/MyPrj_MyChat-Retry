@@ -41,9 +41,11 @@ roomService.createRoom = async function (title, user) {
       throw new Error('이미 존재하는 방제목입니다.');
     } else {
       // -> 없으면 새로 저장
+      const now = await dateFormatKST();
       const room = new Room({
         title: title,
         owner: user._id,
+        created: now,
       });
       await room.save();
       return room;

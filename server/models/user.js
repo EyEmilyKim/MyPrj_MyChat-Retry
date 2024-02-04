@@ -20,8 +20,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   created: {
-    type: Date,
-    default: Date.now,
+    type: String,
   },
   token: {
     type: String,

@@ -3,18 +3,23 @@ const router = express.Router();
 
 const Room = require('../models/room');
 const mongoose = require('mongoose');
+const { dateFormatKST } = require('../utils/dateFormatKST');
 
-router.get('/createDummy', (req, res) => {
+router.get('/createDummy', async (req, res) => {
   // 임의로 룸 만들어주기
+  const now = await dateFormatKST();
   Room.insertMany([
     {
       title: '*자바스크립트 단톡방',
+      created: now,
     },
     {
       title: '*리액트 단톡방',
+      created: now,
     },
     {
       title: '*NodeJS 단톡방',
+      created: now,
     },
   ])
     .then(() => {
