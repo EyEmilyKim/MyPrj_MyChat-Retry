@@ -56,22 +56,14 @@ export default function RoomList() {
     axios
       .get(`${apiRoot}/room/createDummy`)
       .then((res) => console.log(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => {
-        if (window.confirm('페이지를 새로고침 하시겠습니까?'))
-          window.location.reload();
-      });
+      .catch((err) => console.error(err));
   };
 
   const clearAllRooms = () => {
     axios
       .get(`${apiRoot}/room/clearRooms`)
       .then((res) => console.log(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => {
-        if (window.confirm('페이지를 새로고침 하시겠습니까?'))
-          window.location.reload();
-      });
+      .catch((err) => console.error(err));
   };
 
   const navigate = useNavigate();
