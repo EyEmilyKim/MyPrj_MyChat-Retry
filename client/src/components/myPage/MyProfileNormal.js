@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { LoginContext } from '../../contexts/LoginContext';
 // CSS definition is in MyPage.css
 
-export default function MyProfile() {
+export default function MyProfileNormal() {
   const { user } = useContext(LoginContext);
 
   return (

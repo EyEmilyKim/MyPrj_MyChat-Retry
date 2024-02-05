@@ -44,17 +44,18 @@
   justify-content: space-evenly;
   gap: 10px;
 }
-.myPage-feats > * {
+.myPage-each-feat {
   border: solid 1px #a8a6a6;
   padding: 5px 20px;
   border-radius: 5px;
-}
-.myPage-feats > *:hover {
-  font-weight: bold;
-  background-color: aquamarine;
-}
-.myPage-each-feat {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
+}
+.myPage-each-feat:hover {
+  font-weight: bold;
+  background-color: aquamarine;
+  cursor: pointer;
 }
