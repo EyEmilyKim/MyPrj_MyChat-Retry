@@ -59,6 +59,27 @@ module.exports = function (io) {
       }
     });
 
+    // ** 유저 정보 수정
+    socket.on('updateUser', async (name, description, cb) => {
+      console.log(`'updateUser' called by : `, socket.decoded.email);
+      try {
+        const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
+        const updatedUser = await userService.updateUser(
+          user,
+          name,
+          description
+        ); // 유저정보 업데이트
+        // 실시간 유저 정보 전체 발신
+        const userList = await userController.listAllUsers('Someone updated');
+        io.emit('users', 'Someone updated', userList);
+
+        cb({ status: 'ok', data: updatedUser });
+      } catch (error) {
+        console.error('io > updateUser Error', error);
+        cb({ status: 'Server side Error' });
+      }
+    });
+
     // ** 룸 목록 요청
     socket.on('getRooms', async (cb) => {
       console.log(`'getRooms' called by : `, socket.decoded.email);

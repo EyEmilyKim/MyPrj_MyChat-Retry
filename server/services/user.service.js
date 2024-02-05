@@ -36,6 +36,22 @@ userService.registerUser = async function (email, pw, un) {
   }
 };
 
+// 유저 업데이트
+userService.updateUser = async function (user, name, description) {
+  // console.log(
+  //   `userService.updateUser called : ${user.email} / ${name} / ${description}`
+  // );
+  try {
+    user.name = name;
+    user.description = description;
+    await user.save();
+    return user;
+  } catch (error) {
+    console.log('userService.updateUser error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 유저 로그인
 userService.loginUser = async function (email, pw) {
   // console.log('userService.loginUser called', email, pw);
