@@ -8,6 +8,7 @@ import UserList from './components/users/UserList';
 import RoomList from './components/rooms/RoomList';
 import ChatRoom from './components/rooms/ChatRoom';
 import MyPage from './components/myPage/MyPage';
+import MySetting from './components/mySetting/MySetting';
 import NoPage from './components-util/NoPage';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
               <Route path="*" element={<NoPage />} />
               <Route element={<PrivateRoutes />}>
                 <Route exact path="/myPage" element={<MyPage />} />
+                <Route exact path="/mySetting" element={<MySetting />} />
                 <Route exact path="/userList" element={<UserList />} />
                 <Route exact path="/roomList" element={<RoomList />} />
                 <Route exact path="/room/:rid" element={<ChatRoom />} />

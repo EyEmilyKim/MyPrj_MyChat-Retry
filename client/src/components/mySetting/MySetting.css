@@ -1,0 +1,47 @@
+.mySetting-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+.mySetting-title {
+  font-size: 23px;
+}
+
+.mySetting-main {
+  border: solid 1px pink;
+  padding: 10px;
+}
+
+.mySetting-feats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.mySetting-each-feat {
+  border: solid 1px #a8a6a6;
+  min-width: 300px;
+  padding: 5px 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.mySetting-each-feat:hover {
+  font-weight: bold;
+  background-color: aquamarine;
+  cursor: pointer;
+}
+
+.mySetting-each-feat-detail {
+  background-color: antiquewhite;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
