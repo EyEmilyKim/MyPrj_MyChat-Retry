@@ -4,8 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWrench } from '@fortawesome/free-solid-svg-icons';
 
 export default function MyFeatSetting() {
+  const moveToSetting = () => {
+    alert('기능 준비중...');
+  };
+
   return (
-    <div className="myPage-each-feat">
+    <div className="myPage-each-feat" onClick={moveToSetting}>
       <FontAwesomeIcon icon={faWrench} />
       <p>설정</p>
     </div>

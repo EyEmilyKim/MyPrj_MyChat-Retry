@@ -4,6 +4,8 @@ import { LoginContext } from '../../contexts/LoginContext';
 
 export default function MyProfileNormal() {
   const { user } = useContext(LoginContext);
+  const userCreated = user.created;
+  const userCreatedFormatted = userCreated.substring(0, 10);
 
   return (
     <div className="myPage-profile">
@@ -14,7 +16,7 @@ export default function MyProfileNormal() {
       />
       <p className="myPage-userName">{user.name} </p>
       <p className="myPage-userDescription">{user.description}</p>
-      <p className="myPage-userCreated">Since {user.created} </p>
+      <p className="myPage-userCreated">가입일 {userCreatedFormatted} </p>
     </div>
   );
 }

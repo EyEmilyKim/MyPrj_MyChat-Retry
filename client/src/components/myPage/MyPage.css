@@ -17,23 +17,37 @@
 }
 /* ----- MyPage 프로필 섹션 ----- */
 .myPage-profile {
+  /* border: solid 1px pink; */
+  max-width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 .myPage-profile > * {
   border-bottom: solid 1.5px #a8a6a6;
   padding-bottom: 3px;
-  font-weight: bold;
+  min-width: 170px;
+  text-align: center;
 }
 .myPage-userImage {
   width: 170px;
   height: 170px;
 }
-.myPage-userCreated {
-  font-weight: normal;
+.myPage-userName {
+  font-weight: 700;
 }
+.myPage-userDescription {
+  font-weight: 600;
+  word-break: break-all; /* 단어 중간이라도 줄바꿈 */
+}
+.myPage-userCreated {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: normal;
+  border-bottom: none;
+}
+
 /* ----- MyPage 설정 섹션 ----- */
 .myPage-feats {
   /* border: solid 1px pink; */

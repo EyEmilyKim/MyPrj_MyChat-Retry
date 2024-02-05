@@ -18,6 +18,10 @@ export default function MyProfileEditing(props) {
         placeholder={name}
         value={name}
         onChange={(e) => {
+          if (e.target.value.length > 15) {
+            alert('닉네임은 15자를 넘을 수 없어요');
+            return;
+          }
           setName(e.target.value);
         }}
       />
@@ -26,6 +30,10 @@ export default function MyProfileEditing(props) {
         placeholder={description}
         value={description}
         onChange={(e) => {
+          if (e.target.value.length > 40) {
+            alert('메세지는 40자를 넘을 수 없어요');
+            return;
+          }
           setDescription(e.target.value);
         }}
       />
