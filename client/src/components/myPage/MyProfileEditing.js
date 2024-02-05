@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
 // CSS definition is in MyPage.css
 
-export default function MyProfileEditing() {
-  const { user } = useContext(LoginContext);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+export default function MyProfileEditing(props) {
+  const name = props.name;
+  const setName = props.setName;
+  const description = props.description;
+  const setDescription = props.setDescription;
 
   return (
     <div className="myPage-profile">
@@ -16,7 +15,7 @@ export default function MyProfileEditing() {
       />
       <input
         className="myPage-userName-editing"
-        placeholder={user.name}
+        placeholder={name}
         value={name}
         onChange={(e) => {
           setName(e.target.value);
@@ -24,13 +23,12 @@ export default function MyProfileEditing() {
       />
       <input
         className="myPage-userDescription-editing"
-        placeholder={user.description}
+        placeholder={description}
         value={description}
         onChange={(e) => {
           setDescription(e.target.value);
         }}
       />
-      {/* <p className="myPage-userCreated"></p> */}
     </div>
   );
 }

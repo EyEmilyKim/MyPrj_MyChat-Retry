@@ -4,11 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 export default function MyFeatSave(props) {
-  const toggleEditing = props.toggleEditing;
-
-  const handleSaveUser = () => {
-    console.log('handleSaveUser called');
-  };
+  const handleSaveUser = props.handleSaveUser;
 
   return (
     <div className="myPage-each-feat" onClick={handleSaveUser}>
