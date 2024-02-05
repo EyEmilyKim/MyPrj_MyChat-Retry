@@ -4,7 +4,8 @@ import { LoginContext } from '../../contexts/LoginContext';
 import useLogout from '../../hooks/useLogout';
 import './NavUserMenu.css';
 
-export default function NavUserMenu() {
+export default function NavUserMenu(props) {
+  const toggleMenu = props.toggleMenu;
   const { isLogin } = useContext(LoginContext);
   const { handleLogout } = useLogout();
 
@@ -16,7 +17,7 @@ export default function NavUserMenu() {
 
   return (
     <div className="navUserMenu">
-      <ul className="navUserMenu-list">
+      <ul className="navUserMenu-list" onClick={toggleMenu}>
         {isLogin ? (
           <>
             <li className="navUserMenu-items" key={101}>

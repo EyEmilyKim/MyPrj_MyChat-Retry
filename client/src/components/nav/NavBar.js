@@ -39,7 +39,7 @@ export default function NavBar() {
       </div>
 
       <div className="nav-lower">
-        {isMenuOpen ? <NavUserMenu isMenuOpen={isMenuOpen} /> : null}
+        {isMenuOpen ? <NavUserMenu toggleMenu={toggleMenu} /> : null}
       </div>
     </div>
   );
