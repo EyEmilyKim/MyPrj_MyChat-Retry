@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { LoginContext } from '../../contexts/LoginContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
-import useToggleMenu from '../../hooks/useToggleMenu';
+import useToggleState from '../../hooks/useToggleState';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
 import RoomHeader from './RoomHeader';
@@ -17,7 +17,7 @@ export default function ChatRoom() {
   const { socket } = useContext(SocketContext);
   const [room, setRoom] = useState('fetching room data...');
   const [isFetching, setIsFetching] = useState(true);
-  const { isMenuOpen, toggleMenu } = useToggleMenu(true);
+  const [isMenuOpen, toggleMenu] = useToggleState(true);
   useStateLogger(room, 'room');
   // useStateLogger(isFetching, 'isFetching');
 

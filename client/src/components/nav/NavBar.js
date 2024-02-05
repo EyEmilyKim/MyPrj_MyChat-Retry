@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import useToggleMenu from '../../hooks/useToggleMenu';
+import useToggleState from '../../hooks/useToggleState';
 import './NavBar.css';
 import NavUser from './NavUser';
 import NavUserMenu from './NavUserMenu';
 
 export default function NavBar() {
-  const { isMenuOpen, toggleMenu } = useToggleMenu(true);
+  const [isMenuOpen, toggleMenu] = useToggleState(true);
 
   const navItems = [
     {
