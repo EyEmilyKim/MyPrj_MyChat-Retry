@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
-import axios from 'axios';
-import { handleHttpError } from '../utils/handleHttpError';
+import { serveUserAxios } from '../utils/serveUserAxios';
 
 export default function useLogin(email, password) {
   const { setUser, setIsLogin, setLoginOperating } = useContext(LoginContext);
@@ -12,27 +11,28 @@ export default function useLogin(email, password) {
     // console.log('handleLogin called', email);
     setLoginOperating(true);
     try {
-      const res = await axios({
-        url: `${apiRoot}/user/login`,
-        method: 'POST',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
+      const resNotify = true;
+      const res = await serveUserAxios(
+        {
+          url: `${apiRoot}/user/login`,
+          method: 'POST',
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            email: email,
+            password: password,
+          },
         },
-        data: {
-          email: email,
-          password: password,
-        },
-      });
+        resNotify
+      );
       if (res.status === 200) {
-        alert(`로그인 성공 !\n반갑습니다 ${res.data.user.name}님~~`);
-        console.log('로그인 성공 !');
         setUser(res.data.user);
         setIsLogin(true);
       }
     } catch (error) {
-      const notify = true;
-      handleHttpError(error, notify);
+      // console.log('handleLogin error', error);
     } finally {
       setLoginOperating(false);
     }

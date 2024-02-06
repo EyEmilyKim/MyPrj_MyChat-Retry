@@ -14,4 +14,4 @@ const handleHttpError = async (error, notify) => {
   }
 };
 
-module.exports = { handleHttpError };
+export { handleHttpError };

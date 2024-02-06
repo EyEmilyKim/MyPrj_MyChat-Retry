@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
-import axios from 'axios';
-import { handleHttpError } from '../utils/handleHttpError';
+import { serveUserAxios } from '../utils/serveUserAxios';
 
 export default function useLogout() {
   const { setIsLogin, setUser } = useContext(LoginContext);
@@ -12,20 +11,21 @@ export default function useLogout() {
     console.log('handleLogout called');
     if (window.confirm('로그아웃 하시겠습니까?')) {
       try {
-        const res = await axios({
-          url: `${apiRoot}/user/logout`,
-          method: 'POST',
-          withCredentials: true,
-        });
+        const resNotify = true;
+        const res = await serveUserAxios(
+          {
+            url: `${apiRoot}/user/logout`,
+            method: 'POST',
+            withCredentials: true,
+          },
+          resNotify
+        );
         if (res.status === 200) {
-          alert(`로그아웃 성공!\n또 만나요 ${res.data.user.name}님~~`);
-          console.log('로그아웃 성공!');
           setIsLogin(false);
           setUser(null);
         }
       } catch (error) {
-        const notify = true;
-        handleHttpError(error, notify);
+        // console.log('handleLogout error', error);
       }
     }
   };

@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { handleHttpError } from '../utils/handleHttpError';
+import { serveUserAxios } from '../utils/serveUserAxios';
 
 export default function useSignup(email, password, userName) {
   const apiRoot = process.env.REACT_APP_API_ROOT;
@@ -9,27 +8,26 @@ export default function useSignup(email, password, userName) {
     console.log('handleSignUp called', email);
 
     try {
-      const res = await axios({
-        url: `${apiRoot}/user/signup`,
-        method: 'POST',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          email: email,
-          password: password,
-          userName: userName,
-        },
-      });
+      const resNotify = true;
 
-      if (res.status === 200) {
-        alert('유저 등록 성공 !', res.data.message);
-        console.log('유저 등록 성공 !', res.data.message, res.data.user);
-      }
+      await serveUserAxios(
+        {
+          url: `${apiRoot}/user/signup`,
+          method: 'POST',
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            email: email,
+            password: password,
+            userName: userName,
+          },
+        },
+        resNotify
+      );
     } catch (error) {
-      const notify = true;
-      handleHttpError(error, notify);
+      // console.log('handleSignUp error', error);
     }
   };
 

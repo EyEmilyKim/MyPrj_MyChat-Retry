@@ -10,7 +10,9 @@ userController.registerUser = async (req, res) => {
     const { email, password, userName } = req.body;
     const user = await userService.registerUser(email, password, userName);
     console.log('userController.registerUser user', user);
-    res.status(200).json({ message: '등록 성공', user: user });
+    res
+      .status(200)
+      .json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
   } catch (error) {
     console.log('userController.registerUser failed', error);
     res.status(500).json({ error: error.message });
@@ -36,7 +38,10 @@ userController.loginUser = async (req, res) => {
         secure: false,
       })
       .status(200)
-      .json({ message: '로그인 성공', user: user });
+      .json({
+        message: `로그인 성공\n반갑습니다 ${user.name}님~~ :D`,
+        user: user,
+      });
     // console.log('userController.loginUser success');
   } catch (error) {
     console.log('userController.loginUser failed', error);
@@ -103,7 +108,10 @@ userController.logoutUser = async (req, res) => {
     const user = await userService.logoutUser(data.email);
     if (!user.online) {
       res.cookie('accessToken', '');
-      res.status(200).json({ message: '로그아웃 성공', user: user });
+      res.status(200).json({
+        message: `로그아웃 성공\n또 만나요 ${user.name}님~~ :)`,
+        user: user,
+      });
     }
   } catch (error) {
     console.log('userController.logout failed', error);
