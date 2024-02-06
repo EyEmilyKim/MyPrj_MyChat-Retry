@@ -5,7 +5,7 @@ import PasswordConfirm from './PasswordConfirm';
 import PasswordNew from './PasswordNew';
 
 export default function PasswordReset() {
-  const [isSettingOpen, toggleSetting] = useToggleState(true);
+  const [isSettingOpen, toggleSetting] = useToggleState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
   useStateLogger(isConfirmed, 'isConfirmed');
 
@@ -20,7 +20,10 @@ export default function PasswordReset() {
           {!isConfirmed ? (
             <PasswordConfirm setIsConfirmed={setIsConfirmed} />
           ) : (
-            <PasswordNew />
+            <PasswordNew
+              toggleSetting={toggleSetting}
+              setIsConfirmed={setIsConfirmed}
+            />
           )}
         </div>
       ) : null}

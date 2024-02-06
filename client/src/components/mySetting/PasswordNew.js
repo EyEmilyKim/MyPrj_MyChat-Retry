@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { LoginContext } from '../../contexts/LoginContext';
-import { alertDeveloping } from '../../utils/alertDeveloping';
+import usePasswordNew from '../../hooks/usePasswordNew';
 import './PasswordNew.css';
 
-export default function PasswordNew() {
+export default function PasswordNew(props) {
+  const toggleSetting = props.toggleSetting;
+  const setIsConfirmed = props.setIsConfirmed;
   const { user } = useContext(LoginContext);
   const email = user.email;
   const [password1, setPassword1] = useState('');
@@ -14,9 +16,13 @@ export default function PasswordNew() {
     focusRef.current.focus();
   }, []);
 
-  const handlePasswordNew = () => {
-    alertDeveloping('handlePasswordNew');
+  const argsForHook = {
+    email,
+    password1,
+    toggleSetting,
+    setIsConfirmed,
   };
+  const { handlePasswordNew } = usePasswordNew(argsForHook);
 
   return (
     <div className="pwNew-main">

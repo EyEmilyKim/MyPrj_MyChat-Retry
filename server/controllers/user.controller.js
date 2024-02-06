@@ -185,4 +185,20 @@ userController.confirmPassword = async (req, res) => {
   }
 };
 
+// 비밀번호 재설정 HTTP
+userController.resetPassword = async (req, res) => {
+  console.log('userController.resetPassword called', req.body);
+  try {
+    const { email, password } = req.body;
+    await userService
+      .checkUser(email, 'email')
+      .then((user) => userService.resetPassword(password, user));
+
+    res.status(200).json({ message: '비밀번호 변경 성공' });
+  } catch (error) {
+    console.log('userController.resetPassword failed', error);
+    res.status(500).json({ error: 'Server side Error' });
+  }
+};
+
 module.exports = userController;

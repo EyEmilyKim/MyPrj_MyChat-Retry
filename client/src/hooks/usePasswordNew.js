@@ -1,17 +1,21 @@
 import { serveUserAxios } from '../utils/serveUserAxios';
 
-export default function usePasswordConfirm(email, password, setIsConfirmed) {
+export default function usePasswordNew(params) {
+  const email = params.email;
+  const password = params.password1;
+  const setIsConfirmed = params.setIsConfirmed;
+  const toggleSetting = params.toggleSetting;
   const apiRoot = process.env.REACT_APP_API_ROOT;
 
   // 비밀번호 확인 이벤트 처리하는 함수
-  const handlePasswordConfirm = async () => {
-    // console.log('handlePasswordConfirm called');
+  const handlePasswordNew = async () => {
+    // console.log('handlePasswordNew called');
 
     try {
       const resNotify = true;
-      const res = await serveUserAxios(
+      await serveUserAxios(
         {
-          url: `${apiRoot}/user/password-confirm`,
+          url: `${apiRoot}/user/password-reset`,
           method: 'POST',
           withCredentials: true,
           headers: {
@@ -24,13 +28,14 @@ export default function usePasswordConfirm(email, password, setIsConfirmed) {
         },
         resNotify
       );
-      if (res.status === 200) setIsConfirmed(true);
+      setIsConfirmed(false);
+      toggleSetting();
     } catch (error) {
-      // console.log('handlePasswordConfirm error', error);
+      // console.log('handlePasswordNew error', error);
     }
   };
 
   return {
-    handlePasswordConfirm,
+    handlePasswordNew,
   };
 }

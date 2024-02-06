@@ -36,7 +36,7 @@ userService.registerUser = async function (email, pw, un) {
   }
 };
 
-// 유저 업데이트
+// 유저 프로필 업데이트
 userService.updateUser = async function (user, name, description) {
   // console.log(
   //   `userService.updateUser called : ${user.email} / ${name} / ${description}`
@@ -219,6 +219,20 @@ userService.confirmPassword = async function (pw, currentPw) {
     return await comparePassword(pw, currentPw);
   } catch (error) {
     console.log('userService.confirmPassword error', error);
+    throw new Error(error.message);
+  }
+};
+
+// 비밀번호 업데이트
+userService.resetPassword = async function (pw, user) {
+  console.log(`userService.resetPassword called : ${user.email} / ${pw}`);
+  try {
+    const hashedPW = await hashPassword(pw);
+    user.password = hashedPW;
+    await user.save();
+    return user;
+  } catch (error) {
+    console.log('userService.resetPassword error', error);
     throw new Error(error.message);
   }
 };
