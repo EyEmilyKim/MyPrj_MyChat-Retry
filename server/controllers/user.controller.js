@@ -64,10 +64,8 @@ userController.updateConnectedUser = async (email, sid) => {
 userController.authenticateUser = async (req, res) => {
   // console.log('userController.authenticateUser called');
   try {
-    const accessToken = req.cookies.accessToken;
-    const data = jwt.verifyToken(accessToken, 'AT');
+    const data = jwt.getDataFromAT(req.cookies.accessToken);
     const user = await userService.checkUser(data.email, 'email');
-
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
     // console.log('userController.authenticateUser failed', error);
@@ -103,8 +101,7 @@ userController.leaveRoom = async (user, room) => {
 userController.logoutUser = async (req, res) => {
   // console.log('userController.logout called');
   try {
-    const accessToken = req.cookies.accessToken;
-    const data = jwt.verifyToken(accessToken, 'AT');
+    const data = jwt.getDataFromAT(req.cookies.accessToken);
     const user = await userService.logoutUser(data.email);
     if (!user.online) {
       res.cookie('accessToken', '');
@@ -170,9 +167,10 @@ userController.listAllUsers = async (reason = 'reason not provided') => {
 userController.confirmPassword = async (req, res) => {
   // console.log('userController.confirmPassword called', req.body.email);
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const data = jwt.getDataFromAT(req.cookies.accessToken);
     const passwordMatch = await userService
-      .checkUser(email, 'email')
+      .checkUser(data.email, 'email')
       .then((user) => userService.confirmPassword(password, user.password));
     if (passwordMatch) {
       res.status(200).json({ message: '비밀번호 확인 성공' });
@@ -189,11 +187,11 @@ userController.confirmPassword = async (req, res) => {
 userController.resetPassword = async (req, res) => {
   // console.log('userController.resetPassword called', req.body.email);
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const data = jwt.getDataFromAT(req.cookies.accessToken);
     await userService
-      .checkUser(email, 'email')
+      .checkUser(data.email, 'email')
       .then((user) => userService.resetPassword(password, user));
-
     res.status(200).json({ message: '비밀번호 변경 성공' });
   } catch (error) {
     console.log('userController.resetPassword failed', error);

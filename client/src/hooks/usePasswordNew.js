@@ -1,7 +1,6 @@
 import { serveUserAxios } from '../utils/serveUserAxios';
 
 export default function usePasswordNew(params) {
-  const email = params.email;
   const password = params.password1;
   const setIsConfirmed = params.setIsConfirmed;
   const toggleSetting = params.toggleSetting;
@@ -22,7 +21,6 @@ export default function usePasswordNew(params) {
             'Content-Type': 'application/json',
           },
           data: {
-            email: email,
             password: password,
           },
         },

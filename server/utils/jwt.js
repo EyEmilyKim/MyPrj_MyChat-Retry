@@ -37,7 +37,18 @@ function verifyToken(token, type) {
   }
 }
 
+function getDataFromAT(accessToken) {
+  // console.log('getDataFromAT called', accessToken);
+  try {
+    const data = this.verifyToken(accessToken, 'AT');
+    return data;
+  } catch (error) {
+    throw new Error('getDataFromAT 실패 : ' + error.message);
+  }
+}
+
 module.exports = {
   generateToken,
   verifyToken,
+  getDataFromAT,
 };

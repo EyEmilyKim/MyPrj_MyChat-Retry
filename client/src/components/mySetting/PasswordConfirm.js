@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
+import React, { useEffect, useRef, useState } from 'react';
 import usePasswordConfirm from '../../hooks/usePasswordConfirm';
 import './PasswordConfirm.css';
 
 export default function PasswordConfirm(props) {
   const setIsConfirmed = props.setIsConfirmed;
-  const { user } = useContext(LoginContext);
-  const email = user.email;
   const [password, setPassword] = useState('');
 
   const focusRef = useRef();
@@ -15,7 +12,6 @@ export default function PasswordConfirm(props) {
   }, []);
 
   const { handlePasswordConfirm } = usePasswordConfirm(
-    email,
     password,
     setIsConfirmed
   );

@@ -1,6 +1,6 @@
 import { serveUserAxios } from '../utils/serveUserAxios';
 
-export default function usePasswordConfirm(email, password, setIsConfirmed) {
+export default function usePasswordConfirm(password, setIsConfirmed) {
   const apiRoot = process.env.REACT_APP_API_ROOT;
 
   // 비밀번호 확인 이벤트 처리하는 함수
@@ -18,7 +18,6 @@ export default function usePasswordConfirm(email, password, setIsConfirmed) {
             'Content-Type': 'application/json',
           },
           data: {
-            email: email,
             password: password,
           },
         },

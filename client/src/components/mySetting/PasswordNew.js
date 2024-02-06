@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
+import React, { useEffect, useRef, useState } from 'react';
 import usePasswordNew from '../../hooks/usePasswordNew';
 import './PasswordNew.css';
 
 export default function PasswordNew(props) {
   const toggleSetting = props.toggleSetting;
   const setIsConfirmed = props.setIsConfirmed;
-  const { user } = useContext(LoginContext);
-  const email = user.email;
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
 
@@ -17,7 +14,6 @@ export default function PasswordNew(props) {
   }, []);
 
   const argsForHook = {
-    email,
     password1,
     toggleSetting,
     setIsConfirmed,
