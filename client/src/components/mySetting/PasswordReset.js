@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import useToggleState from '../../hooks/useToggleState';
 import useStateLogger from '../../hooks/useStateLogger';
-import PasswordAuth from './PasswordAuth';
+import PasswordConfirm from './PasswordConfirm';
 import PasswordNew from './PasswordNew';
 
 export default function PasswordReset() {
   const [isSettingOpen, toggleSetting] = useToggleState(true);
-  const [authComplete, setAuthComplete] = useState(false);
-  useStateLogger(authComplete, 'authComplete');
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  useStateLogger(isConfirmed, 'isConfirmed');
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function PasswordReset() {
 
       {isSettingOpen ? (
         <div className="mySetting-each-feat-field">
-          {!authComplete ? <PasswordAuth /> : <PasswordNew />}
+          {!isConfirmed ? <PasswordConfirm /> : <PasswordNew />}
         </div>
       ) : null}
     </>
