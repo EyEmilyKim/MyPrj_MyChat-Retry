@@ -36,7 +36,7 @@ export default function PasswordConfirm(props) {
           rows={1}
         />
         <button
-          className="submit-button"
+          className="pwConf-button"
           disabled={password === ''}
           onClick={handlePasswordConfirm}
         >
