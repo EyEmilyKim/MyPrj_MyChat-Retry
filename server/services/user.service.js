@@ -212,4 +212,15 @@ userService.extractNameIdOnline = async function (users) {
   return extractData;
 };
 
+// 비밀번호 일치여부 확인
+userService.confirmPassword = async function (pw, currentPw) {
+  // console.log('userService.confirmPassword called', pw, currentPw);
+  try {
+    return await comparePassword(pw, currentPw);
+  } catch (error) {
+    console.log('userService.confirmPassword error', error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = userService;

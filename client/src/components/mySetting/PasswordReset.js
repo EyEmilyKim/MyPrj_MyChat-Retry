@@ -17,7 +17,11 @@ export default function PasswordReset() {
 
       {isSettingOpen ? (
         <div className="mySetting-each-feat-field">
-          {!isConfirmed ? <PasswordConfirm /> : <PasswordNew />}
+          {!isConfirmed ? (
+            <PasswordConfirm setIsConfirmed={setIsConfirmed} />
+          ) : (
+            <PasswordNew />
+          )}
         </div>
       ) : null}
     </>

@@ -30,6 +30,7 @@ export default function Login() {
           rows={1}
         />
         <input
+          type="password"
           placeholder="비밀번호"
           className="login-input"
           value={password}

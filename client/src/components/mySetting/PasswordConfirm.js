@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { LoginContext } from '../../contexts/LoginContext';
+import usePasswordConfirm from '../../hooks/usePasswordConfirm';
 import './PasswordConfirm.css';
-import { alertDeveloping } from '../../utils/alertDeveloping';
 
-export default function PasswordConfirm() {
+export default function PasswordConfirm(props) {
+  const setIsConfirmed = props.setIsConfirmed;
+  const { user } = useContext(LoginContext);
+  const email = user.email;
   const [password, setPassword] = useState('');
 
   const focusRef = useRef();
@@ -10,9 +14,11 @@ export default function PasswordConfirm() {
     focusRef.current.focus();
   }, []);
 
-  const handlePasswordConfirm = () => {
-    alertDeveloping('handlePasswordConfirm');
-  };
+  const { handlePasswordConfirm } = usePasswordConfirm(
+    email,
+    password,
+    setIsConfirmed
+  );
 
   return (
     <div className="pwConf-main">
@@ -20,6 +26,7 @@ export default function PasswordConfirm() {
       <div className="pwConf-form-row">
         <input
           ref={focusRef}
+          type="password"
           placeholder="****"
           className="pwConf-input"
           value={password}

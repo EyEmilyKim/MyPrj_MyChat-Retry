@@ -166,4 +166,23 @@ userController.listAllUsers = async (reason = 'reason not provided') => {
   }
 };
 
+// 비밀번호 확인 HTTP
+userController.confirmPassword = async (req, res) => {
+  console.log('userController.confirmPassword called', req.body.email);
+  try {
+    const { email, password } = req.body;
+    const passwordMatch = await userService
+      .checkUser(email, 'email')
+      .then((user) => userService.confirmPassword(password, user.password));
+    if (passwordMatch) {
+      res.status(200).json({ message: '비밀번호 확인 성공' });
+    } else {
+      res.status(500).json({ error: '비밀번호가 일치하지 않습니다' });
+    }
+  } catch (error) {
+    console.log('userController.confirmPassword failed', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = userController;
