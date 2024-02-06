@@ -11,16 +11,14 @@ export default function PasswordReset() {
 
   return (
     <>
-      <div className="mySetting-each-feat" onClick={toggleSetting}>
+      <div className="mySetting-each-feat-title" onClick={toggleSetting}>
         <p>비밀번호 변경</p>
       </div>
 
       {isSettingOpen ? (
-        !authComplete ? (
-          <PasswordAuth />
-        ) : (
-          <PasswordNew />
-        )
+        <div className="mySetting-each-feat-field">
+          {!authComplete ? <PasswordAuth /> : <PasswordNew />}
+        </div>
       ) : null}
     </>
   );

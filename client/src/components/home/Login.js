@@ -11,10 +11,10 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userName, setUserName] = useState('');
-  const emailRef = useRef();
+  const focusRef = useRef();
 
   useEffect(() => {
-    emailRef.current.focus();
+    focusRef.current.focus();
   }, []);
 
   // 로그인 이벤트 처리하는 함수
@@ -84,7 +84,7 @@ export default function Login() {
     <div>
       <div className="login-container">
         <input
-          ref={emailRef}
+          ref={focusRef}
           placeholder="이메일"
           className="login-input"
           value={email}

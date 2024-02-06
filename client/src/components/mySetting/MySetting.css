@@ -20,7 +20,7 @@
   align-items: center;
   gap: 10px;
 }
-.mySetting-each-feat {
+.mySetting-each-feat-title {
   border: solid 1px #a8a6a6;
   min-width: 300px;
   padding: 5px 20px;
@@ -31,13 +31,13 @@
   justify-content: center;
   gap: 5px;
 }
-.mySetting-each-feat:hover {
+.mySetting-each-feat-title:hover {
   font-weight: bold;
   background-color: aquamarine;
   cursor: pointer;
 }
 
-.mySetting-each-feat-detail {
+.mySetting-each-feat-field {
   background-color: antiquewhite;
   width: 100%;
   display: flex;

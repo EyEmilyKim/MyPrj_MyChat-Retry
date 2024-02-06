@@ -11,10 +11,10 @@ export default function MySetting() {
       <div className="mySetting-main">
         <div className="mySetting-feats">
           <PasswordReset />
-          <div className="mySetting-each-feat" onClick={alertDeveloping}>
+          <div className="mySetting-each-feat-title" onClick={alertDeveloping}>
             <p>계정 삭제</p>
           </div>
-          <div className="mySetting-each-feat" onClick={alertDeveloping}>
+          <div className="mySetting-each-feat-title" onClick={alertDeveloping}>
             <p>알림 설정</p>
           </div>
         </div>
