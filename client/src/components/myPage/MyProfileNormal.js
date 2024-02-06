@@ -16,7 +16,10 @@ export default function MyProfileNormal() {
       />
       <p className="myPage-userName">{user.name} </p>
       <p className="myPage-userDescription">{user.description}</p>
-      <p className="myPage-userCreated">가입일 {userCreatedFormatted} </p>
+      <div className="myPage-default">
+        <p>가입일 {userCreatedFormatted}</p>
+        <p>{user.email} </p>
+      </div>
     </div>
   );
 }

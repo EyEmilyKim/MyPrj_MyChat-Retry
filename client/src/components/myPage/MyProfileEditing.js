@@ -27,7 +27,7 @@ export default function MyProfileEditing(props) {
       />
       <input
         className="myPage-userDescription-editing"
-        placeholder={description}
+        placeholder={description || '소개 메세지'}
         value={description}
         onChange={(e) => {
           if (e.target.value.length > 40) {

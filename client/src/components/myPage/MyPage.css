@@ -41,7 +41,7 @@
   font-weight: 600;
   word-break: break-all; /* 단어 중간이라도 줄바꿈 */
 }
-.myPage-userCreated {
+.myPage-default {
   margin-top: 10px;
   font-size: 14px;
   font-weight: normal;
