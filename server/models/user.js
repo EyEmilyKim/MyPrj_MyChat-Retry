@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     match: [
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-      'This is not a valid email format.',
+      '유효한 이메일 형식이 아닙니다.',
     ],
   },
   password: {
@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    unique: true,
   },
   created: {
     type: String,
