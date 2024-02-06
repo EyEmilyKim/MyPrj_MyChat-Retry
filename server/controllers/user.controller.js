@@ -15,7 +15,7 @@ userController.registerUser = async (req, res) => {
       .json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
   } catch (error) {
     console.log('userController.registerUser failed', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message }); // 에러메세지 제공
   }
 };
 
@@ -45,7 +45,7 @@ userController.loginUser = async (req, res) => {
     // console.log('userController.loginUser success');
   } catch (error) {
     console.log('userController.loginUser failed', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message }); // 에러메세지 제공
   }
 };
 
@@ -71,7 +71,7 @@ userController.authenticateUser = async (req, res) => {
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
     // console.log('userController.authenticateUser failed', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message }); // 에러메세지 제공
   }
 };
 
@@ -115,7 +115,7 @@ userController.logoutUser = async (req, res) => {
     }
   } catch (error) {
     console.log('userController.logout failed', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Server side Error' });
   }
 };
 
@@ -168,7 +168,7 @@ userController.listAllUsers = async (reason = 'reason not provided') => {
 
 // 비밀번호 확인 HTTP
 userController.confirmPassword = async (req, res) => {
-  console.log('userController.confirmPassword called', req.body.email);
+  // console.log('userController.confirmPassword called', req.body.email);
   try {
     const { email, password } = req.body;
     const passwordMatch = await userService
@@ -177,17 +177,17 @@ userController.confirmPassword = async (req, res) => {
     if (passwordMatch) {
       res.status(200).json({ message: '비밀번호 확인 성공' });
     } else {
-      res.status(500).json({ error: '비밀번호가 일치하지 않습니다' });
+      res.status(500).json({ error: '비밀번호가 일치하지 않습니다' }); // 에러메세지 제공
     }
   } catch (error) {
     console.log('userController.confirmPassword failed', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Server side Error' });
   }
 };
 
 // 비밀번호 재설정 HTTP
 userController.resetPassword = async (req, res) => {
-  console.log('userController.resetPassword called', req.body);
+  // console.log('userController.resetPassword called', req.body.email);
   try {
     const { email, password } = req.body;
     await userService

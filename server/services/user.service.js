@@ -225,7 +225,7 @@ userService.confirmPassword = async function (pw, currentPw) {
 
 // 비밀번호 업데이트
 userService.resetPassword = async function (pw, user) {
-  console.log(`userService.resetPassword called : ${user.email} / ${pw}`);
+  // console.log(`userService.resetPassword called : ${user.email} / ${pw}`);
   try {
     const hashedPW = await hashPassword(pw);
     user.password = hashedPW;
