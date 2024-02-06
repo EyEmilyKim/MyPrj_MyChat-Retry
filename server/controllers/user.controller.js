@@ -199,4 +199,19 @@ userController.resetPassword = async (req, res) => {
   }
 };
 
+// 유저 탈퇴 HTTP
+userController.resignUser = async (req, res) => {
+  // console.log('userController.resignUser called', req.body);
+  try {
+    const data = jwt.getDataFromAT(req.cookies.accessToken);
+    const user = await userService
+      .checkUser(data.email, 'email')
+      .then((user) => userService.resignUser(user));
+    res.status(200).json({ message: '계정 삭제 성공', user: user });
+  } catch (error) {
+    console.log('userController.resignUser failed', error);
+    res.status(500).json({ error: 'Server side Error' });
+  }
+};
+
 module.exports = userController;

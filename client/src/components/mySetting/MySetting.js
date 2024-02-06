@@ -2,6 +2,7 @@ import React from 'react';
 import { alertDeveloping } from '../../utils/alertDeveloping';
 import './MySetting.css';
 import PasswordReset from './PasswordReset';
+import Resign from './Resign';
 
 export default function MySetting() {
   return (
@@ -11,9 +12,7 @@ export default function MySetting() {
       <div className="mySetting-main">
         <div className="mySetting-feats">
           <PasswordReset />
-          <div className="mySetting-each-feat-title" onClick={alertDeveloping}>
-            <p>계정 삭제</p>
-          </div>
+          <Resign />
           <div className="mySetting-each-feat-title" onClick={alertDeveloping}>
             <p>알림 설정</p>
           </div>

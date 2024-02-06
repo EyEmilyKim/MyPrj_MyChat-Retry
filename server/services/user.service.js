@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const { dateFormatKST } = require('../utils/dateFormatKST');
 const db = require('../utils/db');
+const { v4: uuidv4 } = require('uuid');
 const { hashPassword, comparePassword } = require('../utils/hash');
 const { generateToken, verifyToken } = require('../utils/jwt');
 
@@ -233,6 +234,22 @@ userService.resetPassword = async function (pw, user) {
     return user;
   } catch (error) {
     console.log('userService.resetPassword error', error);
+    throw new Error(error.message);
+  }
+};
+
+// 유저 탈퇴 -> 닉네임, 이메일, 탈퇴일 처리
+userService.resignUser = async function (user) {
+  // console.log(`userService.resignUser called : ${user.email}`);
+  try {
+    const now = await dateFormatKST();
+    user.resigned = now;
+    user.email = `${uuidv4()}@resign.resign`;
+    user.name = '탈퇴한 회원입니다';
+    await user.save();
+    return user;
+  } catch (error) {
+    console.log('userService.resignUser error', error);
     throw new Error(error.message);
   }
 };

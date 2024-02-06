@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
   created: {
     type: String,
   },
+  resigned: {
+    type: String,
+  },
   token: {
     type: String,
   },
