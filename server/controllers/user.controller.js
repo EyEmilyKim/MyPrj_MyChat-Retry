@@ -163,6 +163,22 @@ userController.listAllUsers = async (reason = 'reason not provided') => {
   }
 };
 
+// 유저 프로필 업데이트
+userController.updateUser = async function (socketId, name, description) {
+  // console.log(
+  //   `userController.updateUser called : ${socketId} / ${name} / ${description}`
+  // );
+  try {
+    const user = await userService
+      .checkUser(socketId, 'sid')
+      .then((u) => userService.updateUser(u, name, description));
+    return user;
+  } catch (error) {
+    console.log('userController.updateUser error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 비밀번호 확인 HTTP
 userController.confirmPassword = async (req, res) => {
   // console.log('userController.confirmPassword called', req.body.email);

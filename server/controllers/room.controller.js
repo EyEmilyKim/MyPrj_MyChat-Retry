@@ -1,5 +1,6 @@
 const roomService = require('../services/room.service');
 const { v4: uuidv4 } = require('uuid');
+const userService = require('../services/user.Service');
 
 const roomController = {};
 
@@ -16,7 +17,7 @@ roomController.getAllRooms = async () => {
 };
 
 // 룸 생성
-roomController.createRoom = async function (title, user) {
+roomController.createRoom = async function (title, socketId) {
   // console.log('roomController.createRoom called', title, user);
   try {
     let providingError = null;
@@ -27,6 +28,7 @@ roomController.createRoom = async function (title, user) {
       providingError = '이미 존재하는 방제목입니다.';
     } else {
       // -> 없으면 새로 저장
+      const user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
       room = await roomService.createRoom(title, user._id);
     }
     return { room, providingError };
