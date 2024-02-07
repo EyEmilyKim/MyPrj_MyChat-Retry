@@ -146,26 +146,26 @@ module.exports = function (io) {
       console.log(`'leaveRoom' called by :`, socket.decoded.email, rid);
       try {
         const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
-        const room = await roomController.leaveRoom(rid, user); // update Room
-        const updatedUser = await userController.leaveRoom(user, room); // update User
-        // 해당 룸채널 탈퇴
-        const ridToString = rid.toString();
-        socket.leave(ridToString);
-        // 룸채널에 퇴장 메세지, 룸 정보 발신
-        const systemMessage = {
-          _id: uuidv4(),
-          room: rid,
-          sender: { _id: uuidv4(), name: 'system' },
-          content: `${user.name} left this room`,
-        };
-        io.to(ridToString).emit('message', systemMessage);
-        io.to(ridToString).emit('updatedRoom', room);
-        // 실시간 룸정보 전체 발신
-        const reason = 'Someone left somewhere';
-        const roomList = await roomController.getAllRooms(reason);
-        io.emit('rooms', reason, roomList);
+        const result = await roomController.leaveRoom(rid, user); // update Room
+        const updatedRoom = result.populatedRoom;
+        let updatedUser = user;
+        // 퇴장 시
+        if (result.updateMessage) {
+          // update User
+          updatedUser = await userController.leaveRoom(user, updatedRoom);
+          // 해당 룸채널 탈퇴
+          const ridToString = rid.toString();
+          socket.leave(ridToString);
+          // 룸채널에 메세지, 룸 정보 발신
+          io.to(ridToString).emit('message', result.updateMessage);
+          io.to(ridToString).emit('updatedRoom', updatedRoom);
+          // 실시간 룸정보 전체 발신
+          const reason = 'Someone left somewhere';
+          const roomList = await roomController.getAllRooms(reason);
+          io.emit('rooms', reason, roomList);
+        }
 
-        cb({ status: 'ok', data: { room: room, user: updatedUser } });
+        cb({ status: 'ok', data: { room: updatedRoom, user: updatedUser } });
       } catch (error) {
         console.log('io > leaveRoom Error', error);
         cb({ status: 'Server side Error' });

@@ -69,7 +69,7 @@ roomService.joinRoom = async function (room, user) {
       room.members.push(user._id);
       await room.save();
       memberUpdate = true;
-      console.log('room.joinRoom, now pushed', memberUpdate, room.members);
+      // console.log('room.joinRoom, now pushed', memberUpdate, room.members);
     }
     return { room, memberUpdate };
   } catch (error) {
@@ -85,13 +85,15 @@ roomService.leaveRoom = async function (room, user) {
     if (!room) {
       throw new Error('해당 방이 존재하지 않습니다.');
     }
+    let memberUpdate = false;
     if (room.members.includes(user._id)) {
       // console.log('room.leaveRoom, does include yet', room.members);
       room.members.pull(user._id);
       await room.save();
-      // console.log('room.leaveRoom, now pulled', room.members);
+      memberUpdate = true;
+      // console.log('room.leaveRoom, now pulled', memberUpdate, room.members);
     }
-    return room;
+    return { room, memberUpdate };
   } catch (error) {
     // console.log('roomService.leaveRoom error', error);
     throw new Error(error.message);

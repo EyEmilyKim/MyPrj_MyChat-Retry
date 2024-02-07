@@ -47,14 +47,24 @@ roomController.joinRoom = async (rid, user) => {
 roomController.leaveRoom = async (rid, user) => {
   // console.log('roomController.leaveRoom called', rid, user);
   try {
-    const room = await roomService
+    const result = await roomService
       .checkRoom(rid, '_id')
       .then((r) => roomService.leaveRoom(r, user));
     // 해당 룸에 owner, members 정보 채우기
-    const populatedRoom = await room
+    const populatedRoom = await result.room
       .populate('owner', ['email', 'name'])
       .then((r) => r.populate('members', ['email', 'name']));
-    return populatedRoom;
+    // member변동 있으면 메시지 준비
+    let updateMessage = null;
+    if (result.memberUpdate) {
+      updateMessage = {
+        _id: uuidv4(),
+        room: rid,
+        sender: { _id: uuidv4(), name: 'system' },
+        content: `${user.name} left this room`,
+      };
+    }
+    return { populatedRoom, updateMessage };
   } catch (error) {
     console.log('roomController.leaveRoom failed', error);
     throw new Error(error);
