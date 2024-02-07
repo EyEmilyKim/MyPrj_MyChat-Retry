@@ -97,16 +97,20 @@ module.exports = function (io) {
       console.log(`'createRoom' called by : ${socket.decoded.email}, ${title}`);
       try {
         const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
-        const room = await roomService.createRoom(title, user); // 룸 만들기
-        // 실시간 룸정보 전체 발신
-        const reason = 'Someone created a room';
-        const roomList = await roomController.getAllRooms(reason);
-        io.emit('rooms', reason, roomList);
-
-        cb({ status: 'ok', data: { room: room, user: user } });
+        const result = await roomController.createRoom(title, user); // 룸 만들기
+        if (result.providingError) {
+          // 클라이언트에게 제공할 에러 있는 경우
+          cb({ status: 'not ok', data: result.providingError });
+        } else {
+          // 실시간 룸정보 전체 발신
+          const reason = 'Someone created a room';
+          const roomList = await roomController.getAllRooms(reason);
+          io.emit('rooms', reason, roomList);
+          cb({ status: 'ok', data: { room: result.room, user: user } });
+        }
       } catch (error) {
         console.log('io > createRoom Error', error);
-        cb({ status: 'not ok', data: error.message });
+        cb({ status: 'Server side Error' });
       }
     });
 

@@ -19,8 +19,10 @@ export default function NewRoom() {
         if (res && res.status === 'ok') {
           console.log('successfully create', res.data);
           navigate(`/room/${res.data.room._id}`);
-        } else {
+        } else if (res && res.status === 'not ok') {
           alert(res.data);
+        } else {
+          alert(res.status);
         }
       });
     }

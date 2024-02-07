@@ -1,5 +1,6 @@
 const Room = require('../models/room');
 const db = require('../utils/db');
+const { dateFormatKST } = require('../utils/dateFormatKST');
 
 const roomService = {};
 
@@ -32,24 +33,17 @@ roomService.checkRoom = async function (value, key) {
 };
 
 // 룸 생성
-roomService.createRoom = async function (title, user) {
-  // console.log('roomService.createRoom called', title, user);
+roomService.createRoom = async function (title, uid) {
+  // console.log('roomService.createRoom called', title, uid);
   try {
-    // 이미 있는 방 제목인지 확인
-    let isExistingTitle = await this.checkRoom(title, 'title');
-    if (isExistingTitle) {
-      throw new Error('이미 존재하는 방제목입니다.');
-    } else {
-      // -> 없으면 새로 저장
-      const now = await dateFormatKST();
-      const room = new Room({
-        title: title,
-        owner: user._id,
-        created: now,
-      });
-      await room.save();
-      return room;
-    }
+    const now = await dateFormatKST();
+    const room = new Room({
+      title: title,
+      owner: uid,
+      created: now,
+    });
+    await room.save();
+    return room;
   } catch (error) {
     // console.log('roomService.createRoom error', error);
     throw new Error(error.message);

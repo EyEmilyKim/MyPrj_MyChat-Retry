@@ -15,6 +15,27 @@ roomController.getAllRooms = async () => {
   }
 };
 
+// 룸 생성
+roomController.createRoom = async function (title, user) {
+  // console.log('roomController.createRoom called', title, user);
+  try {
+    let providingError = null;
+    let room = null;
+    // 이미 있는 방 제목인지 확인
+    const isExistingTitle = await roomService.checkRoom(title, 'title');
+    if (isExistingTitle) {
+      providingError = '이미 존재하는 방제목입니다.';
+    } else {
+      // -> 없으면 새로 저장
+      room = await roomService.createRoom(title, user._id);
+    }
+    return { room, providingError };
+  } catch (error) {
+    // console.log('roomController.createRoom error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 룸 입장
 roomController.joinRoom = async (rid, user) => {
   // console.log('roomController.joinRoom called', rid, user);
