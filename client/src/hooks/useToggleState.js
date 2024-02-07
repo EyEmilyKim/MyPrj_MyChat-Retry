@@ -7,5 +7,5 @@ export default function useToggleState(initialState) {
     setState(!state);
   };
 
-  return [state, toggleState];
+  return [state, toggleState, setState];
 }
