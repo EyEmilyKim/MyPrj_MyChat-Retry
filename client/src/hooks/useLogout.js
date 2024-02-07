@@ -11,7 +11,7 @@ export default function useLogout() {
     console.log('handleLogout called');
     if (window.confirm('로그아웃 하시겠습니까?')) {
       try {
-        const resNotify = true;
+        const resNotify = false;
         const res = await serveUserAxios(
           {
             url: `${apiRoot}/user/logout`,

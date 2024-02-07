@@ -8,7 +8,7 @@ const serveUserAxios = async (config, resNotify) => {
     const res = await axios(config);
     if (res.status === 200) {
       alert(res.data.message);
-      console.log(`${res.data.message}`, res.data.user);
+      if (resNotify) console.log(`${res.data.message}`, res.data.user);
     }
     return res;
   } catch (error) {

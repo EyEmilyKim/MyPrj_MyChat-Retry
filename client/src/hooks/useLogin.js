@@ -11,7 +11,7 @@ export default function useLogin(email, password) {
     // console.log('handleLogin called', email);
     setLoginOperating(true);
     try {
-      const resNotify = true;
+      const resNotify = false;
       const res = await serveUserAxios(
         {
           url: `${apiRoot}/user/login`,

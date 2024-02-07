@@ -43,7 +43,7 @@ function getDataFromAT(accessToken) {
     const data = this.verifyToken(accessToken, 'AT');
     return data;
   } catch (error) {
-    throw new Error('getDataFromAT 실패 : ' + error.message);
+    throw new Error(error.message);
   }
 }
 
