@@ -122,13 +122,13 @@ module.exports = function (io) {
         const result = await roomController.joinRoom(rid, user); // update Room
         const updatedRoom = result.populatedRoom;
         let updatedUser = user;
+        // 해당 룸채널 조인
+        const ridToString = rid.toString();
+        socket.join(ridToString);
         // 첫 입장 시
         if (result.updateMessage) {
           // update User
           updatedUser = await userController.joinRoom(user, updatedRoom);
-          // 해당 룸채널 조인
-          const ridToString = rid.toString();
-          socket.join(ridToString);
           // 룸채널에 메세지, 룸 정보 발신
           io.to(ridToString).emit('message', result.updateMessage);
           io.to(ridToString).emit('updatedRoom', updatedRoom);
@@ -153,13 +153,13 @@ module.exports = function (io) {
         const result = await roomController.leaveRoom(rid, user); // update Room
         const updatedRoom = result.populatedRoom;
         let updatedUser = user;
+        // 해당 룸채널 탈퇴
+        const ridToString = rid.toString();
+        socket.leave(ridToString);
         // 퇴장 시
         if (result.updateMessage) {
           // update User
           updatedUser = await userController.leaveRoom(user, updatedRoom);
-          // 해당 룸채널 탈퇴
-          const ridToString = rid.toString();
-          socket.leave(ridToString);
           // 룸채널에 메세지, 룸 정보 발신
           io.to(ridToString).emit('message', result.updateMessage);
           io.to(ridToString).emit('updatedRoom', updatedRoom);
