@@ -115,26 +115,26 @@ module.exports = function (io) {
       console.log(`'joinRoom' called by :`, socket.decoded.email, rid);
       try {
         const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
-        const room = await roomController.joinRoom(rid, user); // update Room
-        const updatedUser = await userController.joinRoom(user, room); // update User
-        // 해당 룸채널 조인
-        const ridToString = rid.toString();
-        socket.join(ridToString);
-        // 룸채널에 입장 메세지, 룸 정보 발신
-        const systemMessage = {
-          _id: uuidv4(),
-          room: rid,
-          sender: { _id: uuidv4(), name: 'system' },
-          content: `${user.name} joined this room`,
-        };
-        io.to(ridToString).emit('message', systemMessage);
-        io.to(ridToString).emit('updatedRoom', room);
-        // 실시간 룸정보 전체 발신
-        const reason = 'Someone joined somewhere';
-        const roomList = await roomController.getAllRooms(reason);
-        io.emit('rooms', reason, roomList);
+        const result = await roomController.joinRoom(rid, user); // update Room
+        const updatedRoom = result.populatedRoom;
+        let updatedUser = user;
+        // 첫 입장 시
+        if (result.updateMessage) {
+          // update User
+          updatedUser = await userController.joinRoom(user, updatedRoom);
+          // 해당 룸채널 조인
+          const ridToString = rid.toString();
+          socket.join(ridToString);
+          // 룸채널에 메세지, 룸 정보 발신
+          io.to(ridToString).emit('message', result.updateMessage);
+          io.to(ridToString).emit('updatedRoom', updatedRoom);
+          // 실시간 룸정보 전체 발신
+          const reason = 'Someone joined somewhere';
+          const roomList = await roomController.getAllRooms(reason);
+          io.emit('rooms', reason, roomList);
+        }
 
-        cb({ status: 'ok', data: { room: room, user: updatedUser } });
+        cb({ status: 'ok', data: { room: updatedRoom, user: updatedUser } });
       } catch (error) {
         console.log('io > joinRoom Error', error);
         cb({ status: 'Server side Error' });
@@ -143,7 +143,7 @@ module.exports = function (io) {
 
     // ** 룸 퇴장 시
     socket.on('leaveRoom', async (rid, cb) => {
-      console.log(`'leaveRoom' called by :`, socket.decoded.email);
+      console.log(`'leaveRoom' called by :`, socket.decoded.email, rid);
       try {
         const user = await userService.checkUser(socket.id, 'sid'); // 유저정보 찾기
         const room = await roomController.leaveRoom(rid, user); // update Room
