@@ -4,6 +4,25 @@ const userService = require('../services/user.Service');
 
 const messageController = {};
 
+// 기존 메세지 조회
+messageController.getAllMessages = async (rid) => {
+  // console.log('messageController.getAllMessages called', rid);
+  try {
+    const messageList = await messageService.getAllMessages(rid);
+    const populatedMessageList = await Promise.all(
+      messageList.map(async (msg) => {
+        await msg.populate('sender', ['email', 'name']);
+        return msg;
+      })
+    );
+    // console.log('populatedMessageList', populatedMessageList);
+    return populatedMessageList;
+  } catch (error) {
+    // console.log('messageController.getAllMessages failed', error);
+    throw new Error(error);
+  }
+};
+
 // 메세지 저장
 messageController.saveMessage = async function (msg, socketId, rid) {
   console.log('messageController.saveMessage called', msg, socketId, rid);

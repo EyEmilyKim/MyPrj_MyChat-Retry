@@ -133,6 +133,18 @@ module.exports = function (io) {
       }
     });
 
+    // ** 기존 메세지 요청
+    socket.on('getMessages', async (rid, cb) => {
+      console.log(`'getMessages' called by : ${socketEmail}, ${rid}`);
+      try {
+        const messageList = await messageController.getAllMessages(rid);
+        cb({ status: 'ok', data: messageList });
+      } catch (error) {
+        console.log('io > getMessages Error', error);
+        cb({ status: 'Server side Error' });
+      }
+    });
+
     // ** 메세지 수신 시
     socket.on('sendMessage', async (msg, rid, cb) => {
       console.log(`'sendMessage' called by : ${socketEmail}, ${msg}, ${rid}`);

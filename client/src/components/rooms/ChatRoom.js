@@ -43,6 +43,15 @@ export default function ChatRoom() {
       }
     });
 
+    socket.emit('getMessages', rid, (res) => {
+      if (res && res.status === 'ok') {
+        console.log('successfully getMessages', res);
+        if (res.data) setMessageList(res.data);
+      } else {
+        console.log('failed to getMessages', res);
+      }
+    });
+
     socket.on('message', (message) => {
       // console.log(`on('message') : ${JSON.stringify(message)}`);
       setMessageList((prevState) => [...prevState, message]);
