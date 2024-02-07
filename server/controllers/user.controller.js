@@ -1,5 +1,6 @@
 const userService = require('../services/user.Service');
-const jwt = require('../utils/jwt');
+const { getDataFromAT } = require('../utils/jwt');
+const { comparePassword, hashPassword } = require('../utils/hash');
 
 const userController = {};
 
@@ -8,11 +9,10 @@ userController.registerUser = async (req, res) => {
   // console.log('userController.registerUser called', req.body);
   try {
     const { email, password, userName } = req.body;
-    const user = await userService.registerUser(email, password, userName);
+    const hashedPW = await hashPassword(password);
+    const user = await userService.registerUser(email, hashedPW, userName);
     console.log('userController.registerUser user', user);
-    res
-      .status(200)
-      .json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
+    res.status(200).json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
   } catch (error) {
     console.log('userController.registerUser failed', error);
     res.status(500).json({ error: error.message }); // 에러메세지 제공
@@ -24,10 +24,7 @@ userController.loginUser = async (req, res) => {
   // console.log('userController.loginUser called', req.body);
   try {
     const { email, password } = req.body;
-    const { user, accessToken, refreshToken } = await userService.loginUser(
-      email,
-      password
-    );
+    const { user, accessToken, refreshToken } = await userService.loginUser(email, password);
     res
       .cookie('accessToken', accessToken, {
         httpOnly: true,
@@ -64,11 +61,11 @@ userController.updateConnectedUser = async (email, sid) => {
 userController.authenticateUser = async (req, res) => {
   // console.log('userController.authenticateUser called');
   try {
-    const data = jwt.getDataFromAT(req.cookies.accessToken);
+    const data = getDataFromAT(req.cookies.accessToken);
     const user = await userService.checkUser(data.email, 'email');
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
-    // console.log('userController.authenticateUser failed', error);
+    console.log('userController.authenticateUser failed', error);
     res.status(500).json({ error: error.message }); // 에러메세지 제공
   }
 };
@@ -80,7 +77,7 @@ userController.joinRoom = async (user, room) => {
     const updateUser = await userService.joinRoom(user, room);
     return updateUser;
   } catch (error) {
-    console.log('userController.joinRoom failed', error);
+    // console.log('userController.joinRoom failed', error);
     throw new Error(error);
   }
 };
@@ -92,7 +89,7 @@ userController.leaveRoom = async (user, room) => {
     const updateUser = await userService.leaveRoom(user, room);
     return updateUser;
   } catch (error) {
-    console.log('userController.leaveRoom failed', error);
+    // console.log('userController.leaveRoom failed', error);
     throw new Error(error);
   }
 };
@@ -101,7 +98,7 @@ userController.leaveRoom = async (user, room) => {
 userController.logoutUser = async (req, res) => {
   // console.log('userController.logout called');
   try {
-    const data = jwt.getDataFromAT(req.cookies.accessToken);
+    const data = getDataFromAT(req.cookies.accessToken);
     const user = await userService.logoutUser(data.email);
     if (!user.online) {
       res.cookie('accessToken', '');
@@ -129,10 +126,11 @@ userController.updateDisconnectedUser = async (sid) => {
 
 // 특정 유저 조회
 userController.checkUser = async (value, key) => {
+  // console.log('userController.checkUser called');
   try {
     const user = await userService
       .checkUser(value, key)
-      .then(userService.extractNameIdOnline)
+      .then(this.extractNameIdOnline)
       .catch((error) => console.log(error));
     // await require('../utils/db').isInstance(
     //   user,
@@ -140,7 +138,7 @@ userController.checkUser = async (value, key) => {
     // ); // false
     return user;
   } catch (error) {
-    console.log('userController.checkUser failed', error);
+    // console.log('userController.checkUser failed', error);
   }
 };
 
@@ -150,7 +148,7 @@ userController.listAllUsers = async (reason = 'reason not provided') => {
   try {
     const userList = await userService
       .getAllUsers()
-      .then(userService.extractNameIdOnline)
+      .then(this.extractNameIdOnline)
       .catch((error) => console.log(error));
     // console.log(
     //   `listAllUsers [${reason}] `
@@ -158,7 +156,7 @@ userController.listAllUsers = async (reason = 'reason not provided') => {
     // );
     return userList;
   } catch (error) {
-    console.log('userController.listAllUsers failed', error);
+    // console.log('userController.listAllUsers failed', error);
     throw new Error(error);
   }
 };
@@ -174,7 +172,7 @@ userController.updateUser = async function (socketId, name, description) {
       .then((u) => userService.updateUser(u, name, description));
     return user;
   } catch (error) {
-    console.log('userController.updateUser error', error);
+    // console.log('userController.updateUser failed', error);
     throw new Error(error.message);
   }
 };
@@ -184,10 +182,13 @@ userController.confirmPassword = async (req, res) => {
   // console.log('userController.confirmPassword called', req.body.email);
   try {
     const { password } = req.body;
-    const data = jwt.getDataFromAT(req.cookies.accessToken);
+    const data = getDataFromAT(req.cookies.accessToken);
     const passwordMatch = await userService
-      .checkUser(data.email, 'email')
-      .then((user) => userService.confirmPassword(password, user.password));
+      .checkUser(data.email, 'email') // 유저 정보 확인
+      .then(async (user) => {
+        await comparePassword(password, user.password); // 비밀번호 대조
+      });
+
     if (passwordMatch) {
       res.status(200).json({ message: '비밀번호 확인 성공' });
     } else {
@@ -204,10 +205,13 @@ userController.resetPassword = async (req, res) => {
   // console.log('userController.resetPassword called', req.body.email);
   try {
     const { password } = req.body;
-    const data = jwt.getDataFromAT(req.cookies.accessToken);
+    const data = getDataFromAT(req.cookies.accessToken);
     await userService
-      .checkUser(data.email, 'email')
-      .then((user) => userService.resetPassword(password, user));
+      .checkUser(data.email, 'email') // 유저 정보 확인
+      .then(async (user) => {
+        const hashedPW = await hashPassword(password);
+        userService.resetPassword(hashedPW, user); // 비밀번호 재설정
+      });
     res.status(200).json({ message: '비밀번호 변경 성공' });
   } catch (error) {
     console.log('userController.resetPassword failed', error);
@@ -219,7 +223,7 @@ userController.resetPassword = async (req, res) => {
 userController.resignUser = async (req, res) => {
   // console.log('userController.resignUser called', req.body);
   try {
-    const data = jwt.getDataFromAT(req.cookies.accessToken);
+    const data = getDataFromAT(req.cookies.accessToken);
     const user = await userService
       .checkUser(data.email, 'email')
       .then((user) => userService.resignUser(user));
@@ -227,6 +231,38 @@ userController.resignUser = async (req, res) => {
   } catch (error) {
     console.log('userController.resignUser failed', error);
     res.status(500).json({ error: 'Server side Error' });
+  }
+};
+
+// 유저 객체or배열에서 name, id, online 만 추출하기
+userController.extractNameIdOnline = async function (users) {
+  // console.log('userController.extractNameIdOnline called');
+  try {
+    const NameIdOnlineOfUser = async (user) => {
+      if (Array.isArray(user)) {
+        // 배열인 경우
+        return user.map((u) => ({
+          id: u.id,
+          name: u.name,
+          online: u.online,
+        }));
+      } else if (typeof user === 'object') {
+        // 단일 객체인 경우
+        return {
+          id: user.id,
+          name: user.name,
+          online: user.online,
+        };
+      } else {
+        throw new Error('userController.extractNameIdOnline Error - Invalid parameter type');
+      }
+    };
+    const extractData = await NameIdOnlineOfUser(users);
+    // console.log('extractData', extractData);
+    return extractData;
+  } catch (error) {
+    // console.log('userController.extractNameIdOnline error', error);
+    throw new Error(error.message);
   }
 };
 

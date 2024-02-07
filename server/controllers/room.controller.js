@@ -11,7 +11,7 @@ roomController.getAllRooms = async () => {
     const roomList = await roomService.getAllRooms();
     return roomList;
   } catch (error) {
-    console.log('roomController.getAllRooms failed', error);
+    // console.log('roomController.getAllRooms failed', error);
     throw new Error(error);
   }
 };
@@ -33,7 +33,7 @@ roomController.createRoom = async function (title, socketId) {
     }
     return { room, providingError };
   } catch (error) {
-    // console.log('roomController.createRoom error', error);
+    // console.log('roomController.createRoom failed', error);
     throw new Error(error.message);
   }
 };
@@ -61,7 +61,7 @@ roomController.joinRoom = async (rid, user) => {
     }
     return { populatedRoom, updateMessage };
   } catch (error) {
-    console.log('roomController.joinRoom failed', error);
+    // console.log('roomController.joinRoom failed', error);
     throw new Error(error);
   }
 };
@@ -89,7 +89,7 @@ roomController.leaveRoom = async (rid, user) => {
     }
     return { populatedRoom, updateMessage };
   } catch (error) {
-    console.log('roomController.leaveRoom failed', error);
+    // console.log('roomController.leaveRoom failed', error);
     throw new Error(error);
   }
 };

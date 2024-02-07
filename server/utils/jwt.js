@@ -40,7 +40,7 @@ function verifyToken(token, type) {
 function getDataFromAT(accessToken) {
   // console.log('getDataFromAT called', accessToken);
   try {
-    const data = this.verifyToken(accessToken, 'AT');
+    const data = verifyToken(accessToken, 'AT');
     return data;
   } catch (error) {
     throw new Error(error.message);

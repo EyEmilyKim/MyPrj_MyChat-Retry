@@ -2,13 +2,13 @@ const User = require('../models/user');
 const { dateFormatKST } = require('../utils/dateFormatKST');
 const db = require('../utils/db');
 const { v4: uuidv4 } = require('uuid');
-const { hashPassword, comparePassword } = require('../utils/hash');
-const { generateToken, verifyToken } = require('../utils/jwt');
+const { comparePassword } = require('../utils/hash');
+const { generateToken } = require('../utils/jwt');
 
 const userService = {};
 
 // 유저 등록
-userService.registerUser = async function (email, pw, un) {
+userService.registerUser = async function (email, hashedPW, un) {
   // console.log('userService.registerUser called', email, pw, un);
   try {
     // 이미 있는 유저인지 확인
@@ -17,7 +17,6 @@ userService.registerUser = async function (email, pw, un) {
       throw new Error('이미 사용중인 이메일입니다.');
     } else {
       // -> 없으면 새로 저장
-      const hashedPW = await hashPassword(pw);
       const now = await dateFormatKST();
       user = new User({
         email: email,
@@ -32,7 +31,7 @@ userService.registerUser = async function (email, pw, un) {
       return user;
     }
   } catch (error) {
-    console.log('userService.registerUser error', error);
+    // console.log('userService.registerUser error', error);
     throw new Error(error.message);
   }
 };
@@ -48,7 +47,7 @@ userService.updateUser = async function (user, name, description) {
     await user.save();
     return user;
   } catch (error) {
-    console.log('userService.updateUser error', error);
+    // console.log('userService.updateUser error', error);
     throw new Error(error.message);
   }
 };
@@ -76,7 +75,7 @@ userService.loginUser = async function (email, pw) {
 
     return { user, accessToken, refreshToken };
   } catch (error) {
-    console.log('userService.loginUser error', error);
+    // console.log('userService.loginUser error', error);
     throw new Error(error.message);
   }
 };
@@ -89,7 +88,7 @@ userService.updateConnectedUser = async function (email, sid) {
     user.sid = sid;
     await user.save();
   } catch (error) {
-    console.log('userService.updateConnectedUser error', error);
+    // console.log('userService.updateConnectedUser error', error);
     throw new Error(error.message);
   }
 };
@@ -106,7 +105,7 @@ userService.joinRoom = async function (user, room) {
     }
     return user;
   } catch (error) {
-    console.log('userService.joinRoom error', error);
+    // console.log('userService.joinRoom error', error);
     throw new Error(error.message);
   }
 };
@@ -123,7 +122,7 @@ userService.leaveRoom = async function (user, room) {
     }
     return user;
   } catch (error) {
-    console.log('userService.leaveRoom error', error);
+    // console.log('userService.leaveRoom error', error);
     throw new Error(error.message);
   }
 };
@@ -137,7 +136,7 @@ userService.logoutUser = async function (email) {
     await user.save();
     return user;
   } catch (error) {
-    console.log('userService.logoutUser error', error);
+    // console.log('userService.logoutUser error', error);
     throw new Error(error.message);
   }
 };
@@ -153,7 +152,7 @@ userService.updateDisconnectedUser = async function (sid) {
     }
     // console.log('disconnected user : ', user);
   } catch (error) {
-    console.log('userService.updateDisconnectedUser error', error);
+    // console.log('userService.updateDisconnectedUser error', error);
     throw new Error(error.message);
   }
 };
@@ -168,6 +167,7 @@ userService.checkUser = async function (value, key) {
     // await db.isInstance(user, 'userServ.checkUser user'); // true
     return user;
   } catch (error) {
+    // console.log('userService.checkUser error', error);
     throw new Error('user not found');
   }
 };
@@ -180,60 +180,20 @@ userService.getAllUsers = async function () {
     // console.log('userList', userList);
     return userList;
   } catch (error) {
-    console.log('userService.getAllUsers error', error);
-    throw new Error(error.message);
-  }
-};
-
-// 유저 객체or배열에서 name, id, online 만 추출하기
-userService.extractNameIdOnline = async function (users) {
-  const NameIdOnlineOfUser = async (user) => {
-    if (Array.isArray(user)) {
-      // 배열인 경우
-      return user.map((u) => ({
-        id: u.id,
-        name: u.name,
-        online: u.online,
-      }));
-    } else if (typeof user === 'object') {
-      // 단일 객체인 경우
-      return {
-        id: user.id,
-        name: user.name,
-        online: user.online,
-      };
-    } else {
-      throw new Error(
-        'userService.extractNameIdOnline Error - Invalid parameter type'
-      );
-    }
-  };
-  const extractData = await NameIdOnlineOfUser(users);
-  // console.log('extractData', extractData);
-  return extractData;
-};
-
-// 비밀번호 일치여부 확인
-userService.confirmPassword = async function (pw, currentPw) {
-  // console.log('userService.confirmPassword called', pw, currentPw);
-  try {
-    return await comparePassword(pw, currentPw);
-  } catch (error) {
-    console.log('userService.confirmPassword error', error);
+    // console.log('userService.getAllUsers error', error);
     throw new Error(error.message);
   }
 };
 
 // 비밀번호 업데이트
-userService.resetPassword = async function (pw, user) {
+userService.resetPassword = async function (hashedPW, user) {
   // console.log(`userService.resetPassword called : ${user.email} / ${pw}`);
   try {
-    const hashedPW = await hashPassword(pw);
     user.password = hashedPW;
     await user.save();
     return user;
   } catch (error) {
-    console.log('userService.resetPassword error', error);
+    // console.log('userService.resetPassword error', error);
     throw new Error(error.message);
   }
 };
@@ -249,7 +209,7 @@ userService.resignUser = async function (user) {
     await user.save();
     return user;
   } catch (error) {
-    console.log('userService.resignUser error', error);
+    // console.log('userService.resignUser error', error);
     throw new Error(error.message);
   }
 };

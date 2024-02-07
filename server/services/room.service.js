@@ -52,7 +52,7 @@ roomService.createRoom = async function (title, uid) {
 
 // 룸 입장 -> members[]: user 추가
 roomService.joinRoom = async function (room, user) {
-  // console.log('roomService.joinRoom called', room);
+  // console.log('roomService.joinRoom called', room, user);
   try {
     if (!room) {
       throw new Error('해당 방이 존재하지 않습니다.');
