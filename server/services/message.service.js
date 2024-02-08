@@ -16,13 +16,13 @@ messageService.getAllMessages = async function (rid) {
 };
 
 // 메세지 저장
-messageService.saveMessage = async function (msg, user, room) {
+messageService.saveMessage = async function (msg, uid, rid) {
   // console.log('messageService.saveMessage called');
   try {
     const now = await dateFormatKST();
     const newMsg = new Message({
-      room: room._id,
-      sender: user._id,
+      room: rid,
+      sender: uid,
       content: msg,
       timestamp: now,
     });

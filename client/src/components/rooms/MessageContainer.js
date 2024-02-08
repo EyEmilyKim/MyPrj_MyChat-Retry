@@ -1,13 +1,15 @@
 import './MessageContainer.css';
 
 export default function MessageContainer({ messageList, user }) {
+  const systemId = process.env.REACT_APP_DB_SYSTEM_USER_ID;
+
   return (
     <>
       <div>
         {messageList.map((message, index) => {
           return (
             <div key={message._id} className="each-message">
-              {message.sender.name === 'system' ? (
+              {message.sender._id === systemId ? (
                 <div className="system-message-container">
                   <p className="system-message">{message.content}</p>
                 </div>

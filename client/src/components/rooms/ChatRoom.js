@@ -16,7 +16,7 @@ export default function ChatRoom() {
   const { user } = useContext(LoginContext);
   const { socket } = useContext(SocketContext);
   const [room, setRoom] = useState('fetching room data...');
-  const [isFetching, setIsFetching] = useState(true);
+  const [joinComplete, setJoinComplete] = useState(false);
   const [isMenuOpen, toggleMenu] = useToggleState(true);
   useStateLogger(room, 'room');
   // useStateLogger(isFetching, 'isFetching');
@@ -26,9 +26,26 @@ export default function ChatRoom() {
   const scrollRef = useRef();
   useEffect(() => {
     console.log('[messageList]', messageList);
-    if (!isFetching)
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (joinComplete) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messageList]);
+
+  useEffect(() => {
+    if (joinComplete) {
+      socket.emit('getMessages', rid, (res) => {
+        if (res && res.status === 'ok') {
+          console.log('successfully getMessages', res);
+          if (res.data) setMessageList(res.data);
+        } else {
+          console.log('failed to getMessages', res);
+        }
+      });
+
+      socket.on('message', (message) => {
+        // console.log(`on('message') : ${JSON.stringify(message)}`);
+        setMessageList((prevState) => [...prevState, message]);
+      });
+    }
+  }, [joinComplete]);
 
   useEffect(() => {
     console.log(`socket : ${socket.id}`);
@@ -37,24 +54,10 @@ export default function ChatRoom() {
       if (res && res.status === 'ok') {
         console.log('successfully joined', res);
         setRoom(res.data.room);
-        setIsFetching(false);
+        setJoinComplete(true);
       } else {
         console.log('failed to join', res);
       }
-    });
-
-    socket.emit('getMessages', rid, (res) => {
-      if (res && res.status === 'ok') {
-        console.log('successfully getMessages', res);
-        if (res.data) setMessageList(res.data);
-      } else {
-        console.log('failed to getMessages', res);
-      }
-    });
-
-    socket.on('message', (message) => {
-      // console.log(`on('message') : ${JSON.stringify(message)}`);
-      setMessageList((prevState) => [...prevState, message]);
     });
 
     socket.on('updatedRoom', (room) => {
@@ -71,7 +74,7 @@ export default function ChatRoom() {
     };
   }, []);
 
-  return isFetching ? (
+  return !joinComplete ? (
     <Loader />
   ) : (
     <div className="room-body">

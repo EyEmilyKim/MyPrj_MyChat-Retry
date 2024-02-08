@@ -89,14 +89,9 @@ module.exports = function (io) {
         const ridToString = rid.toString();
         socket.join(ridToString);
         // 첫 입장 시
-        if (result.updateMessage) {
-          // update User
-          user = await userController.joinRoom(user, result.populatedRoom);
-          // 룸채널에 메세지, 룸 정보 발신
-          io.to(ridToString).emit('message', result.updateMessage);
-          io.to(ridToString).emit('updatedRoom', result.populatedRoom);
-          // 실시간 룸 정보 발신
-          emitRooms(io, 'Someone joined somewhere');
+        if (result.memberUpdate) {
+          io.to(ridToString).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
+          emitRooms(io, 'Someone joined somewhere'); // 실시간 룸 정보 발신
         }
         cb({ status: 'ok', data: { room: result.populatedRoom, user: user } });
       } catch (error) {

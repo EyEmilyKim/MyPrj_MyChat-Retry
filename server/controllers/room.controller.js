@@ -1,6 +1,6 @@
 const roomService = require('../services/room.service');
-const { v4: uuidv4 } = require('uuid');
 const userService = require('../services/user.Service');
+const messageService = require('../services/message.service');
 
 const roomController = {};
 
@@ -42,6 +42,7 @@ roomController.createRoom = async function (title, socketId) {
 roomController.joinRoom = async (rid, user) => {
   // console.log('roomController.joinRoom called', rid, user);
   try {
+    // 룸 입장 처리
     const result = await roomService
       .checkRoom(rid, '_id')
       .then((r) => roomService.joinRoom(r, user));
@@ -49,17 +50,15 @@ roomController.joinRoom = async (rid, user) => {
     const populatedRoom = await result.room
       .populate('owner', ['email', 'name'])
       .then((r) => r.populate('members', ['email', 'name']));
-    // member변동 있으면 메시지 준비
-    let updateMessage = null;
-    if (result.memberUpdate) {
-      updateMessage = {
-        _id: uuidv4(),
-        room: rid,
-        sender: { _id: uuidv4(), name: 'system' },
-        content: `${user.name} joined this room`,
-      };
+    // member변동 있으면 user, system message 저장
+    let memberUpdate = result.memberUpdate;
+    if (memberUpdate) {
+      user = await userService.joinRoom(user, result.room); // update User
+      const systemId = process.env.SYSTEM_USER_ID;
+      const content = `${user.name} joined this room`;
+      await messageService.saveMessage(content, systemId, rid);
     }
-    return { populatedRoom, updateMessage };
+    return { populatedRoom, memberUpdate };
   } catch (error) {
     // console.log('roomController.joinRoom failed', error);
     throw new Error(error);
@@ -80,10 +79,10 @@ roomController.leaveRoom = async (rid, user) => {
     // member변동 있으면 메시지 준비
     let updateMessage = null;
     if (result.memberUpdate) {
+      const systemId = process.env.SYSTEM_USER_ID;
       updateMessage = {
-        _id: uuidv4(),
         room: rid,
-        sender: { _id: uuidv4(), name: 'system' },
+        sender: { _id: systemId, name: 'system' },
         content: `${user.name} left this room`,
       };
     }

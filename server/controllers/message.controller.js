@@ -33,7 +33,7 @@ messageController.saveMessage = async function (msg, socketId, rid) {
     // console.log('user & room', user, room);
     if (user && room) {
       // 메세지 저장
-      const newMsg = await messageService.saveMessage(msg, user, room);
+      const newMsg = await messageService.saveMessage(msg, user._id, room._id);
       // 해당 룸에 메세지(sender 정보 채워서) 보냄
       const populatedMsg = await newMsg.populate('sender', ['email', 'name']);
       // console.log('populatedMsg', populatedMsg);
