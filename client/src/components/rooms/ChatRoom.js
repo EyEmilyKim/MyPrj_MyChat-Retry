@@ -29,22 +29,19 @@ export default function ChatRoom() {
     if (joinComplete) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messageList]);
 
-  useEffect(() => {
-    if (joinComplete) {
-      socket.emit('getMessages', rid, (res) => {
-        if (res && res.status === 'ok') {
-          console.log('successfully getMessages', res);
-          if (res.data) setMessageList(res.data);
-        } else {
-          console.log('failed to getMessages', res);
-        }
-      });
+  const getMessages = () => {
+    socket.emit('getMessages', rid, (res) => {
+      if (res && res.status === 'ok') {
+        console.log('successfully getMessages', res);
+        if (res.data) setMessageList(res.data);
+      } else {
+        console.log('failed to getMessages', res);
+      }
+    });
+  };
 
-      socket.on('message', (message) => {
-        // console.log(`on('message') : ${JSON.stringify(message)}`);
-        setMessageList((prevState) => [...prevState, message]);
-      });
-    }
+  useEffect(() => {
+    if (joinComplete) getMessages();
   }, [joinComplete]);
 
   useEffect(() => {
@@ -63,6 +60,12 @@ export default function ChatRoom() {
     socket.on('updatedRoom', (room) => {
       console.log(`on('updatedRoom'): `, room);
       setRoom(room);
+      getMessages();
+    });
+
+    socket.on('message', (message) => {
+      // console.log(`on('message') : ${JSON.stringify(message)}`);
+      setMessageList((prevState) => [...prevState, message]);
     });
 
     // 컴포넌트 언마운트 시 이벤트 해제
