@@ -27,7 +27,7 @@ module.exports = function (io) {
     socket.on('getUsers', async (cb) => {
       console.log(`'getUsers' called by : `, socketEmail);
       try {
-        const userList = await userController.listAllUsers('UserList loaded');
+        const userList = await userController.listAllUsersExtracted('UserList loaded');
         cb({ status: 'ok', data: userList });
       } catch (error) {
         console.error('io > getUsers Error', error);

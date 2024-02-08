@@ -157,7 +157,7 @@ userService.updateDisconnectedUser = async function (sid) {
   }
 };
 
-// 특정 키,값으로 유저 조회
+// 특정 키,값으로 유저 조회 (original user)
 userService.checkUser = async function (value, key) {
   // console.log('userService.checkUser called', value, key);
   try {
@@ -172,7 +172,7 @@ userService.checkUser = async function (value, key) {
   }
 };
 
-// 모든 유저 조회
+// 모든 유저 조회 (original user)
 userService.getAllUsers = async function () {
   // console.log('userService.getAllUsers called');
   try {

@@ -15,7 +15,7 @@ async function printAllSockets(io) {
 // 실시간 유저 정보 전체 발신
 async function emitUsers(io, reason) {
   // console.log('emitUsers called', reason);
-  const userList = await userController.listAllUsers(reason);
+  const userList = await userController.listAllUsersExtracted(reason);
   io.emit('users', reason, userList);
 }
 

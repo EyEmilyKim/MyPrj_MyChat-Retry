@@ -124,17 +124,14 @@ userController.updateDisconnectedUser = async (sid) => {
   }
 };
 
-// 특정 유저 조회
+// 특정 유저 조회 (original user)
 userController.checkUser = async (value, key) => {
   // console.log('userController.checkUser called');
   try {
-    const user = await userService
-      .checkUser(value, key)
-      .then(this.extractNameIdOnline)
-      .catch((error) => console.log(error));
+    const user = await userService.checkUser(value, key);
     // await require('../utils/db').isInstance(
     //   user,
-    //   'userCont.checkUser user_extracted'
+    //   'userCont.checkUser user'
     // ); // false
     return user;
   } catch (error) {
@@ -142,21 +139,21 @@ userController.checkUser = async (value, key) => {
   }
 };
 
-// 모든 유저 조회
-userController.listAllUsers = async (reason = 'reason not provided') => {
-  // console.log('userController.listAllUsers called');
+// 모든 유저 조회 (필요 정보만 추출)
+userController.listAllUsersExtracted = async (reason = 'reason not provided') => {
+  // console.log('userController.listAllUsersExtracted called');
   try {
     const userList = await userService
       .getAllUsers()
       .then(this.extractNameIdOnline)
       .catch((error) => console.log(error));
     // console.log(
-    //   `listAllUsers [${reason}] `
+    //   `listAllUsersExtracted [${reason}] `
     //   // : ${JSON.stringify(userList)}`
     // );
     return userList;
   } catch (error) {
-    // console.log('userController.listAllUsers failed', error);
+    // console.log('userController.listAllUsersExtracted failed', error);
     throw new Error(error);
   }
 };
