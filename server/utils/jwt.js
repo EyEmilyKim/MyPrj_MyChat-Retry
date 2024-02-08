@@ -1,43 +1,61 @@
 const jwt = require('jsonwebtoken');
 
 const generateToken = async (user, type) => {
-  let secretKey = '';
-  let expiresIn = '';
-  if (type === 'AT') {
-    secretKey = process.env.ACCESS_SECRET_KEY;
-    expiresIn = process.env.ACCESS_EXPIRES_IN;
-  } else if (type === 'RT') {
-    secretKey = process.env.REFRESH_SECRET_KEY;
-    expiresIn = process.env.REFRESH_EXPIRES_IN;
-  }
-
-  const token = jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-    },
-    secretKey,
-    {
-      expiresIn: expiresIn,
-      issuer: process.env.TOKEN_ISSUER,
+  // console.log('generateToken called', user, type);
+  try {
+    let secretKey = '';
+    let expiresIn = '';
+    if (type === 'AT') {
+      secretKey = process.env.ACCESS_SECRET_KEY;
+      expiresIn = process.env.ACCESS_EXPIRES_IN;
+    } else if (type === 'RT') {
+      secretKey = process.env.REFRESH_SECRET_KEY;
+      expiresIn = process.env.REFRESH_EXPIRES_IN;
     }
-  );
-  return token;
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      secretKey,
+      {
+        expiresIn: expiresIn,
+        issuer: process.env.TOKEN_ISSUER,
+      }
+    );
+    return token;
+  } catch (error) {
+    throw new Error('토큰 생성 실패 : ', error.message);
+  }
 };
 
-function verifyToken(token, type) {
-  // console.log('verifyToken called', token);
-  let secretKey = '';
-  if (type === 'AT') secretKey = process.env.ACCESS_SECRET_KEY;
-  else if (type === 'RT') secretKey = process.env.REFRESH_SECRET_KEY;
+const verifyToken = async (token, type) => {
+  // console.log('verifyToken called', token, type);
   try {
+    let secretKey = '';
+    if (type === 'AT') secretKey = process.env.ACCESS_SECRET_KEY;
+    else if (type === 'RT') secretKey = process.env.REFRESH_SECRET_KEY;
     return jwt.verify(token, secretKey);
   } catch (error) {
     throw new Error('토큰 인증 실패 : ' + error.message);
   }
-}
+};
 
-function getDataFromAT(accessToken) {
+const generateTokenPair = async (user) => {
+  // console.log('generateTokenPair called', user);
+  try {
+    const ATPromise = generateToken(user, 'AT');
+    const RTPromise = generateToken(user, 'RT');
+    return Promise.all([ATPromise, RTPromise]).then((tokens) => {
+      return tokens;
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const getDataFromAT = async (accessToken) => {
   // console.log('getDataFromAT called', accessToken);
   try {
     const data = verifyToken(accessToken, 'AT');
@@ -45,10 +63,11 @@ function getDataFromAT(accessToken) {
   } catch (error) {
     throw new Error(error.message);
   }
-}
+};
 
 module.exports = {
   generateToken,
   verifyToken,
+  generateTokenPair,
   getDataFromAT,
 };

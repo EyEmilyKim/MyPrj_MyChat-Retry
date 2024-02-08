@@ -1,9 +1,6 @@
 const User = require('../models/user');
 const { dateFormatKST } = require('../utils/dateFormatKST');
-const db = require('../utils/db');
 const { v4: uuidv4 } = require('uuid');
-const { comparePassword } = require('../utils/hash');
-const { generateToken } = require('../utils/jwt');
 
 const userService = {};
 
@@ -11,25 +8,18 @@ const userService = {};
 userService.registerUser = async function (email, hashedPW, un) {
   // console.log('userService.registerUser called', email, pw, un);
   try {
-    // 이미 있는 유저인지 확인
-    let user = await this.checkUser(email, 'email');
-    if (user) {
-      throw new Error('이미 사용중인 이메일입니다.');
-    } else {
-      // -> 없으면 새로 저장
-      const now = await dateFormatKST();
-      user = new User({
-        email: email,
-        password: hashedPW,
-        name: un,
-        online: false,
-        created: now,
-        // token: '',
-        // sid: '',
-      });
-      await user.save();
-      return user;
-    }
+    const now = await dateFormatKST();
+    const user = new User({
+      email: email,
+      password: hashedPW,
+      name: un,
+      online: false,
+      created: now,
+      // token: '',
+      // sid: '',
+    });
+    await user.save();
+    return user;
   } catch (error) {
     // console.log('userService.registerUser error', error);
     throw new Error(error.message);
@@ -38,9 +28,7 @@ userService.registerUser = async function (email, hashedPW, un) {
 
 // 유저 프로필 업데이트
 userService.updateUser = async function (user, name, description) {
-  // console.log(
-  //   `userService.updateUser called : ${user.email} / ${name} / ${description}`
-  // );
+  // console.log(`userService.updateUser called : ${user.email} / ${name} / ${description}`);
   try {
     user.name = name;
     user.description = description;
@@ -53,38 +41,23 @@ userService.updateUser = async function (user, name, description) {
 };
 
 // 유저 로그인
-userService.loginUser = async function (email, pw) {
-  // console.log('userService.loginUser called', email, pw);
+userService.loginUser = async function (user, tokens) {
+  // console.log('userService.loginUser called', user.email);
   try {
-    let user = await this.checkUser(email, 'email'); // 이미 있는 유저인지 확인
-    if (!user) {
-      throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
-    }
-    // -> 있다면 비밀번호 조회 후 일치하면 JWT 발급, 로그인
-    const passwordMatch = await comparePassword(pw, user.password);
-    if (!passwordMatch) {
-      throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
-    }
-
-    const accessToken = await generateToken(user, 'AT');
-    const refreshToken = await generateToken(user, 'RT');
-    user.token = accessToken;
+    user.token = tokens[0];
     user.online = true;
-
     await user.save();
-
-    return { user, accessToken, refreshToken };
+    return user;
   } catch (error) {
     // console.log('userService.loginUser error', error);
     throw new Error(error.message);
   }
 };
+
 // 유저 소켓 Connected -> sid 저장
-userService.updateConnectedUser = async function (email, sid) {
+userService.updateConnectedUser = async function (user, sid) {
   // console.log('userService.updateConnectedUser called');
   try {
-    const user = await this.checkUser(email, 'email');
-    user.online = true;
     user.sid = sid;
     await user.save();
   } catch (error) {
@@ -128,10 +101,9 @@ userService.leaveRoom = async function (user, room) {
 };
 
 // 유저 로그아웃
-userService.logoutUser = async function (email) {
+userService.logoutUser = async function (user) {
   // console.log('userService.logoutUser called', email);
   try {
-    const user = await this.checkUser(email, 'email');
     user.online = false;
     await user.save();
     return user;
@@ -140,16 +112,12 @@ userService.logoutUser = async function (email) {
     throw new Error(error.message);
   }
 };
-// 유저 소켓 disconnected -> online:false, sid:''
-userService.updateDisconnectedUser = async function (sid) {
+// 유저 소켓 disconnected -> sid:''
+userService.updateDisconnectedUser = async function (user) {
   // console.log('userService.updateDisconnectedUser called', sid);
   try {
-    const user = await this.checkUser(sid, 'sid');
-    if (user) {
-      user.online = false;
-      user.sid = '';
-      await user.save();
-    }
+    user.sid = '';
+    await user.save();
     // console.log('disconnected user : ', user);
   } catch (error) {
     // console.log('userService.updateDisconnectedUser error', error);
@@ -164,7 +132,6 @@ userService.checkUser = async function (value, key) {
     const query = {};
     query[key] = value;
     const user = await User.findOne(query);
-    // await db.isInstance(user, 'userServ.checkUser user'); // true
     return user;
   } catch (error) {
     // console.log('userService.checkUser error', error);

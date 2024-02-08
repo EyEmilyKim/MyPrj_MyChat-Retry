@@ -1,5 +1,5 @@
 const userService = require('../services/user.Service');
-const { getDataFromAT } = require('../utils/jwt');
+const { getDataFromAT, generateTokenPair } = require('../utils/jwt');
 const { comparePassword, hashPassword } = require('../utils/hash');
 
 const userController = {};
@@ -9,10 +9,17 @@ userController.registerUser = async (req, res) => {
   // console.log('userController.registerUser called', req.body);
   try {
     const { email, password, userName } = req.body;
-    const hashedPW = await hashPassword(password);
-    const user = await userService.registerUser(email, hashedPW, userName);
-    console.log('userController.registerUser user', user);
-    res.status(200).json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
+    // 이미 있는 유저인지 확인
+    let user = await userService.checkUser(email, 'email');
+    if (user) {
+      throw new Error('이미 사용중인 이메일입니다.');
+    } else {
+      // -> 없으면 새로 저장
+      const hashedPW = await hashPassword(password);
+      user = await userService.registerUser(email, hashedPW, userName);
+      // console.log('userController.registerUser user', user);
+      res.status(200).json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
+    }
   } catch (error) {
     console.log('userController.registerUser failed', error);
     res.status(500).json({ error: error.message }); // 에러메세지 제공
@@ -24,22 +31,34 @@ userController.loginUser = async (req, res) => {
   // console.log('userController.loginUser called', req.body);
   try {
     const { email, password } = req.body;
-    const { user, accessToken, refreshToken } = await userService.loginUser(email, password);
-    res
-      .cookie('accessToken', accessToken, {
-        httpOnly: true,
-        secure: false,
-      })
-      .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: false,
-      })
-      .status(200)
-      .json({
-        message: `로그인 성공\n반갑습니다 ${user.name}님~~ :D`,
-        user: user,
-      });
-    // console.log('userController.loginUser success');
+    let user = await userService.checkUser(email, 'email'); // 있는 유저인지 확인
+    if (!user) {
+      throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
+    }
+    // -> 있다면 비밀번호 조회 후
+    const passwordMatch = await comparePassword(password, user.password);
+    if (!passwordMatch) {
+      throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
+    } else {
+      // 일치하면 JWT 발급, 로그인
+      const tokens = await generateTokenPair(user);
+      user = await userService.loginUser(user, tokens);
+      // res 전달
+      res
+        .cookie('accessToken', tokens[0], {
+          httpOnly: true,
+          secure: false,
+        })
+        .cookie('refreshToken', tokens[1], {
+          httpOnly: true,
+          secure: false,
+        })
+        .status(200)
+        .json({
+          message: `로그인 성공\n반갑습니다 ${user.name}님~~ :D`,
+          user: user,
+        });
+    }
   } catch (error) {
     console.log('userController.loginUser failed', error);
     res.status(500).json({ error: error.message }); // 에러메세지 제공
@@ -50,7 +69,14 @@ userController.loginUser = async (req, res) => {
 userController.updateConnectedUser = async (email, sid) => {
   // console.log('userController.updateConnectedUser called');
   try {
-    await userService.updateConnectedUser(email, sid);
+    await userService
+      .checkUser(email, 'email') // 유저 정보 찾기
+      .then(async (u) => {
+        userService.updateConnectedUser(u, sid); // online 처리
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   } catch (error) {
     // console.log('userController.updateConnectedUser failed', error);
     throw new Error(error);
@@ -61,7 +87,7 @@ userController.updateConnectedUser = async (email, sid) => {
 userController.authenticateUser = async (req, res) => {
   // console.log('userController.authenticateUser called');
   try {
-    const data = getDataFromAT(req.cookies.accessToken);
+    const data = await getDataFromAT(req.cookies.accessToken);
     const user = await userService.checkUser(data.email, 'email');
     res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
@@ -98,8 +124,13 @@ userController.leaveRoom = async (user, room) => {
 userController.logoutUser = async (req, res) => {
   // console.log('userController.logout called');
   try {
-    const data = getDataFromAT(req.cookies.accessToken);
-    const user = await userService.logoutUser(data.email);
+    const data = await getDataFromAT(req.cookies.accessToken);
+    const user = await userService
+      .checkUser(data.email, 'email')
+      .then((u) => userService.logoutUser(u))
+      .catch((err) => {
+        throw new Error(err);
+      });
     if (!user.online) {
       res.cookie('accessToken', '');
       res.status(200).json({
@@ -117,7 +148,14 @@ userController.logoutUser = async (req, res) => {
 userController.updateDisconnectedUser = async (sid) => {
   // console.log('userController.updateDisconnectedUser called');
   try {
-    await userService.updateDisconnectedUser(sid);
+    await userService
+      .checkUser(sid, 'sid') // 유저 정보 찾기
+      .then(async (user) => {
+        if (user) await userService.updateDisconnectedUser(user); // offline 처리
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   } catch (error) {
     // console.log('userController.updateDisconnectedUser failed', error);
     throw new Error(error);
@@ -129,10 +167,6 @@ userController.checkUser = async (value, key) => {
   // console.log('userController.checkUser called');
   try {
     const user = await userService.checkUser(value, key);
-    // await require('../utils/db').isInstance(
-    //   user,
-    //   'userCont.checkUser user'
-    // ); // false
     return user;
   } catch (error) {
     // console.log('userController.checkUser failed', error);
@@ -176,16 +210,17 @@ userController.updateUser = async function (socketId, name, description) {
 
 // 비밀번호 확인 HTTP
 userController.confirmPassword = async (req, res) => {
-  // console.log('userController.confirmPassword called', req.body.email);
+  // console.log('userController.confirmPassword called', req.body);
   try {
     const { password } = req.body;
-    const data = getDataFromAT(req.cookies.accessToken);
-    const passwordMatch = await userService
-      .checkUser(data.email, 'email') // 유저 정보 확인
+    const passwordMatch = await getDataFromAT(req.cookies.accessToken)
+      .then(async (data) => await userService.checkUser(data.email, 'email')) // 유저 정보 확인
       .then(async (user) => {
-        await comparePassword(password, user.password); // 비밀번호 대조
+        return await comparePassword(password, user.password); // 비밀번호 대조
+      })
+      .catch((err) => {
+        throw new Error(err);
       });
-
     if (passwordMatch) {
       res.status(200).json({ message: '비밀번호 확인 성공' });
     } else {
@@ -199,15 +234,17 @@ userController.confirmPassword = async (req, res) => {
 
 // 비밀번호 재설정 HTTP
 userController.resetPassword = async (req, res) => {
-  // console.log('userController.resetPassword called', req.body.email);
+  // console.log('userController.resetPassword called', req.body);
   try {
     const { password } = req.body;
-    const data = getDataFromAT(req.cookies.accessToken);
-    await userService
-      .checkUser(data.email, 'email') // 유저 정보 확인
-      .then(async (user) => {
+    await getDataFromAT(req.cookies.accessToken)
+      .then(async (data) => await userService.checkUser(data.email, 'email')) // 유저 정보 확인
+      .then(async (u) => {
         const hashedPW = await hashPassword(password);
-        userService.resetPassword(hashedPW, user); // 비밀번호 재설정
+        await userService.resetPassword(hashedPW, u); // 비밀번호 재설정
+      })
+      .catch((err) => {
+        throw new Error(err);
       });
     res.status(200).json({ message: '비밀번호 변경 성공' });
   } catch (error) {
