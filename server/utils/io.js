@@ -1,7 +1,6 @@
 const { authenticateSocket } = require('./io-middlewares');
 const { printAllSockets, emitUsers, emitRooms } = require('./io-functions');
 const userController = require('../controllers/user.controller');
-const userService = require('../services/user.Service');
 const roomController = require('../controllers/room.controller');
 const messageController = require('../controllers/message.controller');
 
@@ -83,17 +82,15 @@ module.exports = function (io) {
     socket.on('joinRoom', async (rid, cb) => {
       console.log(`'joinRoom' called by :`, socketEmail, rid);
       try {
-        let user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
-        const result = await roomController.joinRoom(rid, user); // update Room
+        const result = await roomController.joinRoom(rid, socketId); // update Room
         // 해당 룸채널 조인
-        const ridToString = rid.toString();
-        socket.join(ridToString);
+        socket.join(rid);
         // 첫 입장 시
         if (result.memberUpdate) {
-          io.to(ridToString).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
+          io.to(rid).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
           emitRooms(io, 'Someone joined somewhere'); // 실시간 룸 정보 발신
         }
-        cb({ status: 'ok', data: { room: result.populatedRoom, user: user } });
+        cb({ status: 'ok', data: { room: result.populatedRoom, user: result.user } });
       } catch (error) {
         console.log('io > joinRoom Error', error);
         cb({ status: 'Server side Error' });
@@ -104,18 +101,15 @@ module.exports = function (io) {
     socket.on('leaveRoom', async (rid, cb) => {
       console.log(`'leaveRoom' called by :`, socketEmail, rid);
       try {
-        const user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
-        const result = await roomController.leaveRoom(rid, user); // update Room
-        const updatedRoom = result.populatedRoom;
+        const result = await roomController.leaveRoom(rid, socketId); // update Room
         // 해당 룸채널 탈퇴
-        const ridToString = rid.toString();
-        socket.leave(ridToString);
+        socket.leave(rid);
         // 퇴장 시
         if (result.memberUpdate) {
-          io.to(ridToString).emit('updatedRoom', updatedRoom); // 룸채널에 룸 정보 발신
+          io.to(rid).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
           emitRooms(io, 'Someone left somewhere'); // 실시간 룸 정보 발신
         }
-        cb({ status: 'ok', data: { room: updatedRoom, user: user } });
+        cb({ status: 'ok', data: { room: result.populatedRoom, user: result.user } });
       } catch (error) {
         console.log('io > leaveRoom Error', error);
         cb({ status: 'Server side Error' });

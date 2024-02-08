@@ -39,10 +39,11 @@ roomController.createRoom = async function (title, socketId) {
 };
 
 // 룸 입장
-roomController.joinRoom = async (rid, user) => {
+roomController.joinRoom = async (rid, socketId) => {
   // console.log('roomController.joinRoom called', rid, user);
   try {
     // 룸 입장 처리
+    let user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
     const result = await roomService
       .checkRoom(rid, '_id')
       .then((r) => roomService.joinRoom(r, user));
@@ -58,7 +59,7 @@ roomController.joinRoom = async (rid, user) => {
       const content = `${user.name} joined this room`;
       await messageService.saveMessage(content, systemId, rid);
     }
-    return { populatedRoom, memberUpdate };
+    return { populatedRoom, memberUpdate, user };
   } catch (error) {
     // console.log('roomController.joinRoom failed', error);
     throw new Error(error);
@@ -66,9 +67,10 @@ roomController.joinRoom = async (rid, user) => {
 };
 
 // 룸 퇴장
-roomController.leaveRoom = async (rid, user) => {
+roomController.leaveRoom = async (rid, socketId) => {
   // console.log('roomController.leaveRoom called', rid, user);
   try {
+    let user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
     const result = await roomService
       .checkRoom(rid, '_id')
       .then((r) => roomService.leaveRoom(r, user));
@@ -84,7 +86,7 @@ roomController.leaveRoom = async (rid, user) => {
       const content = `${user.name} left this room`;
       await messageService.saveMessage(content, systemId, rid);
     }
-    return { populatedRoom, memberUpdate };
+    return { populatedRoom, memberUpdate, user };
   } catch (error) {
     // console.log('roomController.leaveRoom failed', error);
     throw new Error(error);
