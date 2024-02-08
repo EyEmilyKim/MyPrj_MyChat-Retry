@@ -107,21 +107,15 @@ module.exports = function (io) {
         const user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
         const result = await roomController.leaveRoom(rid, user); // update Room
         const updatedRoom = result.populatedRoom;
-        let updatedUser = user;
         // 해당 룸채널 탈퇴
         const ridToString = rid.toString();
         socket.leave(ridToString);
         // 퇴장 시
-        if (result.updateMessage) {
-          // update User
-          updatedUser = await userController.leaveRoom(user, updatedRoom);
-          // 룸채널에 메세지, 룸 정보 발신
-          io.to(ridToString).emit('message', result.updateMessage);
-          io.to(ridToString).emit('updatedRoom', updatedRoom);
-          // 실시간 룸 정보 발신
-          emitRooms(io, 'Someone left somewhere');
+        if (result.memberUpdate) {
+          io.to(ridToString).emit('updatedRoom', updatedRoom); // 룸채널에 룸 정보 발신
+          emitRooms(io, 'Someone left somewhere'); // 실시간 룸 정보 발신
         }
-        cb({ status: 'ok', data: { room: updatedRoom, user: updatedUser } });
+        cb({ status: 'ok', data: { room: updatedRoom, user: user } });
       } catch (error) {
         console.log('io > leaveRoom Error', error);
         cb({ status: 'Server side Error' });
