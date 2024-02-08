@@ -26,20 +26,6 @@ userService.registerUser = async function (email, hashedPW, un) {
   }
 };
 
-// 유저 프로필 업데이트
-userService.updateUser = async function (user, name, description) {
-  // console.log(`userService.updateUser called : ${user.email} / ${name} / ${description}`);
-  try {
-    user.name = name;
-    user.description = description;
-    await user.save();
-    return user;
-  } catch (error) {
-    // console.log('userService.updateUser error', error);
-    throw new Error(error.message);
-  }
-};
-
 // 유저 로그인
 userService.loginUser = async function (user, tokens) {
   // console.log('userService.loginUser called', user.email);
@@ -62,6 +48,31 @@ userService.updateConnectedUser = async function (user, sid) {
     await user.save();
   } catch (error) {
     // console.log('userService.updateConnectedUser error', error);
+    throw new Error(error.message);
+  }
+};
+
+// 유저 로그아웃
+userService.logoutUser = async function (user) {
+  // console.log('userService.logoutUser called', email);
+  try {
+    user.online = false;
+    await user.save();
+    return user;
+  } catch (error) {
+    // console.log('userService.logoutUser error', error);
+    throw new Error(error.message);
+  }
+};
+// 유저 소켓 disconnected -> sid:''
+userService.updateDisconnectedUser = async function (user) {
+  // console.log('userService.updateDisconnectedUser called', sid);
+  try {
+    user.sid = '';
+    await user.save();
+    // console.log('disconnected user : ', user);
+  } catch (error) {
+    // console.log('userService.updateDisconnectedUser error', error);
     throw new Error(error.message);
   }
 };
@@ -100,54 +111,16 @@ userService.leaveRoom = async function (user, room) {
   }
 };
 
-// 유저 로그아웃
-userService.logoutUser = async function (user) {
-  // console.log('userService.logoutUser called', email);
+// 유저 프로필 업데이트
+userService.updateUser = async function (user, name, description) {
+  // console.log(`userService.updateUser called : ${user.email} / ${name} / ${description}`);
   try {
-    user.online = false;
+    user.name = name;
+    user.description = description;
     await user.save();
     return user;
   } catch (error) {
-    // console.log('userService.logoutUser error', error);
-    throw new Error(error.message);
-  }
-};
-// 유저 소켓 disconnected -> sid:''
-userService.updateDisconnectedUser = async function (user) {
-  // console.log('userService.updateDisconnectedUser called', sid);
-  try {
-    user.sid = '';
-    await user.save();
-    // console.log('disconnected user : ', user);
-  } catch (error) {
-    // console.log('userService.updateDisconnectedUser error', error);
-    throw new Error(error.message);
-  }
-};
-
-// 특정 키,값으로 유저 조회 (original user)
-userService.checkUser = async function (value, key) {
-  // console.log('userService.checkUser called', value, key);
-  try {
-    const query = {};
-    query[key] = value;
-    const user = await User.findOne(query);
-    return user;
-  } catch (error) {
-    // console.log('userService.checkUser error', error);
-    throw new Error('user not found');
-  }
-};
-
-// 모든 유저 조회 (original user)
-userService.getAllUsers = async function () {
-  // console.log('userService.getAllUsers called');
-  try {
-    const userList = await User.find({});
-    // console.log('userList', userList);
-    return userList;
-  } catch (error) {
-    // console.log('userService.getAllUsers error', error);
+    // console.log('userService.updateUser error', error);
     throw new Error(error.message);
   }
 };
@@ -177,6 +150,33 @@ userService.resignUser = async function (user) {
     return user;
   } catch (error) {
     // console.log('userService.resignUser error', error);
+    throw new Error(error.message);
+  }
+};
+
+// 특정 키,값으로 유저 조회 (original user)
+userService.checkUser = async function (value, key) {
+  // console.log('userService.checkUser called', value, key);
+  try {
+    const query = {};
+    query[key] = value;
+    const user = await User.findOne(query);
+    return user;
+  } catch (error) {
+    // console.log('userService.checkUser error', error);
+    throw new Error('user not found');
+  }
+};
+
+// 모든 유저 조회 (original user)
+userService.getAllUsers = async function () {
+  // console.log('userService.getAllUsers called');
+  try {
+    const userList = await User.find({});
+    // console.log('userList', userList);
+    return userList;
+  } catch (error) {
+    // console.log('userService.getAllUsers error', error);
     throw new Error(error.message);
   }
 };

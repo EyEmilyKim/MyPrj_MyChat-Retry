@@ -4,6 +4,8 @@ const { comparePassword, hashPassword } = require('../utils/hash');
 
 const userController = {};
 
+// ============== HTTP Logics ==============
+
 // 유저 등록 HTTP
 userController.registerUser = async (req, res) => {
   // console.log('userController.registerUser called', req.body);
@@ -65,61 +67,6 @@ userController.loginUser = async (req, res) => {
   }
 };
 
-// 유저 소켓 Connected -> sid 저장
-userController.updateConnectedUser = async (email, sid) => {
-  // console.log('userController.updateConnectedUser called');
-  try {
-    await userService
-      .checkUser(email, 'email') // 유저 정보 찾기
-      .then(async (u) => {
-        userService.updateConnectedUser(u, sid); // online 처리
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
-  } catch (error) {
-    // console.log('userController.updateConnectedUser failed', error);
-    throw new Error(error);
-  }
-};
-
-// 유저 인증 HTTP
-userController.authenticateUser = async (req, res) => {
-  // console.log('userController.authenticateUser called');
-  try {
-    const data = await getDataFromAT(req.cookies.accessToken);
-    const user = await userService.checkUser(data.email, 'email');
-    res.status(200).json({ message: '인증 성공', user: user });
-  } catch (error) {
-    console.log('userController.authenticateUser failed', error);
-    res.status(500).json({ error: error.message }); // 에러메세지 제공
-  }
-};
-
-// 유저 룸 입장
-userController.joinRoom = async (user, room) => {
-  // console.log('userController.joinRoom called');
-  try {
-    const updateUser = await userService.joinRoom(user, room);
-    return updateUser;
-  } catch (error) {
-    // console.log('userController.joinRoom failed', error);
-    throw new Error(error);
-  }
-};
-
-// 유저 룸 퇴장
-userController.leaveRoom = async (user, room) => {
-  // console.log('userController.leaveRoom called');
-  try {
-    const updateUser = await userService.leaveRoom(user, room);
-    return updateUser;
-  } catch (error) {
-    // console.log('userController.leaveRoom failed', error);
-    throw new Error(error);
-  }
-};
-
 // 유저 로그아웃 HTTP
 userController.logoutUser = async (req, res) => {
   // console.log('userController.logout called');
@@ -144,67 +91,16 @@ userController.logoutUser = async (req, res) => {
   }
 };
 
-// 유저 소켓 disconnected -> online:false, sid:''
-userController.updateDisconnectedUser = async (sid) => {
-  // console.log('userController.updateDisconnectedUser called');
+// 유저 인증 HTTP
+userController.authenticateUser = async (req, res) => {
+  // console.log('userController.authenticateUser called');
   try {
-    await userService
-      .checkUser(sid, 'sid') // 유저 정보 찾기
-      .then(async (user) => {
-        if (user) await userService.updateDisconnectedUser(user); // offline 처리
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
+    const data = await getDataFromAT(req.cookies.accessToken);
+    const user = await userService.checkUser(data.email, 'email');
+    res.status(200).json({ message: '인증 성공', user: user });
   } catch (error) {
-    // console.log('userController.updateDisconnectedUser failed', error);
-    throw new Error(error);
-  }
-};
-
-// 특정 유저 조회 (original user)
-userController.checkUser = async (value, key) => {
-  // console.log('userController.checkUser called');
-  try {
-    const user = await userService.checkUser(value, key);
-    return user;
-  } catch (error) {
-    // console.log('userController.checkUser failed', error);
-  }
-};
-
-// 모든 유저 조회 (필요 정보만 추출)
-userController.listAllUsersExtracted = async (reason = 'reason not provided') => {
-  // console.log('userController.listAllUsersExtracted called');
-  try {
-    const userList = await userService
-      .getAllUsers()
-      .then(this.extractNameIdOnline)
-      .catch((error) => console.log(error));
-    // console.log(
-    //   `listAllUsersExtracted [${reason}] `
-    //   // : ${JSON.stringify(userList)}`
-    // );
-    return userList;
-  } catch (error) {
-    // console.log('userController.listAllUsersExtracted failed', error);
-    throw new Error(error);
-  }
-};
-
-// 유저 프로필 업데이트
-userController.updateUser = async function (socketId, name, description) {
-  // console.log(
-  //   `userController.updateUser called : ${socketId} / ${name} / ${description}`
-  // );
-  try {
-    const user = await userService
-      .checkUser(socketId, 'sid')
-      .then((u) => userService.updateUser(u, name, description));
-    return user;
-  } catch (error) {
-    // console.log('userController.updateUser failed', error);
-    throw new Error(error.message);
+    console.log('userController.authenticateUser failed', error);
+    res.status(500).json({ error: error.message }); // 에러메세지 제공
   }
 };
 
@@ -265,6 +161,114 @@ userController.resignUser = async (req, res) => {
   } catch (error) {
     console.log('userController.resignUser failed', error);
     res.status(500).json({ error: 'Server side Error' });
+  }
+};
+
+// ============== SOCKET, GENERAL Logics ==============
+
+// 소켓 Connected -> sid 저장
+userController.updateConnectedUser = async (email, sid) => {
+  // console.log('userController.updateConnectedUser called');
+  try {
+    await userService
+      .checkUser(email, 'email') // 유저 정보 찾기
+      .then(async (u) => {
+        userService.updateConnectedUser(u, sid); // online 처리
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  } catch (error) {
+    // console.log('userController.updateConnectedUser failed', error);
+    throw new Error(error);
+  }
+};
+
+// 소켓 disconnected -> sid:''
+userController.updateDisconnectedUser = async (sid) => {
+  // console.log('userController.updateDisconnectedUser called');
+  try {
+    await userService
+      .checkUser(sid, 'sid') // 유저 정보 찾기
+      .then(async (user) => {
+        if (user) await userService.updateDisconnectedUser(user); // offline 처리
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  } catch (error) {
+    // console.log('userController.updateDisconnectedUser failed', error);
+    throw new Error(error);
+  }
+};
+
+// 유저 룸 입장
+userController.joinRoom = async (user, room) => {
+  // console.log('userController.joinRoom called');
+  try {
+    const updateUser = await userService.joinRoom(user, room);
+    return updateUser;
+  } catch (error) {
+    // console.log('userController.joinRoom failed', error);
+    throw new Error(error);
+  }
+};
+
+// 유저 룸 퇴장
+userController.leaveRoom = async (user, room) => {
+  // console.log('userController.leaveRoom called');
+  try {
+    const updateUser = await userService.leaveRoom(user, room);
+    return updateUser;
+  } catch (error) {
+    // console.log('userController.leaveRoom failed', error);
+    throw new Error(error);
+  }
+};
+
+// 유저 프로필 업데이트
+userController.updateUser = async function (socketId, name, description) {
+  // console.log(
+  //   `userController.updateUser called : ${socketId} / ${name} / ${description}`
+  // );
+  try {
+    const user = await userService
+      .checkUser(socketId, 'sid')
+      .then((u) => userService.updateUser(u, name, description));
+    return user;
+  } catch (error) {
+    // console.log('userController.updateUser failed', error);
+    throw new Error(error.message);
+  }
+};
+
+// 특정 유저 조회 (original user)
+userController.checkUser = async (value, key) => {
+  // console.log('userController.checkUser called');
+  try {
+    const user = await userService.checkUser(value, key);
+    return user;
+  } catch (error) {
+    // console.log('userController.checkUser failed', error);
+  }
+};
+
+// 모든 유저 조회 (필요 정보만 추출)
+userController.listAllUsersExtracted = async (reason = 'reason not provided') => {
+  // console.log('userController.listAllUsersExtracted called');
+  try {
+    const userList = await userService
+      .getAllUsers()
+      .then(this.extractNameIdOnline)
+      .catch((error) => console.log(error));
+    // console.log(
+    //   `listAllUsersExtracted [${reason}] `
+    //   // : ${JSON.stringify(userList)}`
+    // );
+    return userList;
+  } catch (error) {
+    // console.log('userController.listAllUsersExtracted failed', error);
+    throw new Error(error);
   }
 };
 
