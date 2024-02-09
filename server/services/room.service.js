@@ -1,5 +1,4 @@
 const Room = require('../models/room');
-const db = require('../utils/db');
 const { dateFormatKST } = require('../utils/dateFormatKST');
 
 const roomService = {};
@@ -24,7 +23,6 @@ roomService.checkRoom = async function (value, key) {
     const query = {};
     query[key] = value;
     const room = await Room.findOne(query);
-    // await db.isInstance(room, 'roomServ.checkRoom room'); // true
     return room;
   } catch (error) {
     // console.log('roomService.checkRoom error', error);
@@ -54,9 +52,6 @@ roomService.createRoom = async function (title, uid) {
 roomService.joinRoom = async function (room, user) {
   // console.log('roomService.joinRoom called', room, user);
   try {
-    if (!room) {
-      throw new Error('해당 방이 존재하지 않습니다.');
-    }
     let memberUpdate = false;
     if (!room.members.includes(user._id)) {
       // console.log('room.joinRoom, not include yet', room.members);
@@ -76,9 +71,6 @@ roomService.joinRoom = async function (room, user) {
 roomService.leaveRoom = async function (room, user) {
   // console.log('roomService.leaveRoom called', room, user);
   try {
-    if (!room) {
-      throw new Error('해당 방이 존재하지 않습니다.');
-    }
     let memberUpdate = false;
     if (room.members.includes(user._id)) {
       // console.log('room.leaveRoom, does include yet', room.members);

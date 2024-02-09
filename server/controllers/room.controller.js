@@ -17,7 +17,7 @@ roomController.getAllRooms = async () => {
 };
 
 // 룸 생성
-roomController.createRoom = async function (title, socketId) {
+roomController.createRoom = async (title, socketId) => {
   // console.log('roomController.createRoom called', title, user);
   try {
     let providingError = null;
@@ -43,10 +43,16 @@ roomController.joinRoom = async (rid, socketId) => {
   // console.log('roomController.joinRoom called', rid, user);
   try {
     // 룸 입장 처리
-    let user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
+    let user = await userService.checkUser(socketId, 'sid'); // 유저 정보 찾기
     const result = await roomService
-      .checkRoom(rid, '_id')
-      .then((r) => roomService.joinRoom(r, user));
+      .checkRoom(rid, '_id') // 룸 정보 찾기
+      .then(async (r) => {
+        if (!r) {
+          throw new Error('해당 방이 존재하지 않습니다.');
+        } else {
+          return await roomService.joinRoom(r, user); // update Room
+        }
+      });
     // 해당 룸에 owner, members 정보 채우기
     const populatedRoom = await result.room
       .populate('owner', ['email', 'name'])
@@ -70,10 +76,16 @@ roomController.joinRoom = async (rid, socketId) => {
 roomController.leaveRoom = async (rid, socketId) => {
   // console.log('roomController.leaveRoom called', rid, user);
   try {
-    let user = await userService.checkUser(socketId, 'sid'); // 유저정보 찾기
+    let user = await userService.checkUser(socketId, 'sid'); // 유저 정보 찾기
     const result = await roomService
-      .checkRoom(rid, '_id')
-      .then((r) => roomService.leaveRoom(r, user));
+      .checkRoom(rid, '_id') // 룸 정보 찾기
+      .then(async (r) => {
+        if (!r) {
+          throw new Error('해당 방이 존재하지 않습니다.');
+        } else {
+          return await roomService.leaveRoom(r, user);
+        }
+      });
     // 해당 룸에 owner, members 정보 채우기
     const populatedRoom = await result.room
       .populate('owner', ['email', 'name'])
