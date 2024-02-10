@@ -120,10 +120,10 @@ module.exports = function (io) {
     });
 
     // ** 기존 메세지 요청
-    socket.on('getMessages', async (rid, cb) => {
-      console.log(`'getMessages' called by : ${socketEmail}, ${rid}`);
+    socket.on('getMessages', async (rid, joinIndex, cb) => {
+      console.log(`'getMessages' called by : ${socketEmail}, ${rid}, ${joinIndex}`);
       try {
-        const messageList = await messageController.getAllMessages(rid);
+        const messageList = await messageController.getAllMessagesSince(rid, joinIndex);
         cb({ status: 'ok', data: messageList });
       } catch (error) {
         console.log('io > getMessages Error', error);

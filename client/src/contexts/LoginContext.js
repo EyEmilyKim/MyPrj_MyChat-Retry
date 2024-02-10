@@ -12,9 +12,9 @@ export const LoginProvider = ({ children }) => {
   const [isAuthing, setIsAuthing] = useState(true);
   const [loginOperating, setLoginOperating] = useState(false);
   useStateLogger(user, 'user');
-  useStateLogger(isLogin, 'isLogin');
-  useStateLogger(isAuthing, 'isAuthing');
-  useStateLogger(loginOperating, 'loginOperating');
+  // useStateLogger(isLogin, 'isLogin');
+  // useStateLogger(isAuthing, 'isAuthing');
+  // useStateLogger(loginOperating, 'loginOperating');
 
   // 로그인 인증
   const Authenticate = async () => {

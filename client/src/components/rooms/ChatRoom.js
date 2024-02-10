@@ -22,17 +22,17 @@ export default function ChatRoom() {
   useStateLogger(room, 'room');
   // useStateLogger(joinComplete, 'joinComplete');
 
-  const { updateJoinIndex } = useLocalRoomsData();
+  const { updateJoinIndex, getJoinIndex } = useLocalRoomsData();
   const [messageList, setMessageList] = useState([]);
 
   const scrollRef = useRef();
   useEffect(() => {
-    console.log('[messageList]', messageList);
+    // console.log('[messageList]', messageList);
     if (joinComplete) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messageList]);
 
-  const getMessages = () => {
-    socket.emit('getMessages', rid, (res) => {
+  const getMessages = (joinIndex) => {
+    socket.emit('getMessages', rid, joinIndex, (res) => {
       if (res && res.status === 'ok') {
         console.log('successfully getMessages', res);
         if (res.data) setMessageList(res.data);
@@ -43,7 +43,11 @@ export default function ChatRoom() {
   };
 
   useEffect(() => {
-    if (joinComplete) getMessages();
+    if (joinComplete) {
+      const joinIndex = getJoinIndex(rid);
+      console.log('local joinIndex', joinIndex);
+      getMessages(joinIndex);
+    }
   }, [joinComplete]);
 
   useEffect(() => {

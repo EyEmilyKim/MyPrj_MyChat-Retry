@@ -4,11 +4,11 @@ const userService = require('../services/user.Service');
 
 const messageController = {};
 
-// 기존 메세지 조회
-messageController.getAllMessages = async (rid) => {
-  // console.log('messageController.getAllMessages called', rid);
+// 룸 별 joinIndex 이후 메세지 조회
+messageController.getAllMessagesSince = async (rid, joinIndex) => {
+  // console.log('messageController.getAllMessagesSince called', rid, joinIndex);
   try {
-    const messageList = await messageService.getAllMessages(rid);
+    const messageList = await messageService.getAllMessagesSince(rid, joinIndex);
     const populatedMessageList = await Promise.all(
       messageList.map(async (msg) => {
         await msg.populate('sender', ['email', 'name']);
@@ -18,7 +18,7 @@ messageController.getAllMessages = async (rid) => {
     // console.log('populatedMessageList', populatedMessageList);
     return populatedMessageList;
   } catch (error) {
-    // console.log('messageController.getAllMessages failed', error);
+    // console.log('messageController.getAllMessagesSince failed', error);
     throw new Error(error);
   }
 };

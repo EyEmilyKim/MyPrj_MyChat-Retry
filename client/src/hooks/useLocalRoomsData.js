@@ -42,9 +42,17 @@ export default function useLocalRoomsData() {
     updateRoomData(rid, (room) => ({ ...room, lastReadIndex }));
   };
 
+  // rid 해당 룸의 joinIndex 읽어오는 함수
+  const getJoinIndex = (rid) => {
+    const roomsData = getLocalRoomsData();
+    const room = roomsData.find((room) => room.rid === rid);
+    return room ? room.joinIndex : null;
+  };
+
   return {
     roomsData,
     updateJoinIndex,
     updateLastReadIndex,
+    getJoinIndex,
   };
 }

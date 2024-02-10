@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [isConnecting, setIsConnecting] = useState(true);
   useStateLogger(socket, 'socket');
-  useStateLogger(isConnecting, 'isConnecting');
+  // useStateLogger(isConnecting, 'isConnecting');
 
   // 소켓 생성하는 함수
   const connectSocket = (reason) => {
