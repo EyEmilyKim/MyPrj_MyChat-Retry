@@ -4,6 +4,7 @@ import { LoginContext } from '../../contexts/LoginContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
+import useLocalRoomsData from '../../hooks/useLocalRoomsData';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
 import RoomHeader from './RoomHeader';
@@ -19,8 +20,9 @@ export default function ChatRoom() {
   const [joinComplete, setJoinComplete] = useState(false);
   const [isMenuOpen, toggleMenu] = useToggleState(true);
   useStateLogger(room, 'room');
-  // useStateLogger(isFetching, 'isFetching');
+  // useStateLogger(joinComplete, 'joinComplete');
 
+  const { updateJoinIndex } = useLocalRoomsData();
   const [messageList, setMessageList] = useState([]);
 
   const scrollRef = useRef();
@@ -51,6 +53,10 @@ export default function ChatRoom() {
       if (res && res.status === 'ok') {
         console.log('successfully joined', res);
         setRoom(res.data.room);
+        if (res.data.joinIndex > 0) {
+          // 첫 입장 시 joinIndex 로컬에 저장
+          updateJoinIndex(rid, res.data.joinIndex);
+        }
         setJoinComplete(true);
       } else {
         console.log('failed to join', res);

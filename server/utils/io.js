@@ -90,7 +90,10 @@ module.exports = function (io) {
           io.to(rid).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
           emitRooms(io, 'Someone joined somewhere'); // 실시간 룸 정보 발신
         }
-        cb({ status: 'ok', data: { room: result.populatedRoom, user: result.user } });
+        cb({
+          status: 'ok',
+          data: { room: result.populatedRoom, user: result.user, joinIndex: result.joinMsgIndex },
+        });
       } catch (error) {
         console.log('io > joinRoom Error', error);
         cb({ status: 'Server side Error' });
