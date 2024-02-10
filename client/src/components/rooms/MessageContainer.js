@@ -8,7 +8,7 @@ export default function MessageContainer({ messageList, user }) {
       <div>
         {messageList.map((message, index) => {
           return (
-            <div key={message._id} className="each-message">
+            <div key={message.index} className="each-message">
               {message.sender._id === systemId ? (
                 <div className="system-message-container">
                   <p className="system-message">{message.content}</p>
