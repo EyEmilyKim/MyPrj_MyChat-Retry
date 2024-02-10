@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import useStateLogger from './useStateLogger';
 
 export default function useLocalRoomsData() {
   // 로컬 스토리지에서 roomsData 불러오기
@@ -8,6 +9,7 @@ export default function useLocalRoomsData() {
   };
 
   const [roomsData, setRoomsData] = useState(getLocalRoomsData);
+  // useStateLogger(roomsData, 'roomsData');
 
   // roomsData 업데이트 시 로컬 스토리지에 저장
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function useLocalRoomsData() {
       if (prev.length === 0) {
         return [updateFunction({ rid })];
       }
-      const updatedRoomsData = prev.RoomsData.map((room) => {
+      const updatedRoomsData = prev.map((room) => {
         if (room.rid === rid) {
           return updateFunction(room);
         }
@@ -44,9 +46,20 @@ export default function useLocalRoomsData() {
 
   // rid 해당 룸의 joinIndex 읽어오는 함수
   const getJoinIndex = (rid) => {
-    const roomsData = getLocalRoomsData();
     const room = roomsData.find((room) => room.rid === rid);
     return room ? room.joinIndex : null;
+  };
+
+  // rid로 해당하는 roomData 찾아서 삭제하는 함수
+  const removeRoomData = (rid) => {
+    console.log('removeRoomData called', rid);
+    setRoomsData((prev) => {
+      const updatedRoomsData = prev.filter((room) => room.rid !== rid);
+      console.log('updatedRoomsData', updatedRoomsData);
+      // 로컬 스토리지에 안전하게 반영
+      localStorage.setItem('roomsData', JSON.stringify(updatedRoomsData));
+      return updatedRoomsData;
+    });
   };
 
   return {
@@ -54,5 +67,6 @@ export default function useLocalRoomsData() {
     updateJoinIndex,
     updateLastReadIndex,
     getJoinIndex,
+    removeRoomData,
   };
 }
