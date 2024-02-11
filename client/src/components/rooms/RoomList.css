@@ -31,7 +31,11 @@
   flex: 1;
 }
 
-.nonClassified-format,
+.nonClassified-format {
+  display: none;
+  border: solid palevioletred 2px;
+}
+
 .format-title {
   display: none;
   border: 1px solid purple;

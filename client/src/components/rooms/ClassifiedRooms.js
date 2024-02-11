@@ -17,27 +17,21 @@ export default function ClassifiedRooms(props) {
 
         {joinedRooms.length > 0
           ? joinedRooms.map((room) => (
-              <div
-                className="each-room"
-                key={room._id}
-                onClick={() => moveToRoom(room._id)}
-              >
+              <div className="each-room" key={room._id} onClick={() => moveToRoom(room._id)}>
                 <div className="room-title">{room.title}</div>
                 <div className="member-count">({room.members.length}명)</div>
               </div>
             ))
           : null}
+
         <div className="list-header">
           <p className="list-title">▼ 전체 룸</p>
           <p className="list-count">{notMyRooms.length}</p>
         </div>
+
         {notMyRooms.length > 0
           ? notMyRooms.map((room) => (
-              <div
-                className="each-room"
-                key={room._id}
-                onClick={() => moveToRoom(room._id)}
-              >
+              <div className="each-room" key={room._id} onClick={() => moveToRoom(room._id)}>
                 <div className="room-title">{room.title}</div>
                 <div className="member-count">({room.members.length}명)</div>
               </div>
