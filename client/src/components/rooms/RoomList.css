@@ -29,10 +29,11 @@
 .roomList-container {
   /* border: solid palevioletred 2px; */
   flex: 1;
+  overflow-y: auto;
 }
 
 .nonClassified-format {
-  display: none;
+  /* display: none; */
   border: solid palevioletred 2px;
 }
 
@@ -81,4 +82,6 @@
 .newRoom-container {
   background-color: aquamarine;
   border: solid 1px green;
+  /* position: sticky; */
+  bottom: 0; /* Stick to the bottom of the viewport */
 }

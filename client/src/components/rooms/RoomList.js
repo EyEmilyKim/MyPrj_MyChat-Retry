@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '../../contexts/SocketContext';
 import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
 import useClassifyRooms from '../../hooks/useClassifyRooms';
+import useScrollToBottomInDelay from '../../hooks/useScrollToBottomInDelay';
 import './RoomList.css';
 import NonClassifiedRooms from './NonClassifiedRooms';
 import ClassifiedRooms from './ClassifiedRooms';
@@ -42,6 +43,9 @@ export default function RoomList() {
     navigate(`/room/${rid}`);
   };
 
+  const scrollRef = useRef();
+  useScrollToBottomInDelay(scrollRef, 10, [roomList]);
+
   return (
     <div className="roomList-body">
       <div className="roomList-header">
@@ -56,7 +60,7 @@ export default function RoomList() {
         </div>
       </div>
 
-      <div className="roomList-container">
+      <div className="roomList-container" ref={scrollRef}>
         {/* <NonClassifiedRooms roomList={roomList} moveToRoom={moveToRoom} /> */}
         <ClassifiedRooms
           joinedRooms={joinedRooms}
