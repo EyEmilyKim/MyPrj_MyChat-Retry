@@ -5,6 +5,7 @@ import { SocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
 import useLocalRoomsData from '../../hooks/useLocalRoomsData';
+import useScrollToTarget from '../../hooks/useScrollToTarget';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
 import RoomHeader from './RoomHeader';
@@ -18,18 +19,15 @@ export default function ChatRoom() {
   const { socket } = useContext(SocketContext);
   const [room, setRoom] = useState('fetching room data...');
   const [joinComplete, setJoinComplete] = useState(false);
-  const [isMenuOpen, toggleMenu] = useToggleState(true);
+  const [isMenuOpen, toggleMenu] = useToggleState(false);
   useStateLogger(room, 'room');
   // useStateLogger(joinComplete, 'joinComplete');
 
   const { updateJoinIndex, getJoinIndex } = useLocalRoomsData();
   const [messageList, setMessageList] = useState([]);
 
-  const scrollRef = useRef();
-  useEffect(() => {
-    // console.log('[messageList]', messageList);
-    if (joinComplete) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messageList]);
+  const messagesEndRef = useRef();
+  useScrollToTarget(messagesEndRef, [messageList]);
 
   const getMessages = (joinIndex) => {
     socket.emit('getMessages', rid, joinIndex, (res) => {
@@ -95,7 +93,7 @@ export default function ChatRoom() {
         <RoomHeader room={room} toggleMenu={toggleMenu} />
       </div>
 
-      <div className="room-main" ref={scrollRef}>
+      <div className="room-main">
         {isMenuOpen && (
           <div className="roomMenu-container">
             <RoomMenu room={room} isMenuOpen={isMenuOpen} />
@@ -103,7 +101,10 @@ export default function ChatRoom() {
         )}
         <div className="chat-container">
           {messageList.length > 0 ? (
-            <MessageContainer messageList={messageList} user={user} />
+            <>
+              <MessageContainer messageList={messageList} user={user} />
+              <div className="endRef" ref={messagesEndRef}></div>
+            </>
           ) : null}
         </div>
       </div>

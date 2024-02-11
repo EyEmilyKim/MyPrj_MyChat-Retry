@@ -22,7 +22,6 @@
   display: flex;
   flex-direction: row-reverse;
   width: 100%;
-  flex: 1;
 }
 
 /* 룸 토글메뉴 */
@@ -35,6 +34,7 @@
   background-color: antiquewhite;
   width: 100%;
   padding: 15px;
+  flex: 1;
   overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
   /* scroll-behavior: smooth; */
   /* scroll-margin-bottom: 0; */
@@ -44,5 +44,5 @@
 .input-container {
   width: 100%;
   position: sticky;
-  bottom: 0; /* Stick to the top of the viewport */
+  bottom: 0; /* Stick to the bottom of the viewport */
 }
