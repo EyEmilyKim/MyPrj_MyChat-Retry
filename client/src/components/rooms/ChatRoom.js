@@ -6,6 +6,7 @@ import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
 import useLocalRoomsData from '../../hooks/useLocalRoomsData';
 import useScrollToTarget from '../../hooks/useScrollToTarget';
+import useHandleScroll from '../../hooks/useHandleScroll';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
 import RoomHeader from './RoomHeader';
@@ -25,9 +26,25 @@ export default function ChatRoom() {
 
   const { updateJoinIndex, getJoinIndex } = useLocalRoomsData();
   const [messageList, setMessageList] = useState([]);
+  // useStateLogger(messageList, 'messageList');
 
   const messagesEndRef = useRef();
+  const { isUserScrolling, setIsUserScrolling, handleScroll } = useHandleScroll();
+  useStateLogger(isUserScrolling, 'isUserScrolling');
   useScrollToTarget(messagesEndRef, [messageList]);
+  const detectTarget = document.getElementById('detectTarget');
+
+  useEffect(() => {
+    if (messageList.length) {
+      console.log('detectTarget', detectTarget);
+      if (detectTarget) {
+        detectTarget.addEventListener('wheel', () => {
+          handleScroll();
+        });
+        console.log('detectTarget EventListener attached');
+      }
+    }
+  }, [messageList]);
 
   const getMessages = (joinIndex) => {
     socket.emit('getMessages', rid, joinIndex, (res) => {
@@ -82,6 +99,11 @@ export default function ChatRoom() {
       eventsToOff.map((item) => {
         socket.off(item);
       });
+      if (detectTarget) {
+        detectTarget.removeEventListener('scroll', () => {
+          handleScroll();
+        });
+      }
     };
   }, []);
 
@@ -99,13 +121,11 @@ export default function ChatRoom() {
             <RoomMenu room={room} isMenuOpen={isMenuOpen} />
           </div>
         )}
-        <div className="chat-container">
+        <div className="chat-container" id="detectTarget">
           {messageList.length > 0 ? (
-            <>
-              <MessageContainer messageList={messageList} user={user} />
-              <div className="endRef" ref={messagesEndRef}></div>
-            </>
+            <MessageContainer messageList={messageList} user={user} />
           ) : null}
+          <div className="endRef" ref={messagesEndRef}></div>
         </div>
       </div>
 
