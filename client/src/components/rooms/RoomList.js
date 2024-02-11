@@ -4,7 +4,9 @@ import { SocketContext } from '../../contexts/SocketContext';
 import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
 import useClassifyRooms from '../../hooks/useClassifyRooms';
+import useHandleScroll from '../../hooks/useHandleScroll';
 import useScrollToBottomInDelay from '../../hooks/useScrollToBottomInDelay';
+import useStateLogger from '../../hooks/useStateLogger';
 import './RoomList.css';
 import NonClassifiedRooms from './NonClassifiedRooms';
 import ClassifiedRooms from './ClassifiedRooms';
@@ -19,6 +21,11 @@ export default function RoomList() {
     classifyRooms(roomList);
   }, [roomList]);
 
+  const scrollRef = useRef();
+  const { isUserScrolling, handleScroll, setIsUserScrolling } = useHandleScroll();
+  useStateLogger(isUserScrolling, 'isUserScrolling');
+  // useScrollToBottomInDelay(scrollRef, 10, [roomList], isUserScrolling);
+
   useEffect(() => {
     console.log(`socket : ${socket.id}`);
 
@@ -32,9 +39,22 @@ export default function RoomList() {
       setRoomList(rooms);
     });
 
+    const targetDiv = document.getElementById('scrollTarget');
+    if (targetDiv) {
+      console.log('targetDiv', targetDiv);
+      targetDiv.addEventListener('scroll', () => {
+        handleScroll();
+      });
+    }
+
     // 컴포넌트 언마운트 시 이벤트 해제
     return () => {
       socket.off('rooms');
+      if (targetDiv) {
+        targetDiv.removeEventListener('scroll', () => {
+          handleScroll();
+        });
+      }
     };
   }, []);
 
@@ -42,9 +62,6 @@ export default function RoomList() {
   const moveToRoom = (rid) => {
     navigate(`/room/${rid}`);
   };
-
-  const scrollRef = useRef();
-  useScrollToBottomInDelay(scrollRef, 10, [roomList]);
 
   return (
     <div className="roomList-body">
@@ -57,10 +74,18 @@ export default function RoomList() {
           <button className="clear-rooms" onClick={clearAllRooms}>
             clear Rooms
           </button>
+          <button
+            className=""
+            onClick={() => {
+              setIsUserScrolling(false);
+            }}
+          >
+            UserScrolling false
+          </button>
         </div>
       </div>
 
-      <div className="roomList-container" ref={scrollRef}>
+      <div className="roomList-container" id="scrollTarget" ref={scrollRef}>
         {/* <NonClassifiedRooms roomList={roomList} moveToRoom={moveToRoom} /> */}
         <ClassifiedRooms
           joinedRooms={joinedRooms}

@@ -28,6 +28,7 @@
 /* RoomList 메인 섹션 */
 .roomList-container {
   /* border: solid palevioletred 2px; */
+  /* padding: 10px; */
   flex: 1;
   overflow-y: auto;
 }
