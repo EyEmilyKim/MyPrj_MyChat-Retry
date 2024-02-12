@@ -12,6 +12,7 @@ import Loader from '../../components-util/Loader';
 import RoomHeader from './RoomHeader';
 import RoomMenu from './RoomMenu';
 import MessageContainer from './MessageContainer';
+import ChatRoomIconDown from './ChatRoomIconDown';
 import ChatInput from './ChatInput';
 
 export default function ChatRoom() {
@@ -31,7 +32,7 @@ export default function ChatRoom() {
   const messagesEndRef = useRef();
   const { isUserScrolling, setIsUserScrolling, handleScroll } = useHandleScroll();
   useStateLogger(isUserScrolling, 'isUserScrolling');
-  useScrollToTarget(messagesEndRef, [messageList]);
+  const { handleScrollToTarget } = useScrollToTarget(messagesEndRef, [messageList]);
   const detectTarget = document.getElementById('detectTarget');
 
   useEffect(() => {
@@ -128,6 +129,17 @@ export default function ChatRoom() {
           <div className="endRef" ref={messagesEndRef}></div>
         </div>
       </div>
+
+      {isUserScrolling ? (
+        <div
+          className="room-icon-down"
+          onClick={() => {
+            handleScrollToTarget(setIsUserScrolling(false));
+          }}
+        >
+          <ChatRoomIconDown />
+        </div>
+      ) : null}
 
       <div className="input-container">
         <ChatInput rid={rid} />

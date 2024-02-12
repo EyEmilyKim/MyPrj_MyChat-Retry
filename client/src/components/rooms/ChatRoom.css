@@ -6,7 +6,7 @@
 }
 .room-body > * {
   /* border: 1px solid plum; */
-  background-color: pink;
+  /* background-color: pink; */
 }
 
 /* ------- ChatRoom 헤더 섹션 ------- */
@@ -40,6 +40,13 @@
   /* scroll-margin-bottom: 0; */
 }
 
+/* ------- 최하단 아이콘 섹션 ------- */
+.room-icon-down {
+  padding: 10px 5px;
+  position: fixed;
+  bottom: 40px; /* Stick to the bottom of the viewport */
+  z-index: 1;
+}
 /* ------- 메세지 입력 섹션 ------- */
 .input-container {
   width: 100%;
