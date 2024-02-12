@@ -143,6 +143,22 @@ userService.leaveRoom = async function (user, room) {
   }
 };
 
+// 룸 퇴장 -> 해당 roomIndex 삭제
+userService.removeRoomIndex = async function (user, rid) {
+  // console.log('userService.removeRoomIndex called', user.email, rid);
+  try {
+    const roomIndex = await user.roomIndexes.filter((item) => {
+      return item.room.toString() !== rid;
+    });
+    // console.log('roomIndex', roomIndex);
+    user.roomIndexes = roomIndex;
+    await user.save();
+  } catch (error) {
+    console.log('userService.removeRoomIndex error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 유저 프로필 업데이트
 userService.updateUser = async function (user, name, description) {
   // console.log(`userService.updateUser called : ${user.email} / ${name} / ${description}`);

@@ -103,7 +103,8 @@ roomController.leaveRoom = async (rid, socketId) => {
       user = await userService.leaveRoom(user, result.room); // update User
       const systemId = process.env.SYSTEM_USER_ID;
       const content = `${user.name} left this room`;
-      await messageService.saveMessage(content, systemId, rid);
+      await messageService.saveMessage(content, systemId, rid); // systemMsg 저장
+      await userService.removeRoomIndex(user, rid); // 해당 roomIndex 삭제
     }
     return { populatedRoom, memberUpdate, user };
   } catch (error) {
