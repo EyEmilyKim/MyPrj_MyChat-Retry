@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
-import useStateLogger from './useStateLogger';
+import { useContext, useEffect, useState } from 'react';
+import { LoginContext } from '../contexts/LoginContext';
+import useStateLogger from '../hooks/useStateLogger';
 
 export default function useLocalRoomsData() {
+  const { user } = useContext(LoginContext);
+
   // 로컬 스토리지에서 roomsData 불러오기
   const getLocalRoomsData = () => {
-    const storedData = localStorage.getItem('roomsData');
+    const storedData = localStorage.getItem(`roomsData_${user._id}`);
     return storedData ? JSON.parse(storedData) : [];
   };
 
@@ -13,7 +16,7 @@ export default function useLocalRoomsData() {
 
   // roomsData 업데이트 시 로컬 스토리지에 저장
   useEffect(() => {
-    localStorage.setItem('roomsData', JSON.stringify(roomsData));
+    localStorage.setItem(`roomsData_${user._id}`, JSON.stringify(roomsData));
   }, [roomsData]);
 
   // rid로 해당하는 roomData 찾아서 업데이트하는 함수
@@ -57,7 +60,7 @@ export default function useLocalRoomsData() {
       const updatedRoomsData = prev.filter((room) => room.rid !== rid);
       console.log('updatedRoomsData', updatedRoomsData);
       // 로컬 스토리지에 안전하게 반영
-      localStorage.setItem('roomsData', JSON.stringify(updatedRoomsData));
+      localStorage.setItem(`roomsData_${user._id}`, JSON.stringify(updatedRoomsData));
       return updatedRoomsData;
     });
   };

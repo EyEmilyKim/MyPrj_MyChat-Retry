@@ -59,14 +59,20 @@ roomController.joinRoom = async (rid, socketId) => {
       .then((r) => r.populate('members', ['email', 'name']));
     // member변동 있으면 user, system message 저장
     let memberUpdate = result.memberUpdate;
-    let joinMsgIndex = -1;
+    let roomIndex = null;
     if (memberUpdate) {
       user = await userService.joinRoom(user, result.room); // update User
       const systemId = process.env.SYSTEM_USER_ID;
       const content = `${user.name} joined this room`;
-      joinMsgIndex = await messageService.saveSystemMessage(content, systemId, rid);
+      roomIndex = await messageService
+        .saveSystemMessage(content, systemId, rid) // systemMsg 저장
+        .then(async (systemMsgIndex) => {
+          return await userService.saveJoinIndex(user, rid, systemMsgIndex); // joinIndex 저장
+        });
+    } else {
+      roomIndex = await userService.getRoomIndex(user, rid);
     }
-    return { populatedRoom, memberUpdate, user, joinMsgIndex };
+    return { populatedRoom, memberUpdate, user, roomIndex };
   } catch (error) {
     // console.log('roomController.joinRoom failed', error);
     throw new Error(error);

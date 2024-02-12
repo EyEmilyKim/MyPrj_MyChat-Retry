@@ -6,10 +6,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Email address is required.'],
     unique: true,
     trim: true,
-    match: [
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-      '유효한 이메일 형식이 아닙니다.',
-    ],
+    match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i, '유효한 이메일 형식이 아닙니다.'],
   },
   password: {
     type: String,
@@ -37,6 +34,20 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.ObjectId,
       ref: 'Room',
+    },
+  ],
+  roomIndexes: [
+    {
+      room: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Room',
+      },
+      joinIndex: {
+        type: Number,
+      },
+      lastReadIndex: {
+        type: Number,
+      },
     },
   ],
   description: {

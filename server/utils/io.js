@@ -92,7 +92,7 @@ module.exports = function (io) {
         }
         cb({
           status: 'ok',
-          data: { room: result.populatedRoom, user: result.user, joinIndex: result.joinMsgIndex },
+          data: { room: result.populatedRoom, user: result.user, roomIndex: result.roomIndex },
         });
       } catch (error) {
         console.log('io > joinRoom Error', error);

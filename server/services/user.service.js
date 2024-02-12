@@ -94,6 +94,38 @@ userService.joinRoom = async function (user, room) {
   }
 };
 
+// 룸 입장 -> roomIndexes[]: room, joinIndex 추가
+userService.saveJoinIndex = async function (user, rid, joinIndex) {
+  // console.log('userService.saveJoinIndex called', user, rid, joinIndex);
+  try {
+    const newRoomIndex = {
+      room: rid,
+      joinIndex: joinIndex,
+    };
+    user.roomIndexes.push(newRoomIndex);
+    await user.save();
+    return newRoomIndex;
+  } catch (error) {
+    // console.log('userService.saveJoinIndex error', error);
+    throw new Error(error.message);
+  }
+};
+
+// 룸 입장 -> roomIndex 얻기
+userService.getRoomIndex = async function (user, rid) {
+  // console.log('userService.getRoomIndex called', user.email, rid);
+  try {
+    const roomIndex = await user.roomIndexes.find((item) => {
+      return item.room.toString() === rid;
+    });
+    // console.log('roomIndex', roomIndex);
+    return roomIndex;
+  } catch (error) {
+    console.log('userService.getRoomIndex error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 룸 퇴장 -> joinedRooms[]: room 제거
 userService.leaveRoom = async function (user, room) {
   // console.log('userService.leaveRoom called', user, room);

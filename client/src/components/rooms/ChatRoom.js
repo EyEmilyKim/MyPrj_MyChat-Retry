@@ -4,7 +4,6 @@ import { LoginContext } from '../../contexts/LoginContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
-import useLocalRoomsData from '../../hooks/useLocalRoomsData';
 import useScrollToTarget from '../../hooks/useScrollToTarget';
 import useHandleScroll from '../../hooks/useHandleScroll';
 import './ChatRoom.css';
@@ -25,7 +24,7 @@ export default function ChatRoom() {
   useStateLogger(room, 'room');
   // useStateLogger(joinComplete, 'joinComplete');
 
-  const { updateJoinIndex, getJoinIndex } = useLocalRoomsData();
+  const [joinIndex, setJoinIndex] = useState(-1);
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
 
@@ -50,7 +49,7 @@ export default function ChatRoom() {
   const getMessages = (joinIndex) => {
     socket.emit('getMessages', rid, joinIndex, (res) => {
       if (res && res.status === 'ok') {
-        console.log('successfully getMessages', res);
+        console.log(`successfully getMessages since ${joinIndex}`, res);
         if (res.data) setMessageList(res.data);
       } else {
         console.log('failed to getMessages', res);
@@ -60,8 +59,7 @@ export default function ChatRoom() {
 
   useEffect(() => {
     if (joinComplete) {
-      const joinIndex = getJoinIndex(rid);
-      console.log('local joinIndex', joinIndex);
+      console.log('joinIndex', joinIndex);
       getMessages(joinIndex);
     }
   }, [joinComplete]);
@@ -73,10 +71,7 @@ export default function ChatRoom() {
       if (res && res.status === 'ok') {
         console.log('successfully joined', res);
         setRoom(res.data.room);
-        if (res.data.joinIndex > 0) {
-          // 첫 입장 시 joinIndex 로컬에 저장
-          updateJoinIndex(rid, res.data.joinIndex);
-        }
+        setJoinIndex(res.data.roomIndex.joinIndex);
         setJoinComplete(true);
       } else {
         console.log('failed to join', res);
@@ -86,7 +81,7 @@ export default function ChatRoom() {
     socket.on('updatedRoom', (room) => {
       console.log(`on('updatedRoom'): `, room);
       setRoom(room);
-      getMessages();
+      getMessages(joinIndex);
     });
 
     socket.on('message', (message) => {
