@@ -4,8 +4,8 @@ import { LoginContext } from '../../contexts/LoginContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
-import useScrollToTarget from '../../hooks/useScrollToTarget';
 import useHandleScroll from '../../hooks/useHandleScroll';
+import useScrollToTarget from '../../hooks/useScrollToTarget';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
 import RoomHeader from './RoomHeader';
@@ -28,27 +28,12 @@ export default function ChatRoom() {
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
 
-  const detectRef = useRef();
-  const detectTarget = detectRef.current;
-  const { isOnBottom, checkScroll, checkIsOnBottom, handleScroll } = useHandleScroll(
-    detectTarget,
-    true
-  );
+  const scrollRef = useRef();
+  const { isOnBottom } = useHandleScroll(scrollRef);
   useStateLogger(isOnBottom, 'isOnBottom');
 
-  const messagesEndRef = useRef();
-  const { handleScrollToTarget } = useScrollToTarget(messagesEndRef, [messageList], isOnBottom);
-
-  useEffect(() => {
-    if (messageList.length) {
-      detectTarget.addEventListener('scroll', () => {
-        handleScroll(() => {
-          // checkScroll();
-          checkIsOnBottom();
-        });
-      });
-    }
-  }, [messageList]);
+  const bottomRef = useRef();
+  const { handleScrollToTarget } = useScrollToTarget(bottomRef, [messageList], isOnBottom);
 
   const getMessages = (joinIndex) => {
     socket.emit('getMessages', rid, joinIndex, (res) => {
@@ -99,12 +84,6 @@ export default function ChatRoom() {
       eventsToOff.map((item) => {
         socket.off(item);
       });
-
-      if (detectTarget) {
-        detectTarget.removeEventListener('scroll', () => {
-          handleScroll();
-        });
-      }
     };
   }, []);
 
@@ -116,7 +95,7 @@ export default function ChatRoom() {
         <RoomHeader room={room} toggleMenu={toggleMenu} />
       </div>
 
-      <div className="room-main" ref={detectRef}>
+      <div className="room-main" ref={scrollRef}>
         {isMenuOpen && (
           <div className="roomMenu-container">
             <RoomMenu room={room} isMenuOpen={isMenuOpen} />
@@ -126,7 +105,7 @@ export default function ChatRoom() {
           {messageList.length > 0 ? (
             <MessageContainer messageList={messageList} user={user} />
           ) : null}
-          <div className="endRef" ref={messagesEndRef}></div>
+          <div className="bottomRef" ref={bottomRef} />
         </div>
       </div>
 

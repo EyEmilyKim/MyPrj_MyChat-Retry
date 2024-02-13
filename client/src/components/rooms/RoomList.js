@@ -22,21 +22,12 @@ export default function RoomList() {
     classifyRooms(roomList);
   }, [roomList]);
 
-  const detectRef = useRef();
-  const detectTarget = detectRef.current;
-  const { isOnTop, handleScroll, checkIsOnTop } = useHandleScroll(detectTarget, true);
+  const scrollRef = useRef();
+  const { isOnTop } = useHandleScroll(scrollRef, true);
   useStateLogger(isOnTop, 'isOnTop');
 
   const topRef = useRef();
   const { handleScrollToTarget } = useScrollToTarget(topRef, [roomList], isOnTop);
-
-  useEffect(() => {
-    if (detectTarget) {
-      detectTarget.addEventListener('scroll', () => {
-        handleScroll(checkIsOnTop());
-      });
-    }
-  }, [roomList]);
 
   useEffect(() => {
     console.log(`socket : ${socket.id}`);
@@ -54,11 +45,6 @@ export default function RoomList() {
     // 컴포넌트 언마운트 시 이벤트 해제
     return () => {
       socket.off('rooms');
-      if (detectTarget) {
-        detectTarget.removeEventListener('scroll', () => {
-          handleScroll();
-        });
-      }
     };
   }, []);
 
@@ -92,7 +78,7 @@ export default function RoomList() {
         </div>
       ) : null}
 
-      <div className="roomList-container" id="scrollTarget" ref={detectRef}>
+      <div className="roomList-container" ref={scrollRef}>
         <div className="topRef" ref={topRef} />
         {/* <NonClassifiedRooms roomList={roomList} moveToRoom={moveToRoom} /> */}
         <ClassifiedRooms
