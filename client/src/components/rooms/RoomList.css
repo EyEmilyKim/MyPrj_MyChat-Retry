@@ -1,15 +1,20 @@
 .roomList-body {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   height: 100%;
 }
+.roomList-body > * {
+  /* border: solid 1px blue; */
+}
 
-/* RoomList 헤더 섹션 */
+/* ------- RoomList 헤더 섹션 ------- */
 .roomList-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 .roomList-title {
   font-size: 23px;
@@ -25,12 +30,21 @@
   color: red;
 }
 
-/* RoomList 메인 섹션 */
+/* ------- IconTop 섹션 ------- */
+.roomList-icon-top {
+  padding-right: 35px;
+  position: fixed;
+  top: 160px; /* Stick to the top of the viewport */
+  z-index: 1;
+}
+
+/* ------- RoomList 메인 섹션 ------- */
 .roomList-container {
   /* border: solid palevioletred 2px; */
   /* padding: 10px; */
   flex: 1;
   overflow-y: auto;
+  width: 100%;
 }
 
 .nonClassified-format {
@@ -79,8 +93,9 @@
   color: gray;
 }
 
-/* 방 만들기 섹션 */
+/* ------- 방 만들기 섹션 ------- */
 .newRoom-container {
+  width: 100%;
   background-color: aquamarine;
   border: solid 1px green;
   /* position: sticky; */

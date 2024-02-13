@@ -5,9 +5,10 @@ import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
 import useClassifyRooms from '../../hooks/useClassifyRooms';
 import useHandleScroll from '../../hooks/useHandleScroll';
-import useScrollToBottomInDelay from '../../hooks/useScrollToBottomInDelay';
+import useScrollToTarget from '../../hooks/useScrollToTarget';
 import useStateLogger from '../../hooks/useStateLogger';
 import './RoomList.css';
+import RoomListIconTop from './RoomListIconTop';
 import NonClassifiedRooms from './NonClassifiedRooms';
 import ClassifiedRooms from './ClassifiedRooms';
 import NewRoom from './NewRoom';
@@ -21,10 +22,21 @@ export default function RoomList() {
     classifyRooms(roomList);
   }, [roomList]);
 
-  const scrollRef = useRef();
-  const { isUserScrolling, handleScroll, setIsUserScrolling } = useHandleScroll();
-  useStateLogger(isUserScrolling, 'isUserScrolling');
-  // useScrollToBottomInDelay(scrollRef, 10, [roomList], isUserScrolling);
+  const detectRef = useRef();
+  const detectTarget = detectRef.current;
+  const { isOnTop, handleScroll, checkIsOnTop } = useHandleScroll(detectTarget, true);
+  useStateLogger(isOnTop, 'isOnTop');
+
+  const topRef = useRef();
+  const { handleScrollToTarget } = useScrollToTarget(topRef, [roomList], isOnTop);
+
+  useEffect(() => {
+    if (detectTarget) {
+      detectTarget.addEventListener('scroll', () => {
+        handleScroll(checkIsOnTop());
+      });
+    }
+  }, [roomList]);
 
   useEffect(() => {
     console.log(`socket : ${socket.id}`);
@@ -39,19 +51,11 @@ export default function RoomList() {
       setRoomList(rooms);
     });
 
-    const targetDiv = document.getElementById('scrollTarget');
-    if (targetDiv) {
-      console.log('targetDiv', targetDiv);
-      targetDiv.addEventListener('scroll', () => {
-        handleScroll();
-      });
-    }
-
     // 컴포넌트 언마운트 시 이벤트 해제
     return () => {
       socket.off('rooms');
-      if (targetDiv) {
-        targetDiv.removeEventListener('scroll', () => {
+      if (detectTarget) {
+        detectTarget.removeEventListener('scroll', () => {
           handleScroll();
         });
       }
@@ -74,18 +78,22 @@ export default function RoomList() {
           <button className="clear-rooms" onClick={clearAllRooms}>
             clear Rooms
           </button>
-          <button
-            className=""
-            onClick={() => {
-              setIsUserScrolling(false);
-            }}
-          >
-            UserScrolling false
-          </button>
         </div>
       </div>
 
-      <div className="roomList-container" id="scrollTarget" ref={scrollRef}>
+      {!isOnTop ? (
+        <div
+          className="roomList-icon-top"
+          onClick={() => {
+            handleScrollToTarget();
+          }}
+        >
+          <RoomListIconTop />
+        </div>
+      ) : null}
+
+      <div className="roomList-container" id="scrollTarget" ref={detectRef}>
+        <div className="topRef" ref={topRef} />
         {/* <NonClassifiedRooms roomList={roomList} moveToRoom={moveToRoom} /> */}
         <ClassifiedRooms
           joinedRooms={joinedRooms}

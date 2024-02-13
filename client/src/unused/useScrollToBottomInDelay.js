@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function useScrollToBottomInDelay(ref, delay = 0, dependency = [], isUserScrolling) {
   const scrollToBottom = () => {
