@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function useScrollToTarget(ref, dependency = []) {
+export default function useScrollToTarget(ref, dependency = [], isOnDefault) {
   const scrollToTarget = () => {
     const target = ref.current;
     // console.log('scrollToTarget called. \ntarget :', target);
@@ -8,7 +8,9 @@ export default function useScrollToTarget(ref, dependency = []) {
   };
 
   useEffect(() => {
-    scrollToTarget();
+    if (isOnDefault) {
+      scrollToTarget();
+    }
   }, dependency);
 
   const handleScrollToTarget = (func) => {

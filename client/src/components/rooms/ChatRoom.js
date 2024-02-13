@@ -28,22 +28,25 @@ export default function ChatRoom() {
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
 
-  const { isUserScrolling, setIsUserScrolling, handleScroll } = useHandleScroll();
-  useStateLogger(isUserScrolling, 'isUserScrolling');
+  const detectRef = useRef();
+  const detectTarget = detectRef.current;
+  const { isOnBottom, checkScroll, checkIsOnBottom, handleScroll } = useHandleScroll(
+    detectTarget,
+    true
+  );
+  useStateLogger(isOnBottom, 'isOnBottom');
 
   const messagesEndRef = useRef();
-  const { handleScrollToTarget } = useScrollToTarget(messagesEndRef, [messageList]);
+  const { handleScrollToTarget } = useScrollToTarget(messagesEndRef, [messageList], isOnBottom);
 
-  const detectTarget = document.getElementById('detectTarget');
   useEffect(() => {
     if (messageList.length) {
-      console.log('detectTarget', detectTarget);
-      if (detectTarget) {
-        detectTarget.addEventListener('scroll', () => {
-          handleScroll();
+      detectTarget.addEventListener('scroll', () => {
+        handleScroll(() => {
+          // checkScroll();
+          checkIsOnBottom();
         });
-        console.log('detectTarget EventListener attached');
-      }
+      });
     }
   }, [messageList]);
 
@@ -113,7 +116,7 @@ export default function ChatRoom() {
         <RoomHeader room={room} toggleMenu={toggleMenu} />
       </div>
 
-      <div className="room-main" id="detectTarget">
+      <div className="room-main" ref={detectRef}>
         {isMenuOpen && (
           <div className="roomMenu-container">
             <RoomMenu room={room} isMenuOpen={isMenuOpen} />
@@ -127,11 +130,11 @@ export default function ChatRoom() {
         </div>
       </div>
 
-      {isUserScrolling ? (
+      {!isOnBottom ? (
         <div
           className="room-icon-down"
           onClick={() => {
-            handleScrollToTarget(setIsUserScrolling(false));
+            handleScrollToTarget();
           }}
         >
           <ChatRoomIconDown />
