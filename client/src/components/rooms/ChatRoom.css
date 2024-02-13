@@ -2,7 +2,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 }
 .room-body > * {
   /* border: 1px solid plum; */
@@ -12,9 +12,6 @@
 /* ------- ChatRoom 헤더 섹션 ------- */
 .roomHeader-container {
   width: 100%;
-  position: sticky;
-  top: 0; /* Stick to the top of the viewport */
-  z-index: 1; /* Ensure it appears above other elements */
 }
 
 /* ------- ChatRoom 메인 섹션 ------- */
@@ -23,6 +20,10 @@
   flex-direction: row-reverse;
   width: 100%;
   flex: 1;
+  background-color: antiquewhite;
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
+  scroll-behavior: smooth;
+  scroll-margin-bottom: 0;
 }
 
 /* 룸 토글메뉴 */
@@ -32,17 +33,13 @@
 
 /* 메세지 출력부 */
 .chat-container {
-  background-color: antiquewhite;
   width: 100%;
   padding: 15px;
-  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
-  /* scroll-behavior: smooth; */
-  /* scroll-margin-bottom: 0; */
 }
 
-/* ------- 최하단 아이콘 섹션 ------- */
+/* ------- IconDown 섹션 ------- */
 .room-icon-down {
-  padding: 10px 5px;
+  padding: 10px;
   position: fixed;
   bottom: 40px; /* Stick to the bottom of the viewport */
   z-index: 1;

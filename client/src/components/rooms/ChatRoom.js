@@ -28,17 +28,18 @@ export default function ChatRoom() {
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
 
-  const messagesEndRef = useRef();
   const { isUserScrolling, setIsUserScrolling, handleScroll } = useHandleScroll();
   useStateLogger(isUserScrolling, 'isUserScrolling');
-  const { handleScrollToTarget } = useScrollToTarget(messagesEndRef, [messageList]);
-  const detectTarget = document.getElementById('detectTarget');
 
+  const messagesEndRef = useRef();
+  const { handleScrollToTarget } = useScrollToTarget(messagesEndRef, [messageList]);
+
+  const detectTarget = document.getElementById('detectTarget');
   useEffect(() => {
     if (messageList.length) {
       console.log('detectTarget', detectTarget);
       if (detectTarget) {
-        detectTarget.addEventListener('wheel', () => {
+        detectTarget.addEventListener('scroll', () => {
           handleScroll();
         });
         console.log('detectTarget EventListener attached');
@@ -95,6 +96,7 @@ export default function ChatRoom() {
       eventsToOff.map((item) => {
         socket.off(item);
       });
+
       if (detectTarget) {
         detectTarget.removeEventListener('scroll', () => {
           handleScroll();
@@ -111,13 +113,13 @@ export default function ChatRoom() {
         <RoomHeader room={room} toggleMenu={toggleMenu} />
       </div>
 
-      <div className="room-main">
+      <div className="room-main" id="detectTarget">
         {isMenuOpen && (
           <div className="roomMenu-container">
             <RoomMenu room={room} isMenuOpen={isMenuOpen} />
           </div>
         )}
-        <div className="chat-container" id="detectTarget">
+        <div className="chat-container">
           {messageList.length > 0 ? (
             <MessageContainer messageList={messageList} user={user} />
           ) : null}
