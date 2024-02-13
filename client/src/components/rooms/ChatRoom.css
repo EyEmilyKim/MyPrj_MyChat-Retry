@@ -20,21 +20,21 @@
   flex-direction: row-reverse;
   width: 100%;
   flex: 1;
-  background-color: antiquewhite;
-  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
-  /* scroll-behavior: smooth; */
-  scroll-margin-bottom: 0;
+  overflow: hidden;
 }
 
 /* 룸 토글메뉴 */
 .roomMenu-container {
   min-width: 40%;
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
 }
 
 /* 메세지 출력부 */
 .chat-container {
   width: 100%;
   padding: 15px;
+  background-color: antiquewhite;
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 표시 */
 }
 
 /* ------- IconDown 섹션 ------- */

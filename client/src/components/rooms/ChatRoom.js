@@ -95,13 +95,13 @@ export default function ChatRoom() {
         <RoomHeader room={room} toggleMenu={toggleMenu} />
       </div>
 
-      <div className="room-main" ref={scrollRef}>
+      <div className="room-main">
         {isMenuOpen && (
           <div className="roomMenu-container">
             <RoomMenu room={room} isMenuOpen={isMenuOpen} />
           </div>
         )}
-        <div className="chat-container">
+        <div className="chat-container" ref={scrollRef}>
           {messageList.length > 0 ? (
             <MessageContainer messageList={messageList} user={user} />
           ) : null}
