@@ -1,6 +1,7 @@
 import React from 'react';
 import useStateLogger from '../../hooks/useStateLogger';
 import './RoomMenu.css';
+import RoomMenuMembers from './RoomMenuMembers';
 
 export default function RoomMenu(props) {
   const room = props.room;
@@ -33,16 +34,7 @@ export default function RoomMenu(props) {
         <div className="roomMenu-section">
           <div className="roomMenu-section-title">멤버</div>
 
-          <ul className="roomMenu-members">
-            {members.map((item) => {
-              return (
-                <li className="each-item" key={item._id}>
-                  <img src="/profile.jpeg" alt="user_profile_image" className="profile-image" />
-                  <div className="roomMenu-member-name">{item.name}</div>
-                </li>
-              );
-            })}
-          </ul>
+          <RoomMenuMembers members={members} />
         </div>
       </div>
     )
