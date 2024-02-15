@@ -4,7 +4,7 @@ import { LoginContext } from '../../contexts/LoginContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
-import useHandleScroll from '../../hooks/useHandleScroll';
+import useScrollPosition from '../../hooks/useScrollPosition';
 import useScrollToTarget from '../../hooks/useScrollToTarget';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
@@ -29,7 +29,7 @@ export default function ChatRoom() {
   // useStateLogger(messageList, 'messageList');
 
   const scrollRef = useRef();
-  const { isOnBottom } = useHandleScroll(scrollRef);
+  const { isOnBottom } = useScrollPosition(scrollRef);
   useStateLogger(isOnBottom, 'isOnBottom');
 
   const bottomRef = useRef();

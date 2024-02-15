@@ -4,7 +4,7 @@ import { SocketContext } from '../../contexts/SocketContext';
 import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
 import useClassifyRooms from '../../hooks/useClassifyRooms';
-import useHandleScroll from '../../hooks/useHandleScroll';
+import useScrollPosition from '../../hooks/useScrollPosition';
 import useScrollToTarget from '../../hooks/useScrollToTarget';
 import useStateLogger from '../../hooks/useStateLogger';
 import './RoomList.css';
@@ -23,7 +23,7 @@ export default function RoomList() {
   }, [roomList]);
 
   const scrollRef = useRef();
-  const { isOnTop } = useHandleScroll(scrollRef, true);
+  const { isOnTop } = useScrollPosition(scrollRef, true);
   useStateLogger(isOnTop, 'isOnTop');
 
   const topRef = useRef();
