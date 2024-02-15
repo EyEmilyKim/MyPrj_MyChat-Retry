@@ -131,6 +131,18 @@ module.exports = function (io) {
       }
     });
 
+    // ** lastReadIndex 수신
+    socket.on('sendLastReadIndex', async (rid, lastReadIndex, cb) => {
+      console.log(`'sendLastReadIndex' called by : ${socketEmail}, ${rid}, ${lastReadIndex}`);
+      try {
+        const user = await userController.saveLastReadeIndex(socketId, rid, lastReadIndex);
+        cb({ status: 'ok', data: user.roomIndexes });
+      } catch (error) {
+        console.log('io > sendLastReadIndex Error', error);
+        cb({ status: 'Server side Error' });
+      }
+    });
+
     // ** 메세지 수신 시
     socket.on('sendMessage', async (msg, rid, cb) => {
       console.log(`'sendMessage' called by : ${socketEmail}, ${msg}, ${rid}`);

@@ -57,6 +57,18 @@ export default function ChatRoom() {
   }, [joinIndex]);
 
   useEffect(() => {
+    if (lastReadIndex !== 0) {
+      socket.emit('sendLastReadIndex', rid, lastReadIndex, (res) => {
+        if (res && res.status === 'ok') {
+          console.log(`successfully sendLastReadIndex as ${lastReadIndex}`, res);
+        } else {
+          console.log('failed to sendLastReadIndex', res);
+        }
+      });
+    }
+  }, [lastReadIndex]);
+
+  useEffect(() => {
     console.log(`socket : ${socket.id}`);
 
     socket.emit('joinRoom', rid, (res) => {

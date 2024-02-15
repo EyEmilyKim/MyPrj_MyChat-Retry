@@ -226,6 +226,23 @@ userController.leaveRoom = async (user, room) => {
   }
 };
 
+// lastReadIndex 저장
+userController.saveLastReadeIndex = async (sid, rid, index) => {
+  // console.log('userController.saveLastReadeIndex called');
+  try {
+    const updatedUser = await userService
+      .checkUser(sid, 'sid')
+      .then((user) => userService.saveLastReadeIndex(user, rid, index))
+      .catch((err) => {
+        throw new Error(err);
+      });
+    return updatedUser;
+  } catch (error) {
+    // console.log('userController.saveLastReadeIndex failed', error);
+    throw new Error(error);
+  }
+};
+
 // 유저 프로필 업데이트
 userController.updateUser = async function (socketId, name, description) {
   // console.log(

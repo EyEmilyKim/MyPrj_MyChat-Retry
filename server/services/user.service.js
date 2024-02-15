@@ -159,6 +159,23 @@ userService.removeRoomIndex = async function (user, rid) {
   }
 };
 
+// 해당 roomIndex에 lastReadIndex 저장
+userService.saveLastReadeIndex = async function (user, rid, index) {
+  // console.log('userService.saveLastReadeIndex called', user.email, rid, index);
+  try {
+    const roomIndexToUpdate = user.roomIndexes.find((item) => item.room.equals(rid));
+    if (!roomIndexToUpdate) {
+      throw new Error('해당하는 roomIndex를 찾을 수 없습니다');
+    }
+    roomIndexToUpdate.lastReadIndex = index;
+    await user.save();
+    return user;
+  } catch (error) {
+    console.log('userService.saveLastReadeIndex error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 유저 프로필 업데이트
 userService.updateUser = async function (user, name, description) {
   // console.log(`userService.updateUser called : ${user.email} / ${name} / ${description}`);
