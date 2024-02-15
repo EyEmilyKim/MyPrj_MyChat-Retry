@@ -2,6 +2,12 @@ import React, { useEffect } from 'react';
 
 export default function useStateLogger(state, stateName) {
   useEffect(() => {
-    console.log(`[${stateName}]`, state);
+    if (Array.isArray(state)) {
+      state.forEach((item, index) => {
+        console.log(`[${stateName[index]}]`, item);
+      });
+    } else {
+      console.log(`[${stateName}]`, state);
+    }
   }, [state]);
 }
