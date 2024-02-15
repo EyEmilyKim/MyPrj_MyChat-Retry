@@ -50,11 +50,11 @@ export default function ChatRoom() {
   };
 
   useEffect(() => {
-    if (joinComplete) {
+    if (joinIndex > 0) {
       console.log('joinIndex', joinIndex);
       getMessages(joinIndex);
     }
-  }, [joinComplete]);
+  }, [joinIndex]);
 
   useEffect(() => {
     console.log(`socket : ${socket.id}`);
