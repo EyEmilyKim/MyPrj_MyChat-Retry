@@ -30,7 +30,7 @@ export default function ChatRoom() {
   // useStateLogger(messageList, 'messageList');
 
   const scrollRef = useRef();
-  const { isOnBottom } = useScrollPosition(scrollRef);
+  const { isOnBottom } = useScrollPosition(scrollRef, false);
   const { lastReadIndex } = useLastReadIndex(scrollRef, messageList, isOnBottom);
   useStateLogger(isOnBottom, 'isOnBottom');
   useStateLogger(lastReadIndex, 'lastReadIndex');

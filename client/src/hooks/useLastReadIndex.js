@@ -4,14 +4,14 @@ export default function useLastReadIndex(ref, list = [], isOnDefault) {
   const [lastReadIndex, setLastReadIndex] = useState(0);
 
   const saveLastReadIndex = () => {
-    if (isOnDefault) setLastReadIndex(list[list.length - 1].index);
+    setLastReadIndex(list[list.length - 1].index);
   };
 
   useEffect(() => {
-    if (ref.current) {
+    if (ref.current && isOnDefault) {
       saveLastReadIndex();
     }
-  }, [list]);
+  }, [list, isOnDefault]);
 
   return { lastReadIndex };
 }

@@ -5,7 +5,7 @@ export default function useHandleScroll(ref, log = false) {
   const [isOnBottom, setIsOnBottom] = useState(true);
   const [isOnTop, setIsOnTop] = useState(true);
   const debounceTime = 200; // 이벤트 디바운싱을 위한 대기 시간
-  const tolerance = 1; // 오차 범위 설정 (for scrollTop 소수점 이하)
+  const tolerance = 1.4; // 오차 범위 설정 (for scrollTop 소수점 이하)
 
   // 스크롤할 때마다 위치 확인
   const handleScroll = debounce(() => {
@@ -25,7 +25,8 @@ export default function useHandleScroll(ref, log = false) {
     if (log) {
       console.log(
         `scrollTop : ${scrollTop}, scrollHeight : ${scrollHeight}, \n` +
-          `clientHeight : ${clientHeight}`
+          `clientHeight : ${clientHeight}\n` +
+          `scrollTop + clientHeight + tolerance = ${scrollTop + clientHeight + tolerance}`
       );
     }
   }, debounceTime);
