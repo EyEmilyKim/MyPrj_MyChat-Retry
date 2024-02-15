@@ -21,8 +21,8 @@ export default function ChatRoom() {
   const { socket } = useContext(SocketContext);
   const [room, setRoom] = useState('fetching room data...');
   const [joinComplete, setJoinComplete] = useState(false);
-  const [isMenuOpen, toggleMenu] = useToggleState(true);
-  useStateLogger(room, 'room');
+  const [isMenuOpen, toggleMenu] = useToggleState(false);
+  // useStateLogger(room, 'room');
   // useStateLogger(joinComplete, 'joinComplete');
 
   const [joinIndex, setJoinIndex] = useState(-1);
@@ -32,7 +32,7 @@ export default function ChatRoom() {
   const scrollRef = useRef();
   const { isOnBottom } = useScrollPosition(scrollRef, false);
   const { lastReadIndex } = useLastReadIndex(scrollRef, messageList, isOnBottom);
-  useStateLogger(isOnBottom, 'isOnBottom');
+  // useStateLogger(isOnBottom, 'isOnBottom');
   useStateLogger(lastReadIndex, 'lastReadIndex');
 
   const bottomRef = useRef();
@@ -40,7 +40,7 @@ export default function ChatRoom() {
 
   useEffect(() => {
     if (joinIndex > 0) {
-      console.log('joinIndex', joinIndex);
+      // console.log('joinIndex', joinIndex);
       socket.emit('getMessages', rid, joinIndex, (res) => {
         if (res && res.status === 'ok') {
           console.log(`successfully getMessages since ${joinIndex}`, res);
@@ -56,7 +56,7 @@ export default function ChatRoom() {
     if (lastReadIndex > 0) {
       socket.emit('sendLastReadIndex', rid, lastReadIndex, (res) => {
         if (res && res.status === 'ok') {
-          console.log(`successfully sendLastReadIndex as ${lastReadIndex}`, res);
+          // console.log(`successfully sendLastReadIndex as ${lastReadIndex}`, res);
         } else {
           console.log('failed to sendLastReadIndex', res);
         }
