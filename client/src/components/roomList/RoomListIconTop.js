@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesUp } from '@fortawesome/free-solid-svg-icons';
-import './ChatRoomIconDown.css';
+import './RoomListIconTop.css';
 
 export default function RoomListIconTop() {
-  return <FontAwesomeIcon icon={faAnglesUp} className="room-icon-body" />;
+  return <FontAwesomeIcon icon={faAnglesUp} className="roomList-icon-body" />;
 }
