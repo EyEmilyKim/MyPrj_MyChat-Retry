@@ -1,12 +1,13 @@
-import React from 'react';
-import useStateLogger from '../../hooks/useStateLogger';
+import { useContext } from 'react';
+import { LoginContext } from '../../contexts/LoginContext';
 import './RoomMenu.css';
+import ChangingOwner from './ChangingOwner';
 import RoomMenuMembers from './RoomMenuMembers';
 
-export default function RoomMenu(props) {
-  const room = props.room;
-  const isMenuOpen = props.isMenuOpen;
-  // useStateLogger(room, 'room');
+export default function RoomMenu({ room, isMenuOpen }) {
+  const { user } = useContext(LoginContext);
+  const rid = room._id || '';
+  const ownerId = room.owner._id;
   const members = room.members || [];
   const info = [
     { label: '오너', value: room.owner.name },
@@ -29,6 +30,9 @@ export default function RoomMenu(props) {
               );
             })}
           </ul>
+          {user._id === ownerId && members.length > 1 && (
+            <ChangingOwner rid={rid} members={members} />
+          )}
         </div>
 
         <div className="roomMenu-section">

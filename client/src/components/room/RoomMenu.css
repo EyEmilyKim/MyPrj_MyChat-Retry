@@ -48,8 +48,12 @@
 .roomMenu-info.label {
   color: navy;
   font-weight: 600;
+  border-bottom: 2px solid #c1f3e2;
 }
-
+.roomMenu-info.click:hover {
+  cursor: pointer;
+  border-bottom: 2px solid yellow;
+}
 .roomMenu-member-name {
   font-weight: 500;
 }
