@@ -25,7 +25,7 @@ messageController.getAllMessagesSince = async (rid, joinIndex) => {
 
 // 메세지 저장
 messageController.saveMessage = async function (msg, socketId, rid) {
-  console.log('messageController.saveMessage called', msg, socketId, rid);
+  // console.log('messageController.saveMessage called', msg, socketId, rid);
   try {
     // 유저, 룸 정보 찾기
     const user = await userService.checkUser(socketId, 'sid');

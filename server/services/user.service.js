@@ -64,7 +64,8 @@ userService.logoutUser = async function (user) {
     throw new Error(error.message);
   }
 };
-// 유저 소켓 disconnected -> sid:''
+
+// 유저 소켓 disconnected -> sid: ''
 userService.updateDisconnectedUser = async function (user) {
   // console.log('userService.updateDisconnectedUser called', sid);
   try {
@@ -111,22 +112,22 @@ userService.saveJoinIndex = async function (user, rid, joinIndex) {
   }
 };
 
-// 룸 입장 -> roomIndex 얻기
+// 룸 입장 -> 해당 roomIndex 조회
 userService.getRoomIndex = async function (user, rid) {
   // console.log('userService.getRoomIndex called', user.email, rid);
   try {
     const roomIndex = await user.roomIndexes.find((item) => {
-      return item.room.toString() === rid;
+      return item.room.equals(rid);
     });
     // console.log('roomIndex', roomIndex);
     return roomIndex;
   } catch (error) {
-    console.log('userService.getRoomIndex error', error);
+    // console.log('userService.getRoomIndex error', error);
     throw new Error(error.message);
   }
 };
 
-// 룸 퇴장 -> joinedRooms[]: room 제거
+// 룸 퇴장 -> joinedRooms[]: room 삭제
 userService.leaveRoom = async function (user, room) {
   // console.log('userService.leaveRoom called', user, room);
   try {
@@ -143,7 +144,7 @@ userService.leaveRoom = async function (user, room) {
   }
 };
 
-// 룸 퇴장 -> 해당 roomIndex 삭제
+// 룸 퇴장 -> roomIndexes[]: 해당 roomIndex 삭제
 userService.removeRoomIndex = async function (user, rid) {
   // console.log('userService.removeRoomIndex called', user.email, rid);
   try {
@@ -154,7 +155,7 @@ userService.removeRoomIndex = async function (user, rid) {
     user.roomIndexes = roomIndex;
     await user.save();
   } catch (error) {
-    console.log('userService.removeRoomIndex error', error);
+    // console.log('userService.removeRoomIndex error', error);
     throw new Error(error.message);
   }
 };
@@ -171,7 +172,7 @@ userService.saveLastReadeIndex = async function (user, rid, index) {
     await user.save();
     return user;
   } catch (error) {
-    console.log('userService.saveLastReadeIndex error', error);
+    // console.log('userService.saveLastReadeIndex error', error);
     throw new Error(error.message);
   }
 };

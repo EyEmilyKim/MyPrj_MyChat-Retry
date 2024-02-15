@@ -5,7 +5,7 @@ const messageService = {};
 
 // 룸 별 joinIndex 이후 메세지 조회
 messageService.getAllMessagesSince = async function (rid, joinIndex) {
-  console.log('messageService.getAllMessagesSince called', rid, joinIndex);
+  // console.log('messageService.getAllMessagesSince called', rid, joinIndex);
   try {
     const messageList = await Message.find({ room: rid, index: { $gte: joinIndex } }).sort('index');
     // console.log('messageList', messageList);

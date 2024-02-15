@@ -78,7 +78,7 @@ module.exports = function (io) {
       }
     });
 
-    // ** 룸 입장 시
+    // ** 룸 입장
     socket.on('joinRoom', async (rid, cb) => {
       console.log(`'joinRoom' called by :`, socketEmail, rid);
       try {
@@ -100,7 +100,7 @@ module.exports = function (io) {
       }
     });
 
-    // ** 룸 퇴장 시
+    // ** 룸 퇴장
     socket.on('leaveRoom', async (rid, cb) => {
       console.log(`'leaveRoom' called by :`, socketEmail, rid);
       try {
@@ -143,7 +143,7 @@ module.exports = function (io) {
       }
     });
 
-    // ** 메세지 수신 시
+    // ** 메세지 수신
     socket.on('sendMessage', async (msg, rid, cb) => {
       console.log(`'sendMessage' called by : ${socketEmail}, ${msg}, ${rid}`);
       try {

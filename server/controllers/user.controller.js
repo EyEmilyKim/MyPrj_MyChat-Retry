@@ -206,8 +206,8 @@ userController.updateDisconnectedUser = async (sid) => {
 userController.joinRoom = async (user, room) => {
   // console.log('userController.joinRoom called');
   try {
-    const updateUser = await userService.joinRoom(user, room);
-    return updateUser;
+    const updatedUser = await userService.joinRoom(user, room);
+    return updatedUser;
   } catch (error) {
     // console.log('userController.joinRoom failed', error);
     throw new Error(error);
@@ -218,8 +218,8 @@ userController.joinRoom = async (user, room) => {
 userController.leaveRoom = async (user, room) => {
   // console.log('userController.leaveRoom called');
   try {
-    const updateUser = await userService.leaveRoom(user, room);
-    return updateUser;
+    const updatedUser = await userService.leaveRoom(user, room);
+    return updatedUser;
   } catch (error) {
     // console.log('userController.leaveRoom failed', error);
     throw new Error(error);
@@ -312,9 +312,9 @@ userController.extractNameIdOnline = async function (users) {
         throw new Error('userController.extractNameIdOnline Error - Invalid parameter type');
       }
     };
-    const extractData = await NameIdOnlineOfUser(users);
+    const extractedData = await NameIdOnlineOfUser(users);
     // console.log('extractData', extractData);
-    return extractData;
+    return extractedData;
   } catch (error) {
     // console.log('userController.extractNameIdOnline error', error);
     throw new Error(error.message);
