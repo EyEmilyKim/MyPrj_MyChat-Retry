@@ -119,6 +119,19 @@ module.exports = function (io) {
       }
     });
 
+    // ** 룸 오너 변경
+    socket.on('changeOwner', async (rid, newOwnerId, cb) => {
+      console.log(`'changeOwner' called by :`, socketEmail, rid, newOwnerId);
+      try {
+        const room = await roomController.changeOwner(rid, newOwnerId, socketId); // update Room
+        io.to(rid).emit('updatedRoom', room); // 룸채널에 룸 정보 발신
+        cb({ status: 'ok', data: room });
+      } catch (error) {
+        console.log('io > changeOwner Error', error);
+        cb({ status: 'Server side Error' });
+      }
+    });
+
     // ** 기존 메세지 요청
     socket.on('getMessages', async (rid, joinIndex, cb) => {
       console.log(`'getMessages' called by : ${socketEmail}, ${rid}, ${joinIndex}`);

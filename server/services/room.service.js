@@ -86,4 +86,17 @@ roomService.leaveRoom = async function (room, user) {
   }
 };
 
+// 룸 오너 변경
+roomService.changeOwner = async function (room, newOwnerId) {
+  // console.log('roomService.changeOwner called', room, newOwnerId);
+  try {
+    room.owner = newOwnerId;
+    await room.save();
+    return room;
+  } catch (error) {
+    // console.log('roomService.changeOwner error', error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = roomService;

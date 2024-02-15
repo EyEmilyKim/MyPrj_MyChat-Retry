@@ -113,4 +113,28 @@ roomController.leaveRoom = async (rid, socketId) => {
   }
 };
 
+// 룸 오너 변경
+roomController.changeOwner = async (rid, newOwnerId, socketId) => {
+  // console.log('roomController.changeOwner called', rid, newOwnerId, socketId);
+  try {
+    const room = await roomService
+      .checkRoom(rid, '_id')
+      .then((r) => roomService.changeOwner(r, newOwnerId));
+    // 해당 룸에 owner, members 정보 채우기
+    const populatedRoom = await room
+      .populate('owner', ['email', 'name'])
+      .then((r) => r.populate('members', ['email', 'name']));
+    // system message 저장
+    const user = await userService.checkUser(socketId, 'sid');
+    const newOwner = await userService.checkUser(newOwnerId, '_id');
+    const systemId = process.env.SYSTEM_USER_ID;
+    const content = `The room owner is changed from ${user.name} to ${newOwner.name}`;
+    await messageService.saveMessage(content, systemId, rid);
+    return populatedRoom;
+  } catch (error) {
+    // console.log('roomController.changeOwner failed', error);
+    throw new Error(error.message);
+  }
+};
+
 module.exports = roomController;

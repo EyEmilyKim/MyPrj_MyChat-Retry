@@ -1,15 +1,16 @@
 import { useContext, useEffect } from 'react';
 import { LoginContext } from '../../contexts/LoginContext';
+import { SocketContext } from '../../contexts/SocketContext';
 import useToggleState from '../../hooks/useToggleState';
 import useSelect from '../../hooks/useSelect';
 import useStateLogger from '../../hooks/useStateLogger';
-import { alertDeveloping } from '../../utils/alertDeveloping';
 import './ChangingOwner.css';
 // some CSS definition is in './RoomMenu.css';
 import Modal from '../../components-util/Modal';
 
 export default function ChangingOwner({ rid, members }) {
   const { user } = useContext(LoginContext);
+  const { socket } = useContext(SocketContext);
   const [isModalOpen, toggleModal] = useToggleState(false);
   const [handleSelectChange, selectedValue, setSelectedValue] = useSelect(-1);
   // useStateLogger(selectedValue, 'newOwnerId');
@@ -19,7 +20,12 @@ export default function ChangingOwner({ rid, members }) {
   }, [isModalOpen]);
 
   const handleChangeOwner = () => {
-    alertDeveloping('handleDelegate');
+    // console.log(`handleChangeOwner called :\n${rid}, ${selectedValue}`);
+    // 소켓 발신
+    socket.emit('changeOwner', rid, selectedValue, (res) => {
+      console.log(`'changeOwner' res : `, res);
+      toggleModal();
+    });
   };
 
   const ModalContent = () => {
