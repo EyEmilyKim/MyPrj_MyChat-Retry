@@ -59,10 +59,10 @@ export default function RoomList() {
         <h1 className="roomList-title">MyApp-test RoomList</h1>
         <div className="button-area">
           <button className="dummy-rooms" onClick={createDummyRooms}>
-            dummy Rooms
+            Create Dummy
           </button>
           <button className="clear-rooms" onClick={clearAllRooms}>
-            clear Rooms
+            Clear Rooms
           </button>
         </div>
       </div>

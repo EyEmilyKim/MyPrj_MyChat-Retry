@@ -8,7 +8,7 @@ export default function RoomMenu(props) {
   // useStateLogger(room, 'room');
   const members = room.members || [];
   const info = [
-    { label: '오너', value: room.owner ? room.owner.name : 'SYSTEM' },
+    { label: '오너', value: room.owner.name },
     { label: '개설일', value: room.created },
   ];
 
@@ -37,11 +37,7 @@ export default function RoomMenu(props) {
             {members.map((item) => {
               return (
                 <li className="each-item" key={item._id}>
-                  <img
-                    src="/profile.jpeg"
-                    alt="user_profile_image"
-                    className="profile-image"
-                  />
+                  <img src="/profile.jpeg" alt="user_profile_image" className="profile-image" />
                   <div className="roomMenu-member-name">{item.name}</div>
                 </li>
               );

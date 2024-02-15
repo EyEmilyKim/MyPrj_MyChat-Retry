@@ -20,7 +20,7 @@ export default function RoomHeader(props) {
 
       <div className="section">
         <FontAwesomeIcon icon={faCrown} className="crown" />
-        <p className="owner">{room.owner ? room.owner.name : 'SYSTEM'}</p>
+        <p className="owner">{room.owner.name}</p>
         <RoomHeaderIconMenu toggleMenu={toggleMenu} />
       </div>
     </div>

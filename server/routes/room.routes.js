@@ -8,20 +8,18 @@ const { dateFormatKST } = require('../utils/dateFormatKST');
 router.get('/createDummy', async (req, res) => {
   // 임의로 룸 만들어주기
   const now = await dateFormatKST();
-  Room.insertMany([
-    {
-      title: '*자바스크립트 단톡방',
-      created: now,
-    },
-    {
-      title: '*리액트 단톡방',
-      created: now,
-    },
-    {
-      title: '*NodeJS 단톡방',
-      created: now,
-    },
-  ])
+  const systemId = process.env.SYSTEM_USER_ID;
+  const titles = ['*자바스크립트 단톡방', '*리액트 단톡방', '*NodeJS 단톡방'];
+
+  Room.insertMany(
+    titles.map((item) => {
+      return {
+        title: item,
+        created: now,
+        owner: systemId,
+      };
+    })
+  )
     .then(() => {
       console.log('createDummy success');
       res.status(200).json({ message: 'createDummy 성공 !' });
