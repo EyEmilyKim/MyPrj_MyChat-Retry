@@ -90,6 +90,24 @@ roomController.leaveRoom = async (rid, socketId) => {
         if (!r) {
           throw new Error('해당 방이 존재하지 않습니다.');
         } else {
+          // 룸 오너일 경우
+          if (user._id.equals(r.owner)) {
+            // 2명 이상 방에서
+            if (r.members.length >= 2) {
+              // 입장순 빠른 타인에게
+              const newOwnerId = r.members.find((mem) => !mem._id.equals(user._id));
+              const newOwner = await userService.checkUser(newOwnerId, '_id');
+              if (newOwner) {
+                // 오너 양도
+                await roomService.changeOwner(r, newOwner._id);
+                // system message 저장
+                const systemId = process.env.SYSTEM_USER_ID;
+                const content = `The room owner is changed from ${user.name} to ${newOwner.name}`;
+                await messageService.saveMessage(content, systemId, rid);
+              }
+            }
+          }
+          // 퇴장
           return await roomService.leaveRoom(r, user);
         }
       });
