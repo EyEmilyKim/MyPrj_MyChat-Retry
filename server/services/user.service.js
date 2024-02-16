@@ -83,10 +83,8 @@ userService.joinRoom = async function (user, room) {
   // console.log('userService.joinRoom called', user, room);
   try {
     if (!user.joinedRooms.includes(room._id)) {
-      // console.log('user.joinRoom, not include yet', user.joinedRooms);
       user.joinedRooms.push(room._id);
       await user.save();
-      // console.log('user.joinRoom, now pushed', user.joinedRooms);
     }
     return user;
   } catch (error) {
@@ -119,7 +117,6 @@ userService.getRoomIndex = async function (user, rid) {
     const roomIndex = await user.roomIndexes.find((item) => {
       return item.room.equals(rid);
     });
-    // console.log('roomIndex', roomIndex);
     return roomIndex;
   } catch (error) {
     // console.log('userService.getRoomIndex error', error);
@@ -127,33 +124,30 @@ userService.getRoomIndex = async function (user, rid) {
   }
 };
 
-// 룸 퇴장 -> joinedRooms[]: room 삭제
-userService.leaveRoom = async function (user, room) {
-  // console.log('userService.leaveRoom called', user, room);
+// 룸 퇴장 -> joinedRooms[]: 해당 room 삭제
+userService.removeJoinedRoom = async function (user, room) {
+  // console.log('userService.removeJoinedRoom called', user.email, room.title);
   try {
-    if (user.joinedRooms.includes(room._id)) {
-      // console.log('user.joinRoom, does include yet', user.joinedRooms);
-      user.joinedRooms.pull(room._id);
-      await user.save();
-      // console.log('user.joinRoom, now pulled', user.joinedRooms);
-    }
+    user.joinedRooms.pull(room._id);
+    await user.save();
     return user;
   } catch (error) {
-    // console.log('userService.leaveRoom error', error);
+    // console.log('userService.removeJoinedRoom error', error);
     throw new Error(error.message);
   }
 };
 
 // 룸 퇴장 -> roomIndexes[]: 해당 roomIndex 삭제
-userService.removeRoomIndex = async function (user, rid) {
-  // console.log('userService.removeRoomIndex called', user.email, rid);
+userService.removeRoomIndex = async function (user, room) {
+  // console.log('userService.removeRoomIndex called', user.email, room);
   try {
-    const roomIndex = await user.roomIndexes.filter((item) => {
-      return item.room.toString() !== rid;
+    const filtered = await user.roomIndexes.filter((item) => {
+      return item.room !== room._id;
     });
     // console.log('roomIndex', roomIndex);
-    user.roomIndexes = roomIndex;
+    user.roomIndexes = filtered;
     await user.save();
+    return user;
   } catch (error) {
     // console.log('userService.removeRoomIndex error', error);
     throw new Error(error.message);

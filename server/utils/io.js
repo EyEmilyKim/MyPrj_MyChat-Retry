@@ -105,13 +105,17 @@ module.exports = function (io) {
       console.log(`'leaveRoom' called by :`, socketEmail, rid);
       try {
         const result = await roomController.leaveRoom(rid, socketId); // update Room
-        // 해당 룸채널 탈퇴
-        socket.leave(rid);
-        // 퇴장 시
-        if (result.memberUpdate) {
-          io.to(rid).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
-          emitRooms(io, 'Someone left somewhere'); // 실시간 룸 정보 발신
+        socket.leave(rid); // 해당 룸채널 탈퇴
+
+        if (result.roomDeleted) {
+          // 마지막 멤버 퇴장, 룸 삭제 시
+          emitRooms(io, 'Someone left and a room has been deleted'); // 실시간 룸 정보 발신
+          cb({ status: 'ok', data: { roomDeleted: result.roomDeleted, user: result.user } });
         }
+
+        // 룸 남아있을 경우
+        io.to(rid).emit('updatedRoom', result.populatedRoom); // 룸채널에 룸 정보 발신
+        emitRooms(io, 'Someone left somewhere'); // 실시간 룸 정보 발신
         cb({ status: 'ok', data: { room: result.populatedRoom, user: result.user } });
       } catch (error) {
         console.log('io > leaveRoom Error', error);

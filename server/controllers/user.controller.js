@@ -216,9 +216,11 @@ userController.joinRoom = async (user, room) => {
 
 // 유저 룸 퇴장
 userController.leaveRoom = async (user, room) => {
-  // console.log('userController.leaveRoom called');
+  // console.log('userController.leaveRoom called', user.email, room.title);
   try {
-    const updatedUser = await userService.leaveRoom(user, room);
+    const updatedUser = await userService
+      .removeJoinedRoom(user, room) // 해당 joinedRoom 삭제
+      .then(async (user) => await userService.removeRoomIndex(user, room)); // 해당 roomIndex 삭제
     return updatedUser;
   } catch (error) {
     // console.log('userController.leaveRoom failed', error);

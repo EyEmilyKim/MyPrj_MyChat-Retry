@@ -26,7 +26,7 @@ roomService.checkRoom = async function (value, key) {
     return room;
   } catch (error) {
     // console.log('roomService.checkRoom error', error);
-    throw new Error(error.message);
+    throw new Error('room not found');
   }
 };
 
@@ -69,17 +69,11 @@ roomService.joinRoom = async function (room, user) {
 
 // 룸 퇴장 -> members[]: user 제거
 roomService.leaveRoom = async function (room, user) {
-  // console.log('roomService.leaveRoom called', room, user);
+  // console.log('roomService.leaveRoom called', room.title, user.email);
   try {
-    let memberUpdate = false;
-    if (room.members.includes(user._id)) {
-      // console.log('room.leaveRoom, does include yet', room.members);
-      room.members.pull(user._id);
-      await room.save();
-      memberUpdate = true;
-      // console.log('room.leaveRoom, now pulled', memberUpdate, room.members);
-    }
-    return { room, memberUpdate };
+    room.members.pull(user._id);
+    await room.save();
+    return room;
   } catch (error) {
     // console.log('roomService.leaveRoom error', error);
     throw new Error(error.message);
