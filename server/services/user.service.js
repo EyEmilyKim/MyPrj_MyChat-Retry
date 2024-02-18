@@ -126,7 +126,7 @@ userService.getRoomIndex = async function (user, rid) {
 
 // 룸 퇴장 -> joinedRooms[]: 해당 room 삭제
 userService.removeJoinedRoom = async function (user, room) {
-  // console.log('userService.removeJoinedRoom called', user.email, room.title);
+  // console.log('userService.removeJoinedRoom called', user.joinedRooms, room);
   try {
     user.joinedRooms.pull(room._id);
     await user.save();
@@ -139,12 +139,11 @@ userService.removeJoinedRoom = async function (user, room) {
 
 // 룸 퇴장 -> roomIndexes[]: 해당 roomIndex 삭제
 userService.removeRoomIndex = async function (user, room) {
-  // console.log('userService.removeRoomIndex called', user.email, room);
+  // console.log('userService.removeRoomIndex called', user.roomIndexes, room);
   try {
-    const filtered = await user.roomIndexes.filter((item) => {
-      return item.room !== room._id;
+    const filtered = user.roomIndexes.filter((item) => {
+      return !item.room.equals(room._id);
     });
-    // console.log('roomIndex', roomIndex);
     user.roomIndexes = filtered;
     await user.save();
     return user;
