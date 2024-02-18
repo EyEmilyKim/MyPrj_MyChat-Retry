@@ -9,7 +9,7 @@ const userController = require('./user.controller');
 const roomController = {};
 
 // 모든 룸 조회
-roomController.getAllRooms = async () => {
+roomController.getAllRooms = async function () {
   // console.log('roomController.getAllRooms called');
   try {
     const roomList = await roomService.getAllRooms();
@@ -21,7 +21,7 @@ roomController.getAllRooms = async () => {
 };
 
 // 룸 생성
-roomController.createRoom = async (title, socketId) => {
+roomController.createRoom = async function (title, socketId) {
   // console.log('roomController.createRoom called', title, user);
   try {
     let providingError = null;
@@ -43,7 +43,7 @@ roomController.createRoom = async (title, socketId) => {
 };
 
 // 룸 입장
-roomController.joinRoom = async (rid, socketId) => {
+roomController.joinRoom = async function (rid, socketId) {
   // console.log('roomController.joinRoom called', rid, user);
   try {
     // 룸 입장 처리
@@ -131,7 +131,7 @@ roomController.leaveRoom = async function (rid, socketId) {
 };
 
 // 룸 오너 변경
-roomController.changeOwner = async (rid, newOwnerId, socketId) => {
+roomController.changeOwner = async function (rid, newOwnerId, socketId) {
   // console.log('roomController.changeOwner called', rid, newOwnerId, socketId);
   try {
     const room = await roomService
