@@ -61,15 +61,12 @@ roomController.joinRoom = async function (rid, socketId) {
     const populatedRoom = await result.room
       .populate('owner', ['email', 'name'])
       .then((r) => r.populate('members', ['email', 'name']));
-    // member변동 있으면 user, system message 저장
+    // 첫 입장 시 user, system message 저장
     let memberUpdate = result.memberUpdate;
     let roomIndex = null;
     if (memberUpdate) {
       user = await userService.joinRoom(user, result.room); // update User
-      const systemId = process.env.SYSTEM_USER_ID;
-      const content = `${user.name} joined this room`;
-      roomIndex = await messageService
-        .saveSystemMessage(content, systemId, rid) // systemMsg 저장
+      roomIndex = await this.saveSysMsg_roomInOut(user, 'in', rid) // systemMsg 저장
         .then(async (systemMsgIndex) => {
           return await userService.saveJoinIndex(user, rid, systemMsgIndex); // joinIndex 저장
         });
@@ -119,9 +116,7 @@ roomController.leaveRoom = async function (rid, socketId) {
       .populate('owner', ['email', 'name'])
       .then((r) => r.populate('members', ['email', 'name']));
     // systemMsg 저장
-    const systemId = process.env.SYSTEM_USER_ID;
-    const content = `${user.name} left this room`;
-    await messageService.saveMessage(content, systemId, rid);
+    await this.saveSysMsg_roomInOut(user, 'out', rid);
 
     return { populatedRoom, user };
   } catch (error) {
@@ -170,15 +165,31 @@ roomController.deleteRoom = async function (room) {
 
 // ------------ system message 관련 ------------------
 
+// 유저 입장, 퇴장 알림
+roomController.saveSysMsg_roomInOut = async function (user, inOut, rid) {
+  // console.log('roomController.saveSysMsg_roomInOut called', user.email, inOut, rid);
+  try {
+    const systemId = process.env.SYSTEM_USER_ID;
+    let content = '';
+    if (inOut === 'in') content = `${user.name} joined this room`;
+    else if (inOut === 'out') content = `${user.name} left this room`;
+    else throw new Error('invalid argument for inOut param');
+    return await messageService.saveSystemMessage(content, systemId, rid); // 입장 시 joinIndex 반환
+  } catch (error) {
+    // console.log('roomController.saveSysMsg_roomInOut Error : ', error);
+    throw new Error(error);
+  }
+};
+
 // 오너 변경 알림
 roomController.saveSysMsg_changeOwner = async function (user, newOwner, rid) {
-  console.log('roomController.saveSysMsg_changeOwner called');
+  // console.log('roomController.saveSysMsg_changeOwner called');
   try {
     const systemId = process.env.SYSTEM_USER_ID;
     const content = `The room owner is changed from ${user.name} to ${newOwner.name}`;
     await messageService.saveMessage(content, systemId, rid);
   } catch (error) {
-    console.log('roomController.saveSysMsg_changeOwner Error : ', error);
+    // console.log('roomController.saveSysMsg_changeOwner Error : ', error);
     throw new Error(error);
   }
 };
