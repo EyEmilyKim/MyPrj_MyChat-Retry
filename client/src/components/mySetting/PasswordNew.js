@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import usePasswordNew from '../../hooks/usePasswordNew';
 import './PasswordNew.css';
 
@@ -51,9 +51,7 @@ export default function PasswordNew(props) {
       </div>
       <button
         className="pwNew-button"
-        disabled={
-          password1 === '' || password2 === '' || password1 !== password2
-        }
+        disabled={password1 === '' || password2 === '' || password1 !== password2}
         onClick={handlePasswordNew}
       >
         확인

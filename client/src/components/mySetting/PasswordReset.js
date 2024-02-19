@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import useToggleState from '../../hooks/useToggleState';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import useStateLogger from '../../hooks/useStateLogger';

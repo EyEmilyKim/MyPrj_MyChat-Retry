@@ -1,4 +1,3 @@
-import React from 'react';
 import './RoomHeader.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';

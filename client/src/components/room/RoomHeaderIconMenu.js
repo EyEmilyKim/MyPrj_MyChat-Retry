@@ -1,4 +1,3 @@
-import React from 'react';
 // CSS definition is in './RoomHeader.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';

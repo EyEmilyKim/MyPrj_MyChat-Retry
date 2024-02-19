@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import usePasswordConfirm from '../../hooks/usePasswordConfirm';
 import './PasswordConfirm.css';
 
@@ -11,10 +11,7 @@ export default function PasswordConfirm(props) {
     focusRef.current.focus();
   }, []);
 
-  const { handlePasswordConfirm } = usePasswordConfirm(
-    password,
-    setIsConfirmed
-  );
+  const { handlePasswordConfirm } = usePasswordConfirm(password, setIsConfirmed);
 
   return (
     <div className="pwConf-main">

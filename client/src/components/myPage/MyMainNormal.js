@@ -1,4 +1,3 @@
-import React from 'react';
 // CSS definition is in MyPage.css
 import MyProfileNormal from './MyProfileNormal';
 import MyFeatEdit from './MyFeatEdit';

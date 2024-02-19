@@ -1,4 +1,3 @@
-import React from 'react';
 import { alertDeveloping } from '../../utils/alertDeveloping';
 import './MySetting.css';
 import PasswordReset from './PasswordReset';

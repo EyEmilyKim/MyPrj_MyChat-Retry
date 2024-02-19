@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useToggleState from '../../hooks/useToggleState';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import PasswordConfirm from './PasswordConfirm';
@@ -30,9 +30,7 @@ export default function Resign() {
 
       {isSettingOpen ? (
         <div className="mySetting-each-feat-field">
-          {!isConfirmed ? (
-            <PasswordConfirm setIsConfirmed={setIsConfirmed} />
-          ) : null}
+          {!isConfirmed ? <PasswordConfirm setIsConfirmed={setIsConfirmed} /> : null}
         </div>
       ) : null}
     </div>

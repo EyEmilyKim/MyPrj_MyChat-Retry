@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 // CSS definition is in './RoomHeader.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,11 +13,5 @@ export default function RoomHeaderIconBack(props) {
     console.log(`successfully back from "${roomTitle}"`);
   };
 
-  return (
-    <FontAwesomeIcon
-      icon={faAngleLeft}
-      className="header-button back"
-      onClick={handleBack}
-    />
-  );
+  return <FontAwesomeIcon icon={faAngleLeft} className="header-button back" onClick={handleBack} />;
 }
