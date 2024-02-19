@@ -165,7 +165,7 @@ module.exports = function (io) {
       console.log(`'sendMessage' called by : ${socketEmail}, ${msg}, ${rid}`);
       try {
         const message = await messageController.saveMessage(msg, socketId, rid);
-        io.to(rid).emit('message', message);
+        io.emit(`message-${rid}`, message);
         cb({ status: 'ok' });
       } catch (error) {
         console.log('io > sendMessage Error', error);

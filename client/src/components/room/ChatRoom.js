@@ -83,7 +83,7 @@ export default function ChatRoom() {
       setRoom(room);
     });
 
-    socket.on('message', (message) => {
+    socket.on(`message-${rid}`, (message) => {
       // console.log(`on('message') : ${JSON.stringify(message)}`);
       setMessageList((prevState) => [...prevState, message]);
     });
