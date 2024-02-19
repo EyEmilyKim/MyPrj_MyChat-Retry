@@ -2,14 +2,21 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useSocketContext } from './SocketContext';
 import useClassifyRooms from '../hooks/useClassifyRooms';
 import useJoinedRoomsNotification from '../hooks/useJoinedRoomsNotification';
+import useStateLogger from '../hooks/useStateLogger';
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const { socket } = useSocketContext();
+
+  const [userList, setUserList] = useState([]);
+  // useStateLogger(userList, 'userList');
+
   const [roomList, setRoomList] = useState([]);
   const { joinedRooms, notMyRooms, classifyRooms } = useClassifyRooms();
-  const { getNotificationCount, resetNotificationCount } = useJoinedRoomsNotification(joinedRooms);
+  const { roomsNotification, getNotificationCount, resetNotificationCount } =
+    useJoinedRoomsNotification(joinedRooms);
+  // useStateLogger(roomsNotification, 'roomsNotification');
 
   useEffect(() => {
     classifyRooms(roomList);
@@ -18,6 +25,16 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     if (socket && socket.connected) {
       console.log(`socket : ${socket.id}`);
+
+      socket.emit('getUsers', (res) => {
+        // console.log('getUsers res', res);
+        setUserList(res.data);
+      });
+
+      socket.on('users', (reason, users) => {
+        console.log(`on('users') ${reason}`, users);
+        setUserList(users);
+      });
 
       socket.emit('getRooms', (res) => {
         console.log('getRooms res', res);
@@ -31,12 +48,14 @@ export const DataProvider = ({ children }) => {
 
       // 컴포넌트 언마운트 시 이벤트 해제
       return () => {
+        socket.off('users');
         socket.off('rooms');
       };
     }
   }, [socket]);
 
   const contextValue = {
+    userList,
     joinedRooms,
     notMyRooms,
     getNotificationCount,
