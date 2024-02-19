@@ -1,13 +1,15 @@
-// CSS definition is in './RoomList.css';
+import { useNavigate } from 'react-router-dom';
+import './ClassifiedRooms.css';
 
-export default function ClassifiedRooms(props) {
-  const joinedRooms = props.joinedRooms;
-  const notMyRooms = props.notMyRooms;
-  const moveToRoom = props.moveToRoom;
+export default function ClassifiedRooms({ joinedRooms, notMyRooms }) {
+  const navigate = useNavigate();
+  const moveToRoom = (rid) => {
+    navigate(`/room/${rid}`);
+  };
 
   return (
     <>
-      <div className="classified-format">
+      <div className="classifiedRoom-body">
         <div className="format-title">분류된 RoomList</div>
 
         <div className="list-header">
@@ -18,8 +20,10 @@ export default function ClassifiedRooms(props) {
         {joinedRooms.length > 0
           ? joinedRooms.map((room) => (
               <div className="each-room" key={room._id} onClick={() => moveToRoom(room._id)}>
-                <div className="room-title">{room.title}</div>
-                <div className="member-count">({room.members.length}명)</div>
+                <div className="each-room-child">
+                  <div className="room-title">{room.title}</div>
+                  <div className="member-count">({room.members.length}명)</div>
+                </div>
               </div>
             ))
           : null}
@@ -32,8 +36,10 @@ export default function ClassifiedRooms(props) {
         {notMyRooms.length > 0
           ? notMyRooms.map((room) => (
               <div className="each-room" key={room._id} onClick={() => moveToRoom(room._id)}>
-                <div className="room-title">{room.title}</div>
-                <div className="member-count">({room.members.length}명)</div>
+                <div className="each-room-child">
+                  <div className="room-title">{room.title}</div>
+                  <div className="member-count">({room.members.length}명)</div>
+                </div>
               </div>
             ))
           : null}

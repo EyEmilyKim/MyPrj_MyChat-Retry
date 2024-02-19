@@ -1,0 +1,52 @@
+.format-title {
+  display: none;
+  border: 1px solid purple;
+  background-color: pink;
+}
+
+/* ------- 리스트 구분 ------- */
+.list-header {
+  background-color: aquamarine;
+  display: flex;
+  align-items: baseline;
+}
+.list-title {
+  padding: 5px 10px;
+  font-weight: 600;
+}
+.list-count {
+  color: palevioletred;
+  font-size: medium;
+  padding-bottom: 2px;
+}
+
+/* ------- 개별 룸 라인 ------- */
+.each-room {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border: solid pink 1px; */
+  background-color: antiquewhite;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 10px;
+}
+.each-room:hover {
+  cursor: pointer;
+  background-color: #e9d4b9;
+}
+.each-room-child {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ------- 정보 디테일 ------- */
+.room-title {
+  font-size: 15px;
+  font-weight: bold;
+}
+.member-count {
+  color: gray;
+}

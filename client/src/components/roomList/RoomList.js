@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SocketContext } from '../../contexts/SocketContext';
 import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
@@ -9,7 +8,6 @@ import useScrollToTarget from '../../hooks/useScrollToTarget';
 import useStateLogger from '../../hooks/useStateLogger';
 import './RoomList.css';
 import RoomListIconTop from './RoomListIconTop';
-import NonClassifiedRooms from './NonClassifiedRooms';
 import ClassifiedRooms from './ClassifiedRooms';
 import NewRoom from './NewRoom';
 
@@ -48,11 +46,6 @@ export default function RoomList() {
     };
   }, []);
 
-  const navigate = useNavigate();
-  const moveToRoom = (rid) => {
-    navigate(`/room/${rid}`);
-  };
-
   return (
     <div className="roomList-body">
       <div className="roomList-header">
@@ -80,12 +73,7 @@ export default function RoomList() {
 
       <div className="roomList-container" ref={scrollRef}>
         <div className="topRef" ref={topRef} />
-        {/* <NonClassifiedRooms roomList={roomList} moveToRoom={moveToRoom} /> */}
-        <ClassifiedRooms
-          joinedRooms={joinedRooms}
-          notMyRooms={notMyRooms}
-          moveToRoom={moveToRoom}
-        />
+        <ClassifiedRooms joinedRooms={joinedRooms} notMyRooms={notMyRooms} />
       </div>
 
       <div className="newRoom-container">
