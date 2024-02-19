@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSocketContext } from '../contexts/SocketContext';
-import useStateLogger from './useStateLogger';
 
 export default function useJoinedRoomsNotification(joinedRooms) {
   const { socket } = useSocketContext();
   const [roomsNotification, setRoomsNotification] = useState({});
-  useStateLogger(roomsNotification, 'roomsNotification');
 
   const getNotificationCount = (rid) => {
     return roomsNotification[rid] || 0;

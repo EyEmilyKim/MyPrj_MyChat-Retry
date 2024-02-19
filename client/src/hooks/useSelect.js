@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import useStateLogger from './useStateLogger';
 
 export default function useSelect(initialIndex) {
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
-  // useStateLogger(selectedIndex, 'selectedIndex');
   const [selectedValue, setSelectedValue] = useState('');
   const [selectedText, setSelectedText] = useState('');
 

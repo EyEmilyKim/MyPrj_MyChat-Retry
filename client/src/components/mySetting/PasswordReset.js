@@ -8,7 +8,7 @@ import PasswordNew from './PasswordNew';
 export default function PasswordReset() {
   const [isSettingOpen, toggleSetting, setSetting] = useToggleState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
-  useStateLogger(isConfirmed, 'isConfirmed');
+  // useStateLogger(isConfirmed, 'isConfirmed');
 
   const clickRef = useRef();
   useOutsideClick(clickRef, () => {
@@ -26,10 +26,7 @@ export default function PasswordReset() {
           {!isConfirmed ? (
             <PasswordConfirm setIsConfirmed={setIsConfirmed} />
           ) : (
-            <PasswordNew
-              toggleSetting={toggleSetting}
-              setIsConfirmed={setIsConfirmed}
-            />
+            <PasswordNew toggleSetting={toggleSetting} setIsConfirmed={setIsConfirmed} />
           )}
         </div>
       ) : null}

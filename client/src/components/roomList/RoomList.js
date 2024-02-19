@@ -15,7 +15,7 @@ export default function RoomList() {
 
   const scrollRef = useRef();
   const { isOnTop } = useScrollPosition(scrollRef, true);
-  useStateLogger(isOnTop, 'isOnTop');
+  // useStateLogger(isOnTop, 'isOnTop');
 
   const topRef = useRef();
   const { handleScrollToTarget } = useScrollToTarget(topRef, [joinedRooms, notMyRooms], isOnTop);
