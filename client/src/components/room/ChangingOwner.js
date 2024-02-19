@@ -1,6 +1,6 @@
-import { useContext, useEffect } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useEffect } from 'react';
+import { useLoginContext } from '../../contexts/LoginContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 import useToggleState from '../../hooks/useToggleState';
 import useSelect from '../../hooks/useSelect';
 import useStateLogger from '../../hooks/useStateLogger';
@@ -9,8 +9,8 @@ import './ChangingOwner.css';
 import Modal from '../../components-util/Modal';
 
 export default function ChangingOwner({ rid, members }) {
-  const { user } = useContext(LoginContext);
-  const { socket } = useContext(SocketContext);
+  const { user } = useLoginContext();
+  const { socket } = useSocketContext();
   const [isModalOpen, toggleModal] = useToggleState(false);
   const [handleSelectChange, selectedValue, setSelectedValue] = useSelect(-1);
   // useStateLogger(selectedValue, 'newOwnerId');

@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { LoginContext } from '../../contexts/LoginContext';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useLoginContext } from '../../contexts/LoginContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
 import useScrollPosition from '../../hooks/useScrollPosition';
@@ -17,8 +17,8 @@ import ChatInput from './ChatInput';
 
 export default function ChatRoom() {
   const { rid } = useParams();
-  const { user } = useContext(LoginContext);
-  const { socket } = useContext(SocketContext);
+  const { user } = useLoginContext();
+  const { socket } = useSocketContext();
   const [room, setRoom] = useState('fetching room data...');
   const [joinComplete, setJoinComplete] = useState(false);
   const [isMenuOpen, toggleMenu] = useToggleState(false);

@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { LoginContext } from '../contexts/LoginContext';
-import { SocketContext } from '../contexts/SocketContext';
+import { useLoginContext } from '../contexts/LoginContext';
+import { useSocketContext } from '../contexts/SocketContext';
 import useStateLogger from '../hooks/useStateLogger';
 import Loader from './Loader';
 
 const PrivateRoutes = () => {
-  const { isLogin, isAuthing } = useContext(LoginContext);
-  const { isConnecting } = useContext(SocketContext);
+  const { isLogin, isAuthing } = useLoginContext();
+  const { isConnecting } = useSocketContext();
   const [canNavigate, setCanNavigate] = useState(false);
   // useStateLogger(canNavigate, 'canNavigate');
 

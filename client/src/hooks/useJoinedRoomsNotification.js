@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { SocketContext } from '../contexts/SocketContext';
+import { useEffect, useState } from 'react';
+import { useSocketContext } from '../contexts/SocketContext';
 import useStateLogger from './useStateLogger';
 
 export default function useJoinedRoomsNotification(joinedRooms) {
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSocketContext();
   const [roomsNotification, setRoomsNotification] = useState({});
   useStateLogger(roomsNotification, 'roomsNotification');
 

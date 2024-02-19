@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useEffect, useState } from 'react';
+import { useSocketContext } from '../../contexts/SocketContext';
 import useStateLogger from '../../hooks/useStateLogger';
 import './UserList.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function UserList() {
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSocketContext();
   const [userList, setUserList] = useState([]);
   useStateLogger(userList, 'useList');
 
@@ -47,11 +47,7 @@ export default function UserList() {
           ? userList.map((user) => (
               <div className="each-user" key={user.id}>
                 <div className="user-name">{user.name}</div>
-                <div
-                  className={`user-online ${
-                    user.online ? 'online' : 'offline'
-                  }`}
-                >
+                <div className={`user-online ${user.online ? 'online' : 'offline'}`}>
                   {user.online ? '●' : '●'}
                 </div>
               </div>

@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
+import { useState } from 'react';
+import { useLoginContext } from '../contexts/LoginContext';
 
 export default function useClassifyRooms() {
-  const { user } = useContext(LoginContext);
+  const { user } = useLoginContext();
   const [joinedRooms, setJoinedRooms] = useState([]);
   const [notMyRooms, setNotMyRooms] = useState([]);
 

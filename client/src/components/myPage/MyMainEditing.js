@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useState } from 'react';
+import { useLoginContext } from '../../contexts/LoginContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 // CSS definition is in MyPage.css
 import MyProfileEditing from './MyProfileEditing';
 import MyFeatSave from './MyFeatSave';
@@ -8,8 +8,8 @@ import MyFeatCancel from './MyFeatCancel';
 
 export default function MyMainEditing(props) {
   const toggleEditing = props.toggleEditing;
-  const { user, setUser } = useContext(LoginContext);
-  const { socket } = useContext(SocketContext);
+  const { user, setUser } = useLoginContext();
+  const { socket } = useSocketContext();
   const [name, setName] = useState(user.name);
   const [description, setDescription] = useState(user.description);
 

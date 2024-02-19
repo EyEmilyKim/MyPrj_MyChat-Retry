@@ -1,14 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-import { LoginContext } from './LoginContext';
+import { useLoginContext } from './LoginContext';
 import useStateLogger from '../hooks/useStateLogger';
 
 // SocketContext 생성
-export const SocketContext = createContext();
+const SocketContext = createContext();
 
 // SocketProvider 컴포넌트 생성
 export const SocketProvider = ({ children }) => {
-  const { isLogin, isAuthing, loginOperating } = useContext(LoginContext);
+  const { isLogin, isAuthing, loginOperating } = useLoginContext();
   const ioUrl = process.env.REACT_APP_API_ROOT;
   const originUrl = process.env.REACT_APP_ORIGIN_ROOT;
   const [socket, setSocket] = useState(null);
@@ -91,4 +91,8 @@ export const SocketProvider = ({ children }) => {
       {children}
     </SocketContext.Provider>
   );
+};
+
+export const useSocketContext = () => {
+  return useContext(SocketContext);
 };

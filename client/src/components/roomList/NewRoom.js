@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useSocketContext } from '../../contexts/SocketContext';
 import { validation } from '../../utils/beforeWriting';
 import './NewRoom.css';
 
 export default function NewRoom() {
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSocketContext();
   const [newTitle, setNewTitle] = useState('');
   const navigate = useNavigate();
 
@@ -41,11 +41,7 @@ export default function NewRoom() {
         }}
         rows={1}
       />
-      <button
-        className="create-button"
-        disabled={newTitle === ''}
-        onClick={handleCreateRoom}
-      >
+      <button className="create-button" disabled={newTitle === ''} onClick={handleCreateRoom}>
         만들기
       </button>
     </div>

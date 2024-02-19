@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useEffect, useState } from 'react';
+import { useSocketContext } from '../../contexts/SocketContext';
 import { validation } from '../../utils/beforeWriting';
 import './ChatInput.css';
 
 export default function ChatInput(props) {
   const rid = props.rid;
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSocketContext();
   const [message, setMessage] = useState('');
   useEffect(() => {
     // console.log(`sending message : ${message}, rid: ${rid}`);
@@ -35,11 +35,7 @@ export default function ChatInput(props) {
         }}
         rows={1}
       />
-      <button
-        className="send-button"
-        disabled={message === ''}
-        onClick={handleSendMessage}
-      >
+      <button className="send-button" disabled={message === ''} onClick={handleSendMessage}>
         보내기
       </button>
     </div>

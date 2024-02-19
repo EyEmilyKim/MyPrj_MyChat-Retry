@@ -1,12 +1,11 @@
-import { useContext } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
+import { useLoginContext } from '../../contexts/LoginContext';
 import './HomePage.css';
 import Loader from '../../components-util/Loader';
 import Login from './Login';
 import Logout from './Logout';
 
 export default function HomePage() {
-  const { loginOperating, isAuthing, isLogin, user } = useContext(LoginContext);
+  const { loginOperating, isAuthing, isLogin, user } = useLoginContext();
 
   return (
     <div className="home-body">
@@ -20,9 +19,7 @@ export default function HomePage() {
         </div>
       ) : (
         <div className="loggedIn-area">
-          <p className="welcome-userName">
-            반갑습니다 {user.name || user.email}님~~ !
-          </p>
+          <p className="welcome-userName">반갑습니다 {user.name || user.email}님~~ !</p>
           <Logout />
         </div>
       )}

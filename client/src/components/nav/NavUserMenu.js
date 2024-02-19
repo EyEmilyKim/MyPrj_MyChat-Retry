@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LoginContext } from '../../contexts/LoginContext';
+import { useLoginContext } from '../../contexts/LoginContext';
 import useLogout from '../../hooks/useLogout';
 import './NavUserMenu.css';
 
 export default function NavUserMenu(props) {
   const toggleMenu = props.toggleMenu;
-  const { isLogin } = useContext(LoginContext);
+  const { isLogin } = useLoginContext();
   const { handleLogout } = useLogout();
 
   const navigate = useNavigate();

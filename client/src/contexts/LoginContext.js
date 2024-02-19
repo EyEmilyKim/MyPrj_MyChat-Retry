@@ -1,9 +1,9 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { handleHttpError } from '../utils/handleHttpError';
 import useStateLogger from '../hooks/useStateLogger';
 
-export const LoginContext = createContext();
+const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
   const apiRoot = process.env.REACT_APP_API_ROOT;
@@ -56,4 +56,8 @@ export const LoginProvider = ({ children }) => {
       {children}
     </LoginContext.Provider>
   );
+};
+
+export const useLoginContext = () => {
+  return useContext(LoginContext);
 };

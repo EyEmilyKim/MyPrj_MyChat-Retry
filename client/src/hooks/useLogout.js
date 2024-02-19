@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
+import { useLoginContext } from '../contexts/LoginContext';
 import { serveUserAxios } from '../utils/serveUserAxios';
 
 export default function useLogout() {
-  const { setIsLogin, setUser } = useContext(LoginContext);
+  const { setIsLogin, setUser } = useLoginContext();
   const apiRoot = process.env.REACT_APP_API_ROOT;
 
   // 로그아웃 이벤트 처리하는 함수

@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { SocketContext } from '../../contexts/SocketContext';
+import { useEffect, useRef, useState } from 'react';
+import { useSocketContext } from '../../contexts/SocketContext';
 import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
 import useClassifyRooms from '../../hooks/useClassifyRooms';
@@ -12,7 +12,7 @@ import ClassifiedRooms from './ClassifiedRooms';
 import NewRoom from './NewRoom';
 
 export default function RoomList() {
-  const { socket } = useContext(SocketContext);
+  const { socket } = useSocketContext();
   const [roomList, setRoomList] = useState([]);
   const { joinedRooms, notMyRooms, classifyRooms } = useClassifyRooms();
 

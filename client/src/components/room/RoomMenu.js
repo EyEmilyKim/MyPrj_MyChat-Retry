@@ -1,11 +1,10 @@
-import { useContext } from 'react';
-import { LoginContext } from '../../contexts/LoginContext';
+import { useLoginContext } from '../../contexts/LoginContext';
 import './RoomMenu.css';
 import ChangingOwner from './ChangingOwner';
 import RoomMenuMembers from './RoomMenuMembers';
 
 export default function RoomMenu({ room, isMenuOpen }) {
-  const { user } = useContext(LoginContext);
+  const { user } = useLoginContext();
   const rid = room._id || '';
   const ownerId = room.owner._id;
   const members = room.members || [];

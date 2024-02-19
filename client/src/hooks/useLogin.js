@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { LoginContext } from '../contexts/LoginContext';
+import { useLoginContext } from '../contexts/LoginContext';
 import { serveUserAxios } from '../utils/serveUserAxios';
 
 export default function useLogin(email, password) {
-  const { setUser, setIsLogin, setLoginOperating } = useContext(LoginContext);
+  const { setUser, setIsLogin, setLoginOperating } = useLoginContext();
   const apiRoot = process.env.REACT_APP_API_ROOT;
 
   // 로그인 이벤트 처리하는 함수
