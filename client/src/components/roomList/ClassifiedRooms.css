@@ -50,3 +50,11 @@
 .member-count {
   color: gray;
 }
+.notification-count {
+  background-color: red;
+  color: white;
+  font-size: small;
+  padding: 1px 5px;
+  border-radius: 10px;
+  margin-right: 5px;
+}

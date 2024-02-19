@@ -1,9 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import useJoinedRoomsNotification from '../../hooks/useJoinedRoomsNotification';
 import './ClassifiedRooms.css';
 
 export default function ClassifiedRooms({ joinedRooms, notMyRooms }) {
+  const { getNotificationCount, resetNotificationCount } = useJoinedRoomsNotification(joinedRooms);
+
   const navigate = useNavigate();
-  const moveToRoom = (rid) => {
+  const moveToRoom = async (rid) => {
+    await resetNotificationCount(rid);
     navigate(`/room/${rid}`);
   };
 
@@ -23,6 +27,11 @@ export default function ClassifiedRooms({ joinedRooms, notMyRooms }) {
                 <div className="each-room-child">
                   <div className="room-title">{room.title}</div>
                   <div className="member-count">({room.members.length}명)</div>
+                </div>
+                <div className="each-room-child">
+                  {getNotificationCount(room._id) > 0 ? (
+                    <div className="notification-count">{getNotificationCount(room._id)}</div>
+                  ) : null}
                 </div>
               </div>
             ))
