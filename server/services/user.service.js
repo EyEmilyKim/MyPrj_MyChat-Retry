@@ -65,10 +65,11 @@ userService.logoutUser = async function (user) {
   }
 };
 
-// 유저 소켓 disconnected -> sid: ''
+// 유저 소켓 disconnected -> sid: '', online: false
 userService.updateDisconnectedUser = async function (user) {
   // console.log('userService.updateDisconnectedUser called', sid);
   try {
+    user.online = false;
     user.sid = '';
     await user.save();
     // console.log('disconnected user : ', user);
