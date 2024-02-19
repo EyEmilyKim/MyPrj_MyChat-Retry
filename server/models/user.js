@@ -30,12 +30,6 @@ const userSchema = new mongoose.Schema({
   online: {
     type: Boolean,
   },
-  joinedRooms: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Room',
-    },
-  ],
   roomIndexes: [
     {
       room: {

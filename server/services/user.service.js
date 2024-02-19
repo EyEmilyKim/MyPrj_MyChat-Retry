@@ -78,24 +78,9 @@ userService.updateDisconnectedUser = async function (user) {
   }
 };
 
-// 룸 입장 -> joinedRooms[]: room 추가
-userService.joinRoom = async function (user, room) {
-  // console.log('userService.joinRoom called', user, room);
-  try {
-    if (!user.joinedRooms.includes(room._id)) {
-      user.joinedRooms.push(room._id);
-      await user.save();
-    }
-    return user;
-  } catch (error) {
-    // console.log('userService.joinRoom error', error);
-    throw new Error(error.message);
-  }
-};
-
-// 룸 입장 -> roomIndexes[]: room, joinIndex 추가
-userService.saveJoinIndex = async function (user, rid, joinIndex) {
-  // console.log('userService.saveJoinIndex called', user, rid, joinIndex);
+// 룸 첫 입장 -> roomIndexes[]: room, joinIndex 저장
+userService.setRoomIndex = async function (user, rid, joinIndex) {
+  // console.log('userService.setRoomIndex called', user, rid, joinIndex);
   try {
     const newRoomIndex = {
       room: rid,
@@ -105,7 +90,7 @@ userService.saveJoinIndex = async function (user, rid, joinIndex) {
     await user.save();
     return newRoomIndex;
   } catch (error) {
-    // console.log('userService.saveJoinIndex error', error);
+    // console.log('userService.setRoomIndex error', error);
     throw new Error(error.message);
   }
 };
@@ -120,19 +105,6 @@ userService.getRoomIndex = async function (user, rid) {
     return roomIndex;
   } catch (error) {
     // console.log('userService.getRoomIndex error', error);
-    throw new Error(error.message);
-  }
-};
-
-// 룸 퇴장 -> joinedRooms[]: 해당 room 삭제
-userService.removeJoinedRoom = async function (user, room) {
-  // console.log('userService.removeJoinedRoom called', user.joinedRooms, room);
-  try {
-    user.joinedRooms.pull(room._id);
-    await user.save();
-    return user;
-  } catch (error) {
-    // console.log('userService.removeJoinedRoom error', error);
     throw new Error(error.message);
   }
 };

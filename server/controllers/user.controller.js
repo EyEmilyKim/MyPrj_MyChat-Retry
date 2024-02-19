@@ -202,32 +202,6 @@ userController.updateDisconnectedUser = async (sid) => {
   }
 };
 
-// 유저 룸 입장
-userController.joinRoom = async (user, room) => {
-  // console.log('userController.joinRoom called');
-  try {
-    const updatedUser = await userService.joinRoom(user, room);
-    return updatedUser;
-  } catch (error) {
-    // console.log('userController.joinRoom failed', error);
-    throw new Error(error);
-  }
-};
-
-// 유저 룸 퇴장
-userController.leaveRoom = async (user, room) => {
-  // console.log('userController.leaveRoom called', user.email, room.title);
-  try {
-    const updatedUser = await userService
-      .removeJoinedRoom(user, room) // 해당 joinedRoom 삭제
-      .then(async (user) => await userService.removeRoomIndex(user, room)); // 해당 roomIndex 삭제
-    return updatedUser;
-  } catch (error) {
-    // console.log('userController.leaveRoom failed', error);
-    throw new Error(error);
-  }
-};
-
 // lastReadIndex 저장
 userController.saveLastReadeIndex = async (sid, rid, index) => {
   // console.log('userController.saveLastReadeIndex called');

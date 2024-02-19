@@ -47,7 +47,7 @@ roomController.joinRoom = async function (rid, socketId) {
   // console.log('roomController.joinRoom called', rid, user);
   try {
     // 룸 입장 처리
-    let user = await userService.checkUser(socketId, 'sid'); // 유저 정보 찾기
+    const user = await userService.checkUser(socketId, 'sid'); // 유저 정보 찾기
     const result = await roomService
       .checkRoom(rid, '_id') // 룸 정보 찾기
       .then(async (r) => {
@@ -65,10 +65,9 @@ roomController.joinRoom = async function (rid, socketId) {
     let memberUpdate = result.memberUpdate;
     let roomIndex = null;
     if (memberUpdate) {
-      user = await userService.joinRoom(user, result.room); // update User
       roomIndex = await this.saveSysMsg_roomInOut(user, 'in', rid) // systemMsg 저장
         .then(async (systemMsgIndex) => {
-          return await userService.saveJoinIndex(user, rid, systemMsgIndex); // joinIndex 저장
+          return await userService.setRoomIndex(user, rid, systemMsgIndex); // joinIndex 저장
         });
     } else {
       roomIndex = await userService.getRoomIndex(user, rid);
@@ -84,7 +83,7 @@ roomController.joinRoom = async function (rid, socketId) {
 roomController.leaveRoom = async function (rid, socketId) {
   // console.log('roomController.leaveRoom called', rid, socketId);
   try {
-    let user = await userService.checkUser(socketId, 'sid'); // 유저 정보 찾기
+    const user = await userService.checkUser(socketId, 'sid'); // 유저 정보 찾기
     let roomDeleted = false;
     const room = await roomService.checkRoom(rid, '_id').then(async (r) => {
       // 내가 오너이고
@@ -101,7 +100,7 @@ roomController.leaveRoom = async function (rid, socketId) {
         }
       }
       // 퇴장 처리
-      user = await userController.leaveRoom(user, r); // update User
+      await userService.removeRoomIndex(user, r); // update User
       return await roomService.leaveRoom(r, user); // update Room
     });
 
