@@ -9,13 +9,13 @@ export default function useClassifyRooms() {
   const classifyRooms = async (roomList) => {
     let joinedRooms = [];
     let notMyRooms = [];
-    await roomList.map((room) => {
+    for (const room of roomList) {
       if (room.members.some((memberId) => memberId === user._id)) {
         joinedRooms.push(room);
       } else {
         notMyRooms.push(room);
       }
-    });
+    }
     // console.log(`classifyRooms joinedRooms : `, joinedRooms);
     // console.log(`classifyRooms notMyRooms : `, notMyRooms);
     setJoinedRooms(joinedRooms);
