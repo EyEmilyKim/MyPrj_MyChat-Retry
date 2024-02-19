@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSocketContext } from '../../contexts/SocketContext';
+import { useRef } from 'react';
+import { useDataContext } from '../../contexts/DataContext';
 import { createDummyRooms } from '../../utils/createDummyRooms';
 import { clearAllRooms } from '../../utils/clearAllRooms';
-import useClassifyRooms from '../../hooks/useClassifyRooms';
 import useScrollPosition from '../../hooks/useScrollPosition';
 import useScrollToTarget from '../../hooks/useScrollToTarget';
 import useStateLogger from '../../hooks/useStateLogger';
@@ -12,39 +11,14 @@ import ClassifiedRooms from './ClassifiedRooms';
 import NewRoom from './NewRoom';
 
 export default function RoomList() {
-  const { socket } = useSocketContext();
-  const [roomList, setRoomList] = useState([]);
-  const { joinedRooms, notMyRooms, classifyRooms } = useClassifyRooms();
-
-  useEffect(() => {
-    classifyRooms(roomList);
-  }, [roomList]);
+  const { joinedRooms, notMyRooms } = useDataContext();
 
   const scrollRef = useRef();
   const { isOnTop } = useScrollPosition(scrollRef, true);
   useStateLogger(isOnTop, 'isOnTop');
 
   const topRef = useRef();
-  const { handleScrollToTarget } = useScrollToTarget(topRef, [roomList], isOnTop);
-
-  useEffect(() => {
-    console.log(`socket : ${socket.id}`);
-
-    socket.emit('getRooms', (res) => {
-      console.log('getRooms res', res);
-      setRoomList(res.data);
-    });
-
-    socket.on('rooms', (reason, rooms) => {
-      console.log(`on('rooms') ${reason}`, rooms);
-      setRoomList(rooms);
-    });
-
-    // 컴포넌트 언마운트 시 이벤트 해제
-    return () => {
-      socket.off('rooms');
-    };
-  }, []);
+  const { handleScrollToTarget } = useScrollToTarget(topRef, [joinedRooms, notMyRooms], isOnTop);
 
   return (
     <div className="roomList-body">
