@@ -5,6 +5,17 @@
   flex-direction: column;
 }
 
+/* 날짜 구분 */
+.date-divider {
+  border-radius: 20px;
+  padding: 2px 7px 4px;
+  background-color: #efd6da;
+  color: #a19b9b;
+  font-size: 13px;
+  font-weight: 400;
+  margin: 10px 0;
+}
+
 /* 시스템 메세지 */
 .system-message-container {
   display: flex;

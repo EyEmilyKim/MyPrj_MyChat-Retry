@@ -1,13 +1,19 @@
+import useGroupingMessages from '../../hooks/useGroupingMessages';
 import './MessageContainer.css';
 
 export default function MessageContainer({ messageList, user }) {
   const systemId = process.env.REACT_APP_DB_SYSTEM_USER_ID;
 
+  const { groupedMessageList } = useGroupingMessages(messageList);
+
   return (
     <>
-      <div>
-        {messageList.map((message, index) => {
-          return (
+      {/* 날짜 순회 */}
+      {Object.keys(groupedMessageList).map((date, index) => (
+        <div key={index}>
+          <div className="date-divider">{date}</div>
+          {/* Array 순회 */}
+          {groupedMessageList[date].map((message, index) => (
             <div key={message.index} className="each-message">
               {message.sender._id === systemId ? (
                 <div className="system-message-container">
@@ -18,7 +24,9 @@ export default function MessageContainer({ messageList, user }) {
                   <div className="message-container mine">
                     <p className="message mine">{message.content}</p>
                   </div>
-                  <p className="timestamp mine">{message.timestamp}</p>
+                  <p className="timestamp mine">
+                    {message.timestamp.substring(14, 16) + ' ' + message.timestamp.substring(16)}
+                  </p>
                 </>
               ) : (
                 <>
@@ -30,9 +38,9 @@ export default function MessageContainer({ messageList, user }) {
                 </>
               )}
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ))}
     </>
   );
 }
