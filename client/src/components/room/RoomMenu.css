@@ -44,6 +44,9 @@
   min-width: 50px;
   text-align: justify;
   font-size: 14px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  margin-left: -2px;
 }
 .roomMenu-info.label {
   color: navy;
