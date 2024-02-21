@@ -1,10 +1,9 @@
-import useGroupingMessages from '../../hooks/useGroupingMessages';
+import { useLoginContext } from '../../contexts/LoginContext';
 import './MessageContainer.css';
 
-export default function MessageContainer({ messageList, user }) {
+export default function MessageContainer({ groupedMessageList }) {
+  const { user } = useLoginContext();
   const systemId = process.env.REACT_APP_DB_SYSTEM_USER_ID;
-
-  const { groupedMessageList } = useGroupingMessages(messageList);
 
   return (
     <>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { useSocketContext } from '../../contexts/SocketContext';
+import useGroupingMessages from '../../hooks/useGroupingMessages';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
 import useScrollPosition from '../../hooks/useScrollPosition';
@@ -28,6 +29,9 @@ export default function ChatRoom() {
   const [joinIndex, setJoinIndex] = useState(-1);
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
+
+  const { groupedMessages } = useGroupingMessages(messageList);
+  // useStateLogger(groupedMessages, 'groupedMessageList');
 
   const scrollRef = useRef();
   const { isOnBottom } = useScrollPosition(scrollRef, false);
@@ -113,7 +117,7 @@ export default function ChatRoom() {
         )}
         <div className="chat-container" ref={scrollRef}>
           {messageList.length > 0 ? (
-            <MessageContainer messageList={messageList} user={user} />
+            <MessageContainer groupedMessageList={groupedMessages} />
           ) : null}
           <div className="bottomRef" ref={bottomRef} />
         </div>
