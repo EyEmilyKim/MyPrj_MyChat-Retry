@@ -14,7 +14,7 @@ export const DataProvider = ({ children }) => {
 
   const [roomList, setRoomList] = useState([]);
   const { joinedRooms, notMyRooms, classifyRooms } = useClassifyRooms();
-  const { roomsNotification, getNotificationCount, resetNotificationCount } =
+  const { getNotificationCount, resetNotificationCount, stackNotificationCount } =
     useJoinedRoomsNotification(joinedRooms);
   // useStateLogger(roomsNotification, 'roomsNotification');
 
@@ -60,6 +60,7 @@ export const DataProvider = ({ children }) => {
     notMyRooms,
     getNotificationCount,
     resetNotificationCount,
+    stackNotificationCount,
   };
 
   return <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>;

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import useJoinedRoomsNotification from '../../hooks/useJoinedRoomsNotification';
+import { useDataContext } from '../../contexts/DataContext';
 import './ClassifiedRooms.css';
 
 export default function ClassifiedRooms({ joinedRooms, notMyRooms }) {
-  const { getNotificationCount, resetNotificationCount } = useJoinedRoomsNotification(joinedRooms);
+  const { getNotificationCount, resetNotificationCount } = useDataContext();
 
   const navigate = useNavigate();
   const moveToRoom = async (rid) => {
