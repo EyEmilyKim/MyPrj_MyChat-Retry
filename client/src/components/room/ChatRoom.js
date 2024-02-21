@@ -35,12 +35,12 @@ export default function ChatRoom() {
 
   const scrollRef = useRef();
   const { isOnBottom } = useScrollPosition(scrollRef, false);
-  const { lastReadIndex } = useLastReadIndex(scrollRef, messageList, isOnBottom);
+  const { lastReadIndex } = useLastReadIndex(scrollRef, groupedMessages, isOnBottom);
   // useStateLogger(isOnBottom, 'isOnBottom');
   // useStateLogger(lastReadIndex, 'lastReadIndex');
 
   const bottomRef = useRef();
-  const { handleScrollToTarget } = useScrollToTarget(bottomRef, [messageList], isOnBottom);
+  const { handleScrollToTarget } = useScrollToTarget(bottomRef, [groupedMessages], isOnBottom);
 
   useEffect(() => {
     if (joinIndex > 0) {
