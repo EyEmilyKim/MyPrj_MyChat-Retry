@@ -13,7 +13,7 @@ export default function useJoinedRoomsNotification(joinedRooms) {
   // 알림 개수 초기화
   const resetNotificationCount = async (rid) => {
     return new Promise((resolve) => {
-      console.log('resetNotificationCount called', rid);
+      // console.log('resetNotificationCount called', rid);
       setRoomsNotification((prev) => {
         const updatedNotification = { ...prev };
         delete updatedNotification[rid];
@@ -56,10 +56,16 @@ export default function useJoinedRoomsNotification(joinedRooms) {
     };
   }, [joinedRooms, socket]);
 
+  // socket 이벤트 핸들러 따로 등록
+  const applyNotificationCount = (rid) => {
+    socket.on(`message-${rid}`, () => {
+      stackNotificationCount(rid);
+    });
+  };
+
   return {
-    roomsNotification,
-    stackNotificationCount,
     getNotificationCount,
     resetNotificationCount,
+    applyNotificationCount,
   };
 }

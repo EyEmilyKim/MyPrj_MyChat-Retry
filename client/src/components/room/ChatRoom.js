@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLoginContext } from '../../contexts/LoginContext';
 import { useSocketContext } from '../../contexts/SocketContext';
+import { useDataContext } from '../../contexts/DataContext';
 import useGroupingMessages from '../../hooks/useGroupingMessages';
 import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
@@ -29,7 +30,6 @@ export default function ChatRoom() {
   const [joinIndex, setJoinIndex] = useState(-1);
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
-
   const { groupedMessages } = useGroupingMessages(messageList);
   // useStateLogger(groupedMessages, 'groupedMessageList');
 
@@ -41,6 +41,8 @@ export default function ChatRoom() {
 
   const bottomRef = useRef();
   const { handleScrollToTarget } = useScrollToTarget(bottomRef, [groupedMessages], isOnBottom);
+
+  const { resetNotificationCount, applyNotificationCount } = useDataContext();
 
   useEffect(() => {
     if (joinIndex > 0) {
@@ -90,14 +92,17 @@ export default function ChatRoom() {
     socket.on(`message-${rid}`, (message) => {
       // console.log(`on('message') : ${JSON.stringify(message)}`);
       setMessageList((prevState) => [...prevState, message]);
+      resetNotificationCount(rid);
     });
 
     // 컴포넌트 언마운트 시 이벤트 해제
     return () => {
-      const eventsToOff = ['message', 'updatedRoom'];
+      const eventsToOff = [`message-${rid}`, 'updatedRoom'];
       eventsToOff.map((item) => {
         socket.off(item);
       });
+
+      applyNotificationCount(rid);
     };
   }, []);
 
