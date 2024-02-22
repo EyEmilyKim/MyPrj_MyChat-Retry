@@ -143,6 +143,22 @@ userService.saveLastReadeIndex = async function (user, rid, index) {
   }
 };
 
+// 해당 roomIndex의 lastReadIndex 조회
+userService.getLastReadIndex = async function (user, rid) {
+  // console.log('userService.getLastReadIndex called', user.email, rid);
+  try {
+    const roomIndex = user.roomIndexes.find((item) => item.room.equals(rid));
+    if (!roomIndex) {
+      throw new Error('해당하는 roomIndex를 찾을 수 없습니다');
+    }
+    const lastReadIndex = roomIndex.lastReadIndex;
+    return lastReadIndex;
+  } catch (error) {
+    // console.log('userService.getLastReadIndex error', error);
+    throw new Error(error.message);
+  }
+};
+
 // 유저 프로필 업데이트
 userService.updateUser = async function (user, name, description) {
   // console.log(`userService.updateUser called : ${user.email} / ${name} / ${description}`);

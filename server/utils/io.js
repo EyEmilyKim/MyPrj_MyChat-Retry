@@ -140,8 +140,9 @@ module.exports = function (io) {
     socket.on('getMessages', async (rid, joinIndex, cb) => {
       console.log(`'getMessages' called by : ${socketEmail}, ${rid}, ${joinIndex}`);
       try {
+        const lastReadIndex = await userController.getLastReadIndex(socketId, rid);
         const messageList = await messageController.getAllMessagesSince(rid, joinIndex);
-        cb({ status: 'ok', data: messageList });
+        cb({ status: 'ok', data: messageList, lastReadIndex });
       } catch (error) {
         console.log('io > getMessages Error', error);
         cb({ status: 'Server side Error' });

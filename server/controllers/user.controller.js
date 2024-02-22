@@ -219,6 +219,23 @@ userController.saveLastReadeIndex = async (sid, rid, index) => {
   }
 };
 
+// lastReadIndex 조회
+userController.getLastReadIndex = async (sid, rid) => {
+  // console.log('userController.getLastReadIndex called');
+  try {
+    const lastReadIndex = await userService
+      .checkUser(sid, 'sid')
+      .then((user) => userService.getLastReadIndex(user, rid))
+      .catch((err) => {
+        throw new Error(err);
+      });
+    return lastReadIndex;
+  } catch (error) {
+    // console.log('userController.getLastReadIndex failed', error);
+    throw new Error(error);
+  }
+};
+
 // 유저 프로필 업데이트
 userController.updateUser = async function (socketId, name, description) {
   // console.log(

@@ -18,7 +18,7 @@ messageService.getAllMessagesSince = async function (rid, joinIndex) {
 
 // 메세지 저장
 messageService.saveMessage = async function (msg, uid, rid) {
-  console.log('messageService.saveMessage called');
+  // console.log('messageService.saveMessage called');
   try {
     const now = await dateFormatKST();
     const newMsg = new Message({
