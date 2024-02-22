@@ -8,6 +8,7 @@ import useStateLogger from '../../hooks/useStateLogger';
 import useToggleState from '../../hooks/useToggleState';
 import useScrollPosition from '../../hooks/useScrollPosition';
 import useLastReadIndex from '../../hooks/useLastReadIndex';
+import useIndexOfLastMessage from '../../hooks/useIndexOfLastMessage';
 import useScrollToTarget from '../../hooks/useScrollToTarget';
 import './ChatRoom.css';
 import Loader from '../../components-util/Loader';
@@ -19,7 +20,6 @@ import ChatInput from './ChatInput';
 
 export default function ChatRoom() {
   const { rid } = useParams();
-  const { user } = useLoginContext();
   const { socket } = useSocketContext();
   const [room, setRoom] = useState('fetching room data...');
   const [joinComplete, setJoinComplete] = useState(false);
@@ -30,6 +30,8 @@ export default function ChatRoom() {
   const [joinIndex, setJoinIndex] = useState(-1);
   const [messageList, setMessageList] = useState([]);
   // useStateLogger(messageList, 'messageList');
+  const [prevLastRead, setPrevLastRead] = useState(-1);
+  // useStateLogger(prevLastRead, 'prevLastRead');
   const { groupedMessages } = useGroupingMessages(messageList);
   // useStateLogger(groupedMessages, 'groupedMessageList');
 
@@ -40,7 +42,16 @@ export default function ChatRoom() {
   // useStateLogger(lastReadIndex, 'lastReadIndex');
 
   const bottomRef = useRef();
-  const { handleScrollToTarget } = useScrollToTarget(bottomRef, [groupedMessages], isOnBottom);
+  const prevLastReadRef = useRef();
+  const { needPrevRef } = useIndexOfLastMessage(groupedMessages, prevLastRead);
+  // useStateLogger(needPrevRef, 'needPrevRef');
+  const { handleScrollToTarget } = useScrollToTarget(
+    bottomRef,
+    [groupedMessages],
+    isOnBottom,
+    needPrevRef,
+    prevLastReadRef
+  );
 
   const { resetNotificationCount, applyNotificationCount } = useDataContext();
 
@@ -51,6 +62,7 @@ export default function ChatRoom() {
         if (res && res.status === 'ok') {
           console.log(`successfully getMessages since ${joinIndex}`, res);
           if (res.data) setMessageList(res.data);
+          if (res.lastReadIndex) setPrevLastRead(res.lastReadIndex);
         } else {
           console.log('failed to getMessages', res);
         }
@@ -121,7 +133,13 @@ export default function ChatRoom() {
           </div>
         )}
         <div className="chat-container" ref={scrollRef}>
-          {messageList.length > 0 ? <MessageContainer groupedMessages={groupedMessages} /> : null}
+          {messageList.length > 0 ? (
+            <MessageContainer
+              groupedMessages={groupedMessages}
+              prevLastRead={prevLastRead}
+              prevLastReadRef={prevLastReadRef}
+            />
+          ) : null}
           <div className="bottomRef" ref={bottomRef} />
         </div>
       </div>
