@@ -121,9 +121,7 @@ export default function ChatRoom() {
           </div>
         )}
         <div className="chat-container" ref={scrollRef}>
-          {messageList.length > 0 ? (
-            <MessageContainer groupedMessageList={groupedMessages} />
-          ) : null}
+          {messageList.length > 0 ? <MessageContainer groupedMessages={groupedMessages} /> : null}
           <div className="bottomRef" ref={bottomRef} />
         </div>
       </div>

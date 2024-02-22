@@ -1,18 +1,19 @@
 import { useLoginContext } from '../../contexts/LoginContext';
 import './MessageContainer.css';
 
-export default function MessageContainer({ groupedMessageList }) {
+export default function MessageContainer(props) {
+  const groupedMessages = props.groupedMessages;
   const { user } = useLoginContext();
   const systemId = process.env.REACT_APP_DB_SYSTEM_USER_ID;
 
   return (
     <>
       {/* 날짜 순회 */}
-      {Object.keys(groupedMessageList).map((date, index) => (
+      {Object.keys(groupedMessages).map((date, index) => (
         <div key={index}>
           <div className="date-divider">{date}</div>
           {/* Array 순회 */}
-          {groupedMessageList[date].map((message, index) => (
+          {groupedMessages[date].map((message, index) => (
             <div key={message.index} className="each-message">
               {message.sender._id === systemId ? (
                 <div className="system-message-container">
