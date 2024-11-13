@@ -14,7 +14,7 @@ userController.registerUser = async (req, res) => {
     // 이미 있는 유저인지 확인
     let user = await userService.checkUser(email, 'email');
     if (user) {
-      throw new Error('이미 사용중인 이메일입니다.');
+      return res.status(409).json({ error: '이미 사용중인 이메일입니다.' });
     } else {
       // -> 없으면 새로 저장
       const hashedPW = await hashPassword(password);
@@ -23,8 +23,9 @@ userController.registerUser = async (req, res) => {
       res.status(200).json({ message: '등록 성공\n로그인 후 이용해주세요 :)', user: user });
     }
   } catch (error) {
+    // 서버 내부 오류 처리
     console.log('userController.registerUser failed', error);
-    res.status(500).json({ error: error.message }); // 에러메세지 제공
+    res.status(500).json({ error: '서버 오류로 인해 등록에 실패했습니다.' });
   }
 };
 
@@ -35,14 +36,16 @@ userController.loginUser = async (req, res) => {
     const { email, password } = req.body;
     let user = await userService.checkUser(email, 'email'); // 있는 유저인지 확인
     if (!user) {
-      throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
+      // 유효하지 않은 유저로 인한 클라이언트 오류
+      return res.status(401).json({ error: '이메일 또는 비밀번호가 유효하지 않습니다.' });
     }
     // -> 있다면 비밀번호 조회 후
     const passwordMatch = await comparePassword(password, user.password);
     if (!passwordMatch) {
-      throw new Error('이메일 또는 비밀번호가 유효하지 않습니다.');
+      // 비밀번호 불일치로 인한 클라이언트 오류
+      return res.status(401).json({ error: '이메일 또는 비밀번호가 유효하지 않습니다.' });
     } else {
-      // 일치하면 JWT 발급, 로그인
+      // 일치하면 JWT 발급, 로그인 처리
       const tokens = await generateTokenPair(user);
       user = await userService.loginUser(user, tokens);
       // res 전달
@@ -62,8 +65,9 @@ userController.loginUser = async (req, res) => {
         });
     }
   } catch (error) {
+    // 서버 내부 오류 처리
     console.log('userController.loginUser failed', error);
-    res.status(500).json({ error: error.message }); // 에러메세지 제공
+    res.status(500).json({ error: '서버 오류로 인해 로그인에 실패했습니다.' });
   }
 };
 
@@ -86,8 +90,9 @@ userController.logoutUser = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log('userController.logout failed', error);
-    res.status(500).json({ error: 'Server side Error' });
+    // 서버 내부 오류 처리
+    console.log('userController.logoutUser failed', error);
+    res.status(500).json({ error: '서버 오류로 인해 처리에 실패했습니다.' });
   }
 };
 
@@ -120,11 +125,12 @@ userController.confirmPassword = async (req, res) => {
     if (passwordMatch) {
       res.status(200).json({ message: '비밀번호 확인 성공' });
     } else {
-      res.status(500).json({ error: '비밀번호가 일치하지 않습니다' }); // 에러메세지 제공
+      res.status(401).json({ error: '비밀번호가 일치하지 않습니다' }); // 에러메세지 제공
     }
   } catch (error) {
+    // 서버 내부 오류 처리
     console.log('userController.confirmPassword failed', error);
-    res.status(500).json({ error: 'Server side Error' });
+    res.status(500).json({ error: '서버 오류로 인해 처리에 실패했습니다.' });
   }
 };
 
@@ -144,8 +150,9 @@ userController.resetPassword = async (req, res) => {
       });
     res.status(200).json({ message: '비밀번호 변경 성공' });
   } catch (error) {
+    // 서버 내부 오류 처리
     console.log('userController.resetPassword failed', error);
-    res.status(500).json({ error: 'Server side Error' });
+    res.status(500).json({ error: '서버 오류로 인해 처리에 실패했습니다.' });
   }
 };
 
@@ -160,7 +167,7 @@ userController.resignUser = async (req, res) => {
     res.status(200).json({ message: '계정 삭제 성공', user: user });
   } catch (error) {
     console.log('userController.resignUser failed', error);
-    res.status(500).json({ error: 'Server side Error' });
+    res.status(500).json({ error: '서버 오류로 인해 처리에 실패했습니다.' });
   }
 };
 
